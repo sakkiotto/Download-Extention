@@ -167,9 +167,10 @@ if (sizeof($index) > 0)
 				array(
 					'routes' => array(
 						'dl_ext_controller',
+						'dl_ext_page_controller',
 					),
 					'params' => array('cat' => $cat_id),
-				), $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['posts_per_page'], 1, true, true);
+				), $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['posts_per_page'], $page_start);
 				
 			$cat_pages = true;
 		}
@@ -265,12 +266,13 @@ if ($cat)
 			array(
 				'routes' => array(
 					'dl_ext_controller',
+					'dl_ext_page_controller',
 				),
 				'params' => array('cat' => $cat, 'sort_by' => $sort_by, 'order' => $order),
-			), 'pagination', 'start', $total_downloads, $this->config['dl_links_per_page'], $start);
-			
+			), 'pagination', 'start', $total_downloads, $this->config['dl_links_per_page'], $page_start);
+
 		$this->template->assign_vars(array(
-			'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $this->config['dl_links_per_page'], $start),
+			'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $this->config['dl_links_per_page'], $page_start),
 			'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $total_downloads),
 		));
 	}

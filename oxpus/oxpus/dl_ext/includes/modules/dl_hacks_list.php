@@ -65,12 +65,13 @@ if ($all_files > $this->config['dl_links_per_page'])
 		array(
 			'routes' => array(
 				'dl_ext_controller',
+				'dl_ext_page_controller',
 			),
 			'params' => array('view' => 'hacks', 'sort_by' => $sort_by, 'order' => $order),
-		), 'pagination', 'start', $all_files, $this->config['dl_links_per_page'], $start);
+		), 'pagination', 'start', $all_files, $this->config['dl_links_per_page'], $page_start);
 		
 	$this->template->assign_vars(array(
-		'PAGE_NUMBER'	=> $pagination->on_page($all_files, $this->config['dl_links_per_page'], $start),
+		'PAGE_NUMBER'	=> $pagination->on_page($all_files, $this->config['dl_links_per_page'], $page_start),
 		'TOTAL_DL'		=> $this->user->lang('VIEW_DL_STATS', $all_files),
 	));
 }

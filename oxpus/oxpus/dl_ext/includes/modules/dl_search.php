@@ -132,12 +132,13 @@ if ($search_keywords != '' && !$search_author)
 			array(
 				'routes' => array(
 					'dl_ext_controller',
+					'dl_ext_page_controller',
 				),
 				'params' => array('view' => 'search', 'search_keywords' => $search_keywords, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir),
-			), 'pagination', 'start', $search_counter, $this->config['dl_links_per_page'], $start);
+			), 'pagination', 'start', $search_counter, $this->config['dl_links_per_page'], $page_start);
 			
 		$this->template->assign_vars(array(
-			'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $start),
+			'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $page_start),
 			'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $search_counter),
 		));
 	}
@@ -272,12 +273,13 @@ else if ($search_author)
 			array(
 				'routes' => array(
 					'dl_ext_controller',
+					'dl_ext_page_controller',
 				),
 				'params' => array('view' => 'search', 'search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir),
-			), 'pagination', 'start', $total_found_dl, $this->config['dl_links_per_page'], $start);
+			), 'pagination', 'start', $total_found_dl, $this->config['dl_links_per_page'], $page_start);
 			
 		$this->template->assign_vars(array(
-			'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $start),
+			'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $page_start),
 			'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $total_found_dl),
 		));
 	}

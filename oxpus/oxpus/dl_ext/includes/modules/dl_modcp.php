@@ -1512,12 +1512,13 @@ else
 					array(
 						'routes' => array(
 							'dl_ext_controller',
+							'dl_ext_page_controller',
 						),
 						'params' => array('view' => 'modcp', 'action' => 'approve', 'cat_id' => $cat_id),
-					), 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $start);
+					), 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $page_start);
 					
 				$this->template->assign_vars(array(
-					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $start),
+					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $total_approve),
 				));
 			}
@@ -1636,12 +1637,13 @@ else
 					array(
 						'routes' => array(
 							'dl_ext_controller',
+							'dl_ext_page_controller',
 						),
 						'params' => array('view' => 'modcp', 'action' => 'capprove', 'cat_id' => $cat_id),
-					), 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $start);
+					), 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $page_start);
 					
 				$this->template->assign_vars(array(
-					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $start),
+					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $total_approve),
 				));
 			}
@@ -1749,12 +1751,13 @@ else
 					array(
 						'routes' => array(
 							'dl_ext_controller',
+							'dl_ext_page_controller',
 						),
 						'params' => array('view' => 'modcp', 'cat_id' => $cat_id),
-					), 'pagination', 'start', $total_downloads, $per_page, $start);
+					), 'pagination', 'start', $total_downloads, $per_page, $page_start);
 					
 				$this->template->assign_vars(array(
-					'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $per_page, $start),
+					'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $per_page, $page_start),
 					'TOTAL_DL'		=> $this->user->lang('VIEW_DOWNLOADS', $total_downloads),
 				));
 			}

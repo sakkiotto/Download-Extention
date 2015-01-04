@@ -174,6 +174,9 @@ class main
 		$dl_mod_link_show = true;
 		$dl_mod_is_active_for_admins = false;
 
+		$page_start = min($start, 1);
+		$start = max($start - 1, 0);
+
 		if ($cat < 0)
 		{
 			$cat = 0;
