@@ -130,7 +130,7 @@ class dl_extra extends dl_mod
 
 		foreach($dl_index as $cat_id => $value)
 		{
-			if ($dl_index[$cat_id]['parent'] == $parent)
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
 				$cat_name = $dl_index[$cat_id]['cat_name'];
 

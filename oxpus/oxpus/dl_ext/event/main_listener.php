@@ -33,6 +33,7 @@ class main_listener implements EventSubscriberInterface
 			'core.submit_post_end'					=> 'add_user_traffic_for_post',
 			'core.modify_posting_parameters'		=> 'drop_user_traffic_for_post',
 			'core.modify_text_for_display_after'	=> 'convert_link_to_download_name',
+			'core.permissions'						=> 'add_permission_cat',
 		);
 	}
 
@@ -73,7 +74,6 @@ class main_listener implements EventSubscriberInterface
 	protected $user;
 
 	/**
-	/**
 	* Constructor
 	*
 	* @param string									$root_path
@@ -112,7 +112,17 @@ class main_listener implements EventSubscriberInterface
 			'ext_name' => 'oxpus/dl_ext',
 			'lang_set' => 'common',
 		);
+
+		if (defined('ADMIN_START'))
+		{
+			$lang_set_ext[] = array(
+				'ext_name' => 'oxpus/dl_ext',
+				'lang_set' => 'permissions_dl_ext',
+			);
+		}
+
 		$event['lang_set_ext'] = $lang_set_ext;
+
 	}
 
 	public function add_download_message($event)
@@ -499,5 +509,27 @@ class main_listener implements EventSubscriberInterface
 	public function convert_link_to_download_name($event)
 	{
 		$event['text'] = preg_replace_callback("#(app\." . $this->php_ext . "\/dl_ext\/view=detail&df_id=)(\d+)#i", array('self', 'dl_mod_callback'), $event['text']);
+	}
+
+	public function add_permission_cat($event)
+	{
+		$perm_cat = $event['categories'];
+		$perm_cat['downloads'] = 'ACP_DOWNLOADS';
+		$event['categories'] = $perm_cat;
+
+		$permission = $event['permissions'];
+		$permission['a_dl_overview']	= array('lang' => 'ACL_A_DL_OVERVIEW',		'cat' => 'downloads');
+		$permission['a_dl_config']		= array('lang' => 'ACL_A_DL_CONFIG',		'cat' => 'downloads');
+		$permission['a_dl_traffic']		= array('lang' => 'ACL_A_DL_TRAFFIC',		'cat' => 'downloads');
+		$permission['a_dl_categories']	= array('lang' => 'ACL_A_DL_CATEGORIES',	'cat' => 'downloads');
+		$permission['a_dl_files']		= array('lang' => 'ACL_A_DL_FILES',			'cat' => 'downloads');
+		$permission['a_dl_permissions']	= array('lang' => 'ACL_A_DL_PERMISSIONS',	'cat' => 'downloads');
+		$permission['a_dl_stats']		= array('lang' => 'ACL_A_DL_STATS',			'cat' => 'downloads');
+		$permission['a_dl_banlist']		= array('lang' => 'ACL_A_DL_BANLIST',		'cat' => 'downloads');
+		$permission['a_dl_blacklist']	= array('lang' => 'ACL_A_DL_BLACKLIST',		'cat' => 'downloads');
+		$permission['a_dl_toolbox']		= array('lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads');
+		$permission['a_dl_fields']		= array('lang' => 'ACL_A_DL_FIELDS',		'cat' => 'downloads');
+		$permission['a_dl_browser']		= array('lang' => 'ACL_A_DL_BROWSER',		'cat' => 'downloads');
+		$event['permissions'] = $permission;
 	}
 }

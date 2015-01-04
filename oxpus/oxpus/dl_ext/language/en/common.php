@@ -306,6 +306,7 @@ $lang = array_merge($lang, array(
 
 	'DL_GB'						=> 'GiB',
 	'DL_GO'						=> 'Go',
+	'DL_GOTO'					=> 'Goto category',
 	'DL_GREEN_EXPLAIN'			=> 'Download! No deductions from user account.',
 	'DL_GREEN_EXPLAIN_T_OFF'	=> 'Download!',
 	'DL_GREY_EXPLAIN'			=> 'Download! External source. No deductions from user account.',

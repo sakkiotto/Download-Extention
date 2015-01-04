@@ -21,8 +21,8 @@ class main_info
 			'title'		=> 'DOWNLOADS',
 			'version'	=> $config['dl_ext_version'],
 			'modes'		=> array(
-				'config'	=> array('title' => 'DL_CONFIG',	'auth' => '',	'cat' => array('DOWNLOADS')),
-				'favorite'	=> array('title' => 'DL_FAVORITE',	'auth' => '',	'cat' => array('DOWNLOADS')),
+				'config'	=> array('title' => 'DL_CONFIG',	'auth' => 'ext_oxpus/dl_ext',	'cat' => array('DOWNLOADS')),
+				'favorite'	=> array('title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dl_ext',	'cat' => array('DOWNLOADS')),
 			),
 		);
 	}

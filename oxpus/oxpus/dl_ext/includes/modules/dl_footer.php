@@ -85,7 +85,7 @@ if (sizeof($index) || $cat)
 	if ($this->config['dl_enable_jumpbox'])
 	{
 		$dl_jumpbox = '<form method="post" id="dl_jumpbox" action="' . $this->helper->route('dl_ext_controller', array('sort_by' => $sort_by, 'order' => $order)) . '" onsubmit="if(this.options[this.selectedIndex].value == -1){ return false; }">';
-		$dl_jumpbox .= "\n<fieldset>" . $this->user->lang['JUMP_TO'] . ': <select name="cat" onchange="if(this.options[this.selectedIndex].value != -1){ forms[\'dl_jumpbox\'].submit() }">';
+		$dl_jumpbox .= "\n<fieldset>" . $this->user->lang['DL_GOTO'] . ': <select name="cat" onchange="if(this.options[this.selectedIndex].value != -1){ forms[\'dl_jumpbox\'].submit() }">';
 		$dl_jumpbox .= '<option value="-1">'.$this->user->lang['DL_CAT_NAME'].'</option>';
 		$dl_jumpbox .= '<option value="-1">----------</option>';
 		$dl_jumpbox .= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $cat, 'auth_view');
