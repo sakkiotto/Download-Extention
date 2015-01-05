@@ -174,8 +174,8 @@ class main
 		$dl_mod_link_show = true;
 		$dl_mod_is_active_for_admins = false;
 
-		$page_start = min($start, 1);
-		$start = max($start - 1, 0);
+		$page_start = max($start - 1, 0) * $this->config['dl_links_per_page'];
+		$start = $page_start;
 
 		if ($cat < 0)
 		{
