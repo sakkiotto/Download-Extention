@@ -170,7 +170,7 @@ if (sizeof($index) > 0)
 						'dl_ext_page_controller',
 					),
 					'params' => array('cat' => $cat_id),
-				), $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['posts_per_page'], $page_start);
+				), $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['dl_links_per_page'], $page_start);
 				
 			$cat_pages = true;
 		}
@@ -294,7 +294,7 @@ if ($cat)
 		$this->template->assign_var('S_MODCP', true);
 	}
 
-	$physical_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes($ext_path . '/' . $this->config['dl_download_dir']);
+	$physical_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes();
 	if ($physical_size < $this->config['dl_physical_quota'] && (!$this->config['dl_stop_uploads']) || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 	{
 		if (\oxpus\dl_ext\includes\classes\ dl_auth::user_auth($cat, 'auth_up'))

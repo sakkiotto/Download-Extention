@@ -82,6 +82,24 @@ class main_module
 		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
 		$ext_path_images			= $ext_path_web . 'includes/images/';
 
+		// Define the basic file storage placement
+		if ($config['dl_download_dir'] == 2)
+		{
+			$filebase_prefix = $filebase_web_prefix = $folder_base = $phpbb_root_path . 'store/oxpus/dl_ext/';
+			$folder_desc = $filebase_web_prefix = $ext_path_web . 'files/';
+		}
+		else
+		{
+			$filebase_prefix = $folder_base = $ext_path . 'files/';
+			$folder_desc = $phpbb_root_path . 'store/oxpus/dl_ext/';
+			$filebase_web_prefix = $ext_path_web . 'files/';
+		}
+
+		define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
+		define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
+		define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
+		define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+
 		include_once($ext_path . 'includes/helpers/dl_constants.' . $phpEx);
 
 		$auth->acl($user->data);
@@ -133,7 +151,7 @@ class main_module
 		* create overall mini statistics
 		*/
 		$total_todo = sizeof(\oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', "AND todo <> '' AND todo IS NOT NULL", 0, true, 'id'));
-		$total_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes($ext_path . '/' . $config['dl_download_dir']);
+		$total_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes();
 		$total_dl = \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count();
 		$total_extern = sizeof(\oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
 

@@ -189,7 +189,7 @@ class dl_init extends dl_mod
 		*/
 		if ($config['dl_use_ext_blacklist'])
 		{
-			$blacklist_ary = dl_cache::obtain_dl_blacklist($ext_path);
+			$blacklist_ary = dl_cache::obtain_dl_blacklist();
 			if (is_array($blacklist_ary) && sizeof($blacklist_ary))
 			{
 				$ext_blacklist = array_unique($blacklist_ary);
@@ -286,7 +286,7 @@ class dl_init extends dl_mod
 		/*
 		* read the index
 		*/
-		$dl_index = dl_cache::obtain_dl_cats($ext_path);
+		$dl_index = dl_cache::obtain_dl_cats();
 
 		if (sizeof($dl_index) > 0 && is_array($dl_index))
 		{
@@ -338,7 +338,7 @@ class dl_init extends dl_mod
 		/*
 		* count all files per category
 		*/
-		$cat_counts = dl_cache::obtain_dl_cat_counts($ext_path);
+		$cat_counts = dl_cache::obtain_dl_cat_counts();
 
 		if (is_array($cat_counts) && sizeof($cat_counts) > 0)
 		{
@@ -357,7 +357,7 @@ class dl_init extends dl_mod
 		*/
 		$cat_auth_array = $group_ids = array();
 
-		$dl_auth_perm = dl_cache::obtain_dl_auth($ext_path);
+		$dl_auth_perm = dl_cache::obtain_dl_auth();
 
 		$auth_cat = (isset($dl_auth_perm['auth_cat'])) ? $dl_auth_perm['auth_cat'] : array();
 		$group_perm_ids = (isset($dl_auth_perm['group_perm_ids'])) ? $dl_auth_perm['group_perm_ids'] : array();
@@ -428,7 +428,7 @@ class dl_init extends dl_mod
 		}
 		$db->sql_freeresult($result);
 
-		$dl_file_icon = dl_cache::obtain_dl_files($ext_path, intval($config['dl_new_time']), intval($config['dl_edit_time']));
+		$dl_file_icon = dl_cache::obtain_dl_files(intval($config['dl_new_time']), intval($config['dl_edit_time']));
 
 		/*
 		* get ban status for current user

@@ -60,7 +60,7 @@ if (sizeof($index) || $cat)
 	*/
 	if ($this->config['dl_show_footer_stat'])
 	{
-		$total_size		= \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes($ext_path . '/' . $this->config['dl_download_dir']);
+		$total_size		= \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes();
 		$total_dl		= \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count();
 		$total_extern	= sizeof(\oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
 

@@ -45,7 +45,7 @@ if($action == 'add')
 			$db->sql_query($sql);
 
 			// Purge the blacklist cache
-			@unlink($ext_path . 'files/cache/data_dl_black.' . $phpEx);
+			@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_black.' . $phpEx);
 
 			add_log('admin', 'DL_LOG_EXT_ADD', $extension);
 		}
@@ -117,7 +117,7 @@ if($action == 'delete')
 			$db->sql_query($sql);
 
 			// Purge the blacklist cache
-			@unlink($ext_path . 'files/cache/data_dl_black.' . $phpEx);
+			@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_black.' . $phpEx);
 
 			add_log('admin', 'DL_LOG_EXT_DEL', implode(', ', $sql_ext_in));
 

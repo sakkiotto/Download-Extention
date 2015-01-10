@@ -38,25 +38,26 @@ switch ($view)
 			'vars'	=> array(
 				'legend1'				=> '',
 		
+				'dl_download_dir'	=> array('lang' => 'DOWNLOAD_PATH',		'validate' => 'int',	'type' => 'select',			'explain' => true,		'help_key' => 'DOWNLOAD_PATH',			'function' => 'select_filebase',	'params' => array('{CONFIG_VALUE}')),
+				'dl_base_switch'	=> array('lang' => 'DL_BASE_SWITCH',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => ''),
+				'dl_method'			=> array('lang' => 'DL_METHOD',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_METHOD',				'function' => 'select_dl_method',	'params' => array('{CONFIG_VALUE}')),
+				'dl_method_quota'	=> array('lang' => 'DL_METHOD_QUOTA',	'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_METHOD_QUOTA', 		'function' => 'select_size',		'params' => array('{CONFIG_VALUE}', 'dl_method_quota', '10', '20', 'dl_m_quote', 'mb', false, $ext_path)),
+
+				'legend2'				=> '',
+		
 				'dl_active'			=> array('lang' => 'DL_ACTIVE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ACTIVE'),
 				'dl_traffic_off'	=> array('lang' => 'DL_TRAFFIC_OFF',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFIC_OFF'),
 				'dl_stop_uploads'	=> array('lang' => 'DL_STOP_UPLOADS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_STOP_UPLOADS'),
 				'dl_use_hacklist'	=> array('lang' => 'DL_USE_HACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_HACKLIST'),
 				'dl_todo_onoff'		=> array('lang' => 'DL_USE_TODOLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_TODOLIST'),
 
-				'legend2'				=> '',
+				'legend3'				=> '',
 		
 				'dl_off_now_time'	=> array('lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 				'function' => 'mod_disable',	'params' => array('{CONFIG_VALUE}')),
 				'dl_off_from'		=> array('lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'),
 				'dl_off_till'		=> array('lang' => 'DL_OFF_PERIOD_TILL',	'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'),
 				'dl_on_admins'		=> array('lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'),
 				'dl_off_hide'		=> array('lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'),
-
-				'legend3'				=> '',
-		
-				'dl_download_dir'	=> array('lang' => 'DOWNLOAD_PATH',		'validate' => 'string',	'type' => 'text:20:255',	'explain' => false,		'help_key' => 'DOWNLOAD_PATH'),
-				'dl_method'			=> array('lang' => 'DL_METHOD',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_METHOD',				'function' => 'select_dl_method',	'params' => array('{CONFIG_VALUE}')),
-				'dl_method_quota'	=> array('lang' => 'DL_METHOD_QUOTA',	'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_METHOD_QUOTA', 		'function' => 'select_size',		'params' => array('{CONFIG_VALUE}', 'dl_method_quota', '10', '20', 'dl_m_quote', 'mb', false, $ext_path)),
 			)
 		);
 	break;
@@ -311,6 +312,9 @@ switch ($view)
 $this->new_config = $config;
 $cfg_array = (isset($_REQUEST['config'])) ? $request->variable('config', array('' => ''), true) : $this->new_config;
 $error = array();
+$movement_error = false;
+$movement_message = '';
+$cur_dl_dir = $config['dl_download_dir'];
 
 // We validate the complete config if whished
 validate_config_vars($display_vars['vars'], $cfg_array, $error);
@@ -327,6 +331,39 @@ foreach ($display_vars['vars'] as $config_name => $null)
 
 	if ($submit)
 	{
+		if ($config_name == 'dl_download_dir' && $config_value <> $cur_dl_dir)
+		{
+			if (!$cfg_array['dl_base_switch'])
+			{
+				$success = \oxpus\dl_ext\includes\classes\ dl_physical::switch_ext_file_path($folder_base, $folder_desc, $cur_dl_dir, $phpbb_root_path, $ext_path);
+				switch ($success)
+				{
+					case 1:
+						$movement_error = true;
+						$movement_message = 'DL_FILEBASE_NOT_MOVED';
+					break;
+					case 2:
+						$movement_error = false;
+						$movement_message = 'DL_FILEBASE_NOT_DROPPED';
+					break;
+					default:
+						$movement_error = false;
+						$movement_message = 'DL_FILEBASE_MOVED';
+				}
+
+				$movement_message = $user->lang[$movement_message];						
+			}
+			else
+			{
+				$movement_message = $user->lang['DL_FILEBASE_MANUALLY'];
+			}
+
+			if ($movement_error)
+			{
+				trigger_error($movement_message);
+			}
+		}
+
 		if ($config_name == 'dl_thumb_xsize' || $config_name == 'dl_thumb_ysize')
 		{
 			$this->new_config[$config_name] = $config_value = intval($config_value);
@@ -400,7 +437,7 @@ foreach ($display_vars['vars'] as $config_name => $null)
 	}
 }
 
-if ($submit)
+if ($submit && !$movement_error)
 {
 	// Refetch all multi select fields which are not provided by the forum default methods
 	if ($view == 'traffic')
@@ -428,7 +465,7 @@ if ($submit)
 	add_log('admin', 'DL_LOG_CONFIG');
 	$cache->destroy('config');
 
-	$message = $user->lang['DL_CONFIG_UPDATED'] . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_DL_CONFIG'], '<a href="' . $basic_link . '&amp;view=' . $view . '">', '</a>') . adm_back_link($this->u_action);
+	$message = $user->lang['DL_CONFIG_UPDATED'] . '<br />' . $movement_message . '<br />' . sprintf($user->lang['CLICK_RETURN_DL_CONFIG'], '<a href="' . $basic_link . '&amp;view=' . $view . '">', '</a>') . adm_back_link($this->u_action);
 	trigger_error($message);
 }
 
@@ -503,11 +540,7 @@ foreach ($display_vars['vars'] as $config_key => $vars)
 	$type = explode(':', $vars['type']);
 
 	$l_explain = '';
-	if ($vars['explain'] && isset($vars['lang_explain']))
-	{
-		$l_explain = (isset($user->lang[$vars['lang_explain']])) ? $user->lang[$vars['lang_explain']] : $vars['lang_explain'];
-	}
-	else if ($vars['explain'])
+	if ($vars['explain'])
 	{
 		$l_explain = (isset($user->lang[$vars['lang'] . '_EXPLAIN'])) ? $user->lang[$vars['lang'] . '_EXPLAIN'] : '';
 	}
@@ -774,7 +807,7 @@ function select_size($value, $field, $size, $maxlength, $quote, $max_quote, $rem
 				$remain_text_out = $remain_traffic_text . $remain_traffic_out . $x_rem;
 			break;
 			case 'dl_physical_quota':
-				$remain_text_out = sprintf($user->lang['DL_PHYSICAL_QUOTA_EXPLAIN'], \oxpus\dl_ext\includes\classes\ dl_format::dl_size(\oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes($ext_path . '/' . $config['dl_download_dir']), 2));
+				$remain_text_out = sprintf($user->lang['DL_PHYSICAL_QUOTA_EXPLAIN'], \oxpus\dl_ext\includes\classes\ dl_format::dl_size(\oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes(), 2));
 			break;
 		}
 
@@ -856,6 +889,15 @@ function select_traffic_multi($field, $s_select, $select_size)
 function textarea_input($value, $field, $cols, $rows)
 {
 	return '<label><textarea cols="' . $cols . '" rows="' . $rows . '" id="' . $field . '" class="inputbox autowidth" name="config[' . $field . ']">' . $value . '</textarea></label>';
+}
+
+function select_filebase($value)
+{
+	$s_select = '<option value="1">/forumroot/ext/oxpus/dl_ext/files/</option>';
+	$s_select .= '<option value="2">/forumroot/store/oxpus/dl_ext/</option>';
+	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+
+	return $s_select;
 }
 
 ?>

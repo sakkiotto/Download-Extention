@@ -108,6 +108,24 @@ class main
 		$table_prefix = $this->table_prefix;
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
 
+		// Define the basic file storage placement
+		if ($this->config['dl_download_dir'] == 2)
+		{
+			$filebase_prefix = $this->root_path . 'store/oxpus/dl_ext/';
+			$filebase_web_prefix = generate_board_url() . '/store/oxpus/dl_ext/';
+		}
+		else
+		{
+			$filebase_prefix = $ext_path . 'files/';
+			$filebase_web_prefix = $ext_path_web . 'files/';
+		}
+
+		define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
+		define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
+		define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
+		define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
+		define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+
 		$this->template->assign_vars(array(
 			'EXT_PATH_WEB'		=> $ext_path_web,
 			'EXT_PATH_AJAX'		=> $ext_path_ajax,

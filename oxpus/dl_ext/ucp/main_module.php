@@ -32,6 +32,20 @@ class main_module
 
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $phpEx);
 
+		// Define the basic file storage placement
+		if ($config['dl_download_dir'] == 2)
+		{
+			$filebase_prefix = $phpbb_root_path . 'store/oxpus/dl_ext/';
+		}
+		else
+		{
+			$filebase_prefix = $ext_path . 'files/';
+		}
+
+		define('DL_EXT_CACHE_FOLDER',	$filebase_prefix . 'cache/');
+		define('DL_EXT_THUMBS_FOLDER',	$filebase_prefix . 'thumbs/');
+		define('DL_EXT_FILES_FOLDER',	$filebase_prefix . 'downloads/');
+
 		$this->tpl_name = 'dl_user_config_body';
 
 		$user->data['dl_enable_desc'] = false;

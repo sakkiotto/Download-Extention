@@ -284,9 +284,9 @@ if (!$dl_files['extern'])
 {
 	if (!$dl_files['file_hash'])
 	{
-		if ($dl_files['real_file'] && file_exists($ext_path . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $dl_files['real_file']))
+		if ($dl_files['real_file'] && file_exists(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $dl_files['real_file']))
 		{
-			$dl_files['file_hash'] = $func_hash($ext_path . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $dl_files['real_file']);
+			$dl_files['file_hash'] = $func_hash(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $dl_files['real_file']);
 			$sql = 'UPDATE ' . DOWNLOADS_TABLE . " SET file_hash = '" . $this->db->sql_escape($dl_files['file_hash']) . "' WHERE id = " . (int) $df_id;
 			$this->db->sql_query($sql);
 		}
@@ -297,7 +297,7 @@ if (!$dl_files['extern'])
 		$dl_key = $dl_files['description'] . (($dl_files['hack_version']) ? ' ' . $dl_files['hack_version'] : ' (' . $this->user->lang['DL_CURRENT_VERSION'] . ')');
 		$hash_table[$dl_key]['hash'] = ($dl_files['file_hash']) ? $dl_files['file_hash'] : '';
 		$hash_table[$dl_key]['file'] = $dl_files['file_name'];
-		$hash_table[$dl_key]['type'] = ($dl_files['file_hash']) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $dl_files['file_name'], $ext_path_web . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path']);
+		$hash_table[$dl_key]['type'] = ($dl_files['file_hash']) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $dl_files['file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
 	}
 	
 	$sql = 'SELECT ver_id, ver_version, ver_real_file, ver_file_hash, ver_file_name, ver_change_time FROM ' . DL_VERSIONS_TABLE . '
@@ -314,9 +314,9 @@ if (!$dl_files['extern'])
 	
 			if (!$ver_file_hash)
 			{
-				if ($row['ver_real_file'] && file_exists($ext_path . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $row['ver_real_file']))
+				if ($row['ver_real_file'] && file_exists(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $row['ver_real_file']))
 				{
-					$ver_file_hash = $func_hash($ext_path . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $row['ver_real_file']);
+					$ver_file_hash = $func_hash(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $row['ver_real_file']);
 					$sql = 'UPDATE ' . DL_VERSIONS_TABLE . " SET ver_file_hash = '" . $this->db->sql_escape($ver_file_hash) . "' WHERE ver_id = " . (int) $row['ver_id'];
 					$this->db->sql_query($sql);
 				}
@@ -327,7 +327,7 @@ if (!$dl_files['extern'])
 				$dl_key = $dl_files['description'] . (($row['ver_version']) ? ' ' . $row['ver_version'] : ' (' . $this->user->format_date($row['ver_change_time']) . ')');
 				$hash_table[$dl_key]['hash'] = ($ver_file_hash) ? $ver_file_hash : '';
 				$hash_table[$dl_key]['file'] = $row['ver_file_name'];
-				$hash_table[$dl_key]['type'] = ($ver_file_hash) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $row['ver_file_name'], $ext_path_web . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path']);
+				$hash_table[$dl_key]['type'] = ($ver_file_hash) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $row['ver_file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
 			}
 		}
 	}
@@ -843,7 +843,7 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 	$first_thumb_exists	= false;
 	$more_thumbs_exists	= false;
 
-	if (@file_exists($ext_path . 'files/thumbs/' . $dl_files['thumbnail']) && $dl_files['thumbnail'])
+	if (@file_exists(DL_EXT_THUMBS_FOLDER . $dl_files['thumbnail']) && $dl_files['thumbnail'])
 	{
 		if (!$total_images)
 		{
@@ -887,10 +887,10 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 
 		foreach ($thumbs_ary as $key => $value)
 		{
-			if (@file_exists($ext_path . 'files/thumbs/' . $thumbs_ary[$key]['img_name']))
+			if (@file_exists(DL_EXT_THUMBS_FOLDER . $thumbs_ary[$key]['img_name']))
 			{
 				$this->template->assign_block_vars('downloads.thumbnail', array(
-					'THUMBNAIL_LINK'	=> $ext_path_web . 'files/thumbs/' . str_replace(" ", "%20", $thumbs_ary[$key]['img_name']),
+					'THUMBNAIL_LINK'	=> DL_EXT_THUMBS_WEB_FOLDER . str_replace(" ", "%20", $thumbs_ary[$key]['img_name']),
 					'THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'])
 				);
 			}
@@ -915,10 +915,10 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 */
 if ($this->config['dl_show_real_filetime'] && !$dl_files['extern'])
 {
-	if (@file_exists($ext_path . '/' . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $real_file))
+	if (@file_exists(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $real_file))
 	{
 		$this->template->assign_block_vars('downloads.real_filetime', array(
-			'REAL_FILETIME'		=> $this->user->format_date(@filemtime($ext_path . '/' . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $real_file)))
+			'REAL_FILETIME'		=> $this->user->format_date(@filemtime(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $real_file)))
 		);
 	}
 }

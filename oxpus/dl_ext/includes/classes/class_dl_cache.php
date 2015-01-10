@@ -34,20 +34,14 @@ class dl_cache extends dl_mod
 		return;
 	}
 
-	public static function dl_cache_dir()
-	{
-		global $ext_path;
-		return $ext_path . 'files/cache/';
-	}
-
 	/**
 	 * Download MOD Category Cache
 	*/
-	public static function obtain_dl_cats($ext_path)
+	public static function obtain_dl_cats()
 	{
 		global $db, $user;
 
-		if (($dl_index = self::get($ext_path, '_dl_cats')) === false)
+		if (($dl_index = self::get('_dl_cats')) === false)
 		{
 			$sql = "SELECT * FROM " . DL_CAT_TABLE . '
 				ORDER BY parent, sort';
@@ -67,7 +61,7 @@ class dl_cache extends dl_mod
 
 			$db->sql_freeresult($result);
 
-			self::put($ext_path, '_dl_cats', $dl_index);
+			self::put('_dl_cats', $dl_index);
 		}
 
 		$sql = "SELECT cat_id, cat_traffic_use FROM " . DL_CAT_TRAF_TABLE;
@@ -105,11 +99,11 @@ class dl_cache extends dl_mod
 	/**
 	 * Download MOD Blacklist Cache
 	*/
-	public static function obtain_dl_blacklist($ext_path)
+	public static function obtain_dl_blacklist()
 	{
 		global $db;
 
-		if (($dl_black = self::get($ext_path, '_dl_black')) === false)
+		if (($dl_black = self::get('_dl_black')) === false)
 		{
 			$sql = 'SELECT extention FROM ' . DL_EXT_BLACKLIST . '
 				ORDER BY extention';
@@ -121,7 +115,7 @@ class dl_cache extends dl_mod
 			}
 			$db->sql_freeresult($result);
 
-			self::put($ext_path, '_dl_black', $dl_black);
+			self::put('_dl_black', $dl_black);
 		}
 
 		return $dl_black;
@@ -130,11 +124,11 @@ class dl_cache extends dl_mod
 	/**
 	 * Download MOD Cat Filecount Cache
 	*/
-	public static function obtain_dl_cat_counts($ext_path)
+	public static function obtain_dl_cat_counts()
 	{
 		global $db;
 
-		if (($dl_cat_counts = self::get($ext_path, '_dl_cat_counts')) === false)
+		if (($dl_cat_counts = self::get('_dl_cat_counts')) === false)
 		{
 			$sql = 'SELECT COUNT(id) AS total, cat FROM ' . DOWNLOADS_TABLE . '
 				GROUP BY cat';
@@ -145,7 +139,7 @@ class dl_cache extends dl_mod
 			}
 			$db->sql_freeresult($result);
 
-			self::put($ext_path, '_dl_cat_counts', $dl_cat_counts);
+			self::put('_dl_cat_counts', $dl_cat_counts);
 		}
 
 		return $dl_cat_counts;
@@ -154,7 +148,7 @@ class dl_cache extends dl_mod
 	/**
 	 * Download MOD Files Cache
 	*/
-	public static function obtain_dl_files($ext_path, $dl_new_time, $dl_edit_time)
+	public static function obtain_dl_files($dl_new_time, $dl_edit_time)
 	{
 		$dl_file['new'] = array();
 		$dl_file['new_sum'] = array();
@@ -172,7 +166,7 @@ class dl_cache extends dl_mod
 
 		$cache_release_time = max($dl_new_time, $dl_edit_time) * 86400;
 
-		if (($dl_file = self::get($ext_path, '_dl_file_preset')) === false)
+		if (($dl_file = self::get('_dl_file_preset')) === false)
 		{
 			global $db;
 
@@ -235,7 +229,7 @@ class dl_cache extends dl_mod
 
 			$db->sql_freeresult($result);
 
-			self::put($ext_path, '_dl_file_preset', $dl_file, $cache_release_time);
+			self::put('_dl_file_preset', $dl_file, $cache_release_time);
 		}
 
 		return $dl_file;
@@ -244,13 +238,13 @@ class dl_cache extends dl_mod
 	/**
 	 * Download MOD Auth Cache
 	*/
-	public static function obtain_dl_auth($ext_path)
+	public static function obtain_dl_auth()
 	{
 		global $db;
 
 		$auth_cat = $group_perm_ids = $auth_perm = array();
 
-		if (($dl_auth_perm = self::get($ext_path, '_dl_auth')) === false)
+		if (($dl_auth_perm = self::get('_dl_auth')) === false)
 		{
 			$sql = 'SELECT * FROM ' . DL_AUTH_TABLE;
 			$result = $db->sql_query($sql);
@@ -285,7 +279,7 @@ class dl_cache extends dl_mod
 			$dl_auth_perm['group_perm_ids'] = $group_perm_ids;
 			$dl_auth_perm['auth_perm'] = $auth_perm;
 
-			self::put($ext_path, '_dl_auth', $dl_auth_perm);
+			self::put('_dl_auth', $dl_auth_perm);
 		}
 
 		return $dl_auth_perm;
@@ -294,29 +288,29 @@ class dl_cache extends dl_mod
 	/**
 	* Get saved cache object
 	*/
-	public static function get($ext_path, $var_name)
+	public static function get($var_name)
 	{
 		static $vars;
 
 		if ($var_name[0] == '_')
 		{
-			if (!self::_exists($ext_path, $var_name))
+			if (!self::_exists($var_name))
 			{
 				return false;
 			}
 
-			return self::_read($ext_path, 'data' . $var_name);
+			return self::_read('data' . $var_name);
 		}
 		else
 		{
-			return (self::_exists($ext_path, $var_name)) ? $vars[$var_name] : false;
+			return (self::_exists($var_name)) ? $vars[$var_name] : false;
 		}
 	}
 
 	/**
 	* Put data into cache
 	*/
-	public static function put($ext_path, $var_name, $var, $ttl = 31536000)
+	public static function put($var_name, $var, $ttl = 31536000)
 	{
 		static $vars;
 		static $var_expires;
@@ -324,7 +318,7 @@ class dl_cache extends dl_mod
 
 		if ($var_name[0] == '_')
 		{
-			self::_write($ext_path, 'data' . $var_name, $var, time() + $ttl);
+			self::_write('data' . $var_name, $var, time() + $ttl);
 		}
 		else
 		{
@@ -337,14 +331,14 @@ class dl_cache extends dl_mod
 	/**
 	* Check if a given cache entry exist
 	*/
-	static private function _exists($ext_path, $var_name)
+	static private function _exists($var_name)
 	{
 		static $var_expires;
 		static $vars;
 
 		if ($var_name[0] == '_')
 		{
-			return file_exists($ext_path . 'files/cache/data' . $var_name . dl_init::phpEx());
+			return file_exists(DL_EXT_CACHE_FOLDER . 'data' . $var_name . dl_init::phpEx());
 		}
 		else
 		{
@@ -364,9 +358,9 @@ class dl_cache extends dl_mod
 	* @param string $filename Filename to write
 	* @return mixed False if an error was encountered, otherwise the data type of the cached data
 	*/
-	static private function _read($ext_path, $filename)
+	static private function _read($filename)
 	{
-		$file = $ext_path . 'files/cache/' . $filename . dl_init::phpEx();
+		$file = DL_EXT_CACHE_FOLDER . $filename . dl_init::phpEx();
 
 		$type = substr($filename, 0, strpos($filename, '_'));
 
@@ -467,9 +461,9 @@ class dl_cache extends dl_mod
 	* @param string $query Query when caching SQL queries
 	* @return bool True if the file was successfully created, otherwise false
 	*/
-	static private function _write($ext_path, $filename, $data = null, $expires = 0, $query = '')
+	static private function _write($filename, $data = null, $expires = 0, $query = '')
 	{
-		$file = $ext_path . 'files/cache/' . $filename . dl_init::phpEx();
+		$file = DL_EXT_CACHE_FOLDER . $filename . dl_init::phpEx();
 
 		if ($handle = @fopen($file, 'wb'))
 		{
@@ -505,13 +499,13 @@ class dl_cache extends dl_mod
 	*/
 	public static function remove_file($filename, $check = false)
 	{
-		if ($check && !@is_writable($ext_path . 'files/cache/'))
+		if ($check && !@is_writable(DL_EXT_CACHE_FOLDER))
 		{
 			// E_USER_ERROR - not using language entry - intended.
-			trigger_error('Die Datei ' . $ext_path . 'files/cache/' . $filename . ' kann nicht entfernt werden. Bitte die Berechtigungen des Cache-Ordners prüfen.', E_USER_ERROR);
+			trigger_error('Die Datei ' . DL_EXT_CACHE_FOLDER . $filename . ' kann nicht entfernt werden. Bitte die Berechtigungen des Cache-Ordners prüfen.', E_USER_ERROR);
 		}
 
-		return @unlink($filename);
+		return @unlink(DL_EXT_CACHE_FOLDER . $filename);
 	}
 }
 

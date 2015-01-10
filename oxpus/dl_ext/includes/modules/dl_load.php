@@ -402,7 +402,7 @@ if ($check_status['auth_dl'] && $dl_file['id'])
 	}
 	else if ($status)
 	{
-	 	$dl_file_url = $ext_path . '/' . $this->config['dl_download_dir'] . $index[$cat_id]['cat_path'] . $dl_file['real_file'];
+	 	$dl_file_url = DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $dl_file['real_file'];
 
 		$dl_file_size = sprintf("%u", @filesize($dl_file_url));
 

@@ -75,7 +75,7 @@ if ($action == 'delete' && $img_id && $df_id)
 	$img_link = $this->db->sql_fetchfield('img_name');
 	$this->db->sql_freeresult($result);
 
-	@unlink($ext_path . 'files/thumbs/' . $img_link);
+	@unlink(DL_EXT_THUMBS_FOLDER . $img_link);
 
 	$sql = 'DELETE FROM ' . DL_IMAGES_TABLE . '
 		WHERE img_id = ' . (int) $img_id . '
@@ -154,16 +154,16 @@ if ($submit && !$action)
 	if (isset($thumb_name) && $thumb_name != '')
 	{
 		$cur_time = time();
-		$thumb_tmp_link = $ext_path . 'files/thumbs/' . $cur_time . '_' . $thumb_name;
+		$thumb_tmp_link = DL_EXT_THUMBS_FOLDER . $cur_time . '_' . $thumb_name;
 
 		while (!file_exists($thumb_tmp_link))
 		{
 			$thumb_file->realname = $thumb_tmp_link;
-			$thumb_file->move_file($ext_path . 'files/thumbs/', false, false, CHMOD_ALL);
+			$thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
 			@chmod($thumb_file->destination_file, 0777);
 
 			$cur_time = time();
-			$thumb_tmp_link = $ext_path . 'files/thumbs/' . $cur_time . '_' . $thumb_name;
+			$thumb_tmp_link = DL_EXT_THUMBS_FOLDER . $cur_time . '_' . $thumb_name;
 		}
 
 		$img_link = $cur_time . '_' . $thumb_name;;
@@ -177,7 +177,7 @@ if ($submit && !$action)
 
 			if ($old_img_link != '')
 			{
-				@unlink($ext_path . 'files/thumbs/' . $old_img_link);
+				@unlink(DL_EXT_THUMBS_FOLDER . $old_img_link);
 			}
 		}
 	}
@@ -245,7 +245,7 @@ $result = $this->db->sql_query($sql);
 while ($row = $this->db->sql_fetchrow($result))
 {
 	$this->template->assign_block_vars('thumbnails', array(
-		'IMG_LINK'	=> $ext_path_web . 'files/thumbs/' . str_replace(" ", "%20", $row['img_name']),
+		'IMG_LINK'	=> DL_EXT_THUMBS_WEB_FOLDER . str_replace(" ", "%20", $row['img_name']),
 		'IMG_TITLE'	=> $row['img_title'],
 
 		'U_DELETE'	=> $this->helper->route('dl_ext_controller', array('view' => 'thumbs', 'action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id'])),

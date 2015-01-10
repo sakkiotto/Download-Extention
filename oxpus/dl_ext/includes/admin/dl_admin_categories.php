@@ -74,10 +74,10 @@ $show_file_hash		= $request->variable('show_file_hash', 0);
 $error = false;
 $error_msg = '';
 
-if ($action == 'save_cat' && $path && !@file_exists($ext_path . '/' . $config['dl_download_dir'] . $path) || substr($path, strlen($path)-1, 1) <> '/')
+if ($action == 'save_cat' && $path && !@file_exists(DL_EXT_FILES_FOLDER . $path) || substr($path, -1, 1) <> '/')
 {
 	$error = true;
-	$error_msg = sprintf($user->lang['DL_PATH_NOT_EXIST'], $path, $ext_path . '/' . $config['dl_download_dir'], $ext_path . '/' . $config['dl_download_dir'] . $path);
+	$error_msg = sprintf($user->lang['DL_PATH_NOT_EXIST'], $path, DL_EXT_FILES_FOLDER, DL_EXT_FILES_FOLDER . $path);
 	$action = ($cat_id) ? 'edit' : 'add';
 	$submit = true;
 	$s_hidden_fields = array('cat_id' => $cat_id);
@@ -163,6 +163,12 @@ if($action == 'edit' || $action == 'add')
 		$perms_copy_from	.= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $perm_cat_id, 'auth_view', -1);
 		$perms_copy_from	.= '</select>';
 	}
+
+	$s_path_select = '<select name="path">';
+	$s_path_select .= '<option value="/">' . $user->lang['DL_CAT_PATH_SELECT'] . '</option>';
+	$s_path_select .= \oxpus\dl_ext\includes\classes\ dl_physical::get_file_base_tree(DL_EXT_FILES_WEBFOLDER, $cat_path);
+	$s_path_select .= '</select>';
+	$s_path_select = str_replace('value="' . $cat_path . '">', 'value="' . $cat_path . '" selected="selected">', $s_path_select);
 
 	$s_topic_user_select = '<select name="dl_diff_topic_user">';
 	$s_topic_user_select .= '<option value="0">' . $user->lang['DL_TOPIC_USER_SELF'] . '</option>';
@@ -312,7 +318,6 @@ if($action == 'edit' || $action == 'add')
 
 		'ERROR_MSG'				=> $error_msg,
 		'CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? sprintf($user->lang['DL_PERMISSIONS'], $index[$cat_id]['cat_name']) : '',
-		'CAT_PATH'				=> $cat_path,
 		'MUST_APPROVE_YES'		=> $approve_yes,
 		'MUST_APPROVE_NO'		=> $approve_no,
 		'ALLOW_MOD_DESC_YES'	=> $allow_mod_desc_yes,
@@ -340,7 +345,7 @@ if($action == 'edit' || $action == 'add')
 		'SHOW_FILE_HASH_YES'	=> $show_file_hash_yes,
 		'SHOW_FILE_HASH_NO'		=> $show_file_hash_no,
 
-
+		'S_CAT_PATH'			=> $s_path_select,
 		'S_DL_TOPIC_FORUM'		=> $s_forum_select,
 		'S_CAT_TRAFFIC_RANGE'	=> $cat_traffic_range,
 		'S_CATEGORY_ACTION'		=> $basic_link,
@@ -395,8 +400,8 @@ else if($action == 'save_cat')
 	// Move files, if the path was changed
 	if ($cat_id && $index[$cat_id]['path'] != $path)
 	{
-		$old_path = $ext_path . '/' . $config['dl_download_dir'] . $index[$cat_id]['path'];
-		$new_path = $ext_path . '/' . $config['dl_download_dir'] . $path;
+		$old_path = DL_EXT_FILES_FOLDER . $index[$cat_id]['path'];
+		$new_path = DL_EXT_FILES_FOLDER . $path;
 
 		$move_mode = (@ini_get('open_basedir') || @ini_get('safe_mode') || strtolower(@ini_get('safe_mode')) == 'on') ? 'move' : 'copy';
 
@@ -610,8 +615,8 @@ else if($action == 'save_cat')
 	}
 
 	// Purge the categories cache
-	@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
-	@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
 	$message .= "<br /><br />" . sprintf($user->lang['CLICK_RETURN_CATEGORYADMIN'], '<a href="' . $basic_link . '">', '</a>') . adm_back_link($this->u_action);
 
@@ -655,13 +660,13 @@ else if($action == 'delete' && $cat_id && !\oxpus\dl_ext\includes\classes\ dl_ma
 
 				if (!$new_cat_id)
 				{
-					@unlink($ext_path . '/' . $config['dl_download_dir'] . $path . $real_file);
+					@unlink(DL_EXT_FILES_FOLDER . $path . $real_file);
 
 					if (isset($real_ver_file[$df_id]))
 					{
 						for ($i = 0; $i < sizeof($real_ver_file[$df_id]); $i++)
 						{
-							@unlink($ext_path . '/' . $config['dl_download_dir'] . $path . $real_ver_file[$df_id][$i]);
+							@unlink(DL_EXT_FILES_FOLDER . $path . $real_ver_file[$df_id][$i]);
 						}
 					}
 				}
@@ -724,10 +729,10 @@ else if($action == 'delete' && $cat_id && !\oxpus\dl_ext\includes\classes\ dl_ma
 		add_log('admin', 'DL_LOG_CAT_DEL', $log_cat_name);
 
 		// Purge the categories cache
-		@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
-		@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
-		@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $phpEx);
-		@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $phpEx);
 
 		$message = $user->lang['DL_CATEGORY_REMOVED'] . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_CATEGORYADMIN'], '<a href="' . $basic_link . '">', '</a>') . adm_back_link($this->u_action);
 
@@ -955,8 +960,8 @@ else if($action == 'category_order')
 	add_log('admin', 'DL_LOG_CAT_MOVE', $log_cat_name);
 
 	// Purge the categories cache
-	@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
-	@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
 	redirect($basic_link);
 }
@@ -981,8 +986,8 @@ else if($action == 'asc_sort')
 	$db->sql_freeresult($result);
 
 	// Purge the categories cache
-	@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
-	@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
 	add_log('admin', 'DL_LOG_CAT_SORT_ASC');
 

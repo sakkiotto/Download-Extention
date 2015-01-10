@@ -40,7 +40,7 @@ if (sizeof($files) && $file_assign)
 	{
 		for ($i = 0; $i < sizeof($files); $i++)
 		{
-			$dl_dir = ($files_path[$i]) ? substr($ext_path . $config['dl_download_dir'], 0, strlen($ext_path . $config['dl_download_dir'])-1) : $ext_path . $config['dl_download_dir'];
+			$dl_dir = ($files_path[$i]) ? substr(DL_EXT_FILES_FOLDER, 0, strlen(DL_EXT_FILES_FOLDER)-1) : DL_EXT_FILES_FOLDER;
 
 			@unlink($dl_dir . $files_path[$i] . '/' . $files_name[$i]);
 
@@ -54,7 +54,7 @@ if (sizeof($files) && $file_assign)
 	}
 	else
 	{
-		$dl_dir = substr($ext_path . $config['dl_download_dir'], 0, strlen($ext_path . $config['dl_download_dir'])-1);
+		$dl_dir = substr(DL_EXT_FILES_FOLDER, 0, strlen(DL_EXT_FILES_FOLDER)-1);
 
 		for ($i = 0; $i < sizeof($files); $i++)
 		{
@@ -66,7 +66,7 @@ if (sizeof($files) && $file_assign)
 
 			if ($cat_path != substr($files_path[$i], 1).'/')
 			{
-				@copy ($dl_dir . $files_path[$i] . '/' . $files_name[$i], $ext_path . $config['dl_download_dir'] . $cat_path . $files_name[$i]);
+				@copy ($dl_dir . $files_path[$i] . '/' . $files_name[$i], DL_EXT_FILES_FOLDER . $cat_path . $files_name[$i]);
 				@unlink($dl_dir . $files_path[$i] . '/' . $files_name[$i]);
 			}
 
@@ -108,7 +108,7 @@ if (isset($index) && sizeof($index))
 
 	if ($action == 'unassigned' && sizeof($unas_files))
 	{
-		$read_files = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_files($ext_path . $config['dl_download_dir'], '', $unas_files);
+		$read_files = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_files('', $unas_files);
 		$read_files = substr($read_files, 0, strlen($read_files) - 1 );
 
 		$files = explode('|', $read_files);
@@ -139,7 +139,7 @@ if ($action == 'check_file_sizes')
 		$file_path	= $row['path'];
 		$file_id	= $row['id'];
 
-		$check_file_size = sprintf("%u", @filesize($ext_path . $config['dl_download_dir'] . $file_path . $real_file));
+		$check_file_size = sprintf("%u", @filesize(DL_EXT_FILES_FOLDER . $file_path . $real_file));
 		if ( $check_file_size == 0 || $check_file_size == '' )
 		{
 			$message .= $file_desc . '<br />';
@@ -191,7 +191,7 @@ if ($action == 'check_thumbnails')
 	{
 		for ($i = 0; $i < sizeof($thumbs); $i++)
 		{
-			unlink($ext_path . 'files/thumbs/' . base64_decode($thumbs[$i]));
+			@unlink(DL_EXT_THUMBS_FOLDER . base64_decode($thumbs[$i]));
 		}
 
 		add_log('admin', 'DL_LOG_THUMBS_DEL');
@@ -200,14 +200,14 @@ if ($action == 'check_thumbnails')
 	$real_thumbnails['file_name'] = array();
 	$real_thumbnails['file_size'] = array();
 
-	@$dir = opendir($ext_path . 'files/thumbs/');
+	@$dir = opendir(DL_EXT_THUMBS_FOLDER);
 
 	while (false !== ($file=@readdir($dir)))
 	{
 		if ($file{0} != "." && !is_dir($file) && $file != 'index.html' && $file != 'index.htm')
 		{
 			$real_thumbnails['file_name'][] = $file;
-			$real_thumbnails['file_size'][] = sprintf("%u", @filesize($ext_path . 'files/thumbs/' . $file));
+			$real_thumbnails['file_size'][] = sprintf("%u", @filesize(DL_EXT_THUMBS_FOLDER . $file));
 		}
 	}
 
@@ -260,7 +260,7 @@ if ($action == 'check_thumbnails')
 				'REAL_FILE'		=> $real_file,
 				'FILE_SIZE'		=> \oxpus\dl_ext\includes\classes\ dl_format::dl_size($real_thumbnails['file_size'][$i]),
 
-				'U_REAL_FILE'	=> $ext_path . 'files/thumbs/' . $real_file,
+				'U_REAL_FILE'	=> DL_EXT_THUMBS_FOLDER . $real_file,
 			));
 		}
 
@@ -281,7 +281,7 @@ if ($files && $file_command)
 	{
 		for ($i = 0; $i < sizeof($files); $i++)
 		{
-			@unlink($ext_path . $config['dl_download_dir'] . $path . $files[$i]);
+			@unlink(DL_EXT_FILES_FOLDER . $path . $files[$i]);
 
 			add_log('admin', 'DL_LOG_FILE_DROP', $files[$i]);
 		}
@@ -290,8 +290,8 @@ if ($files && $file_command)
 	{
 		for ($i = 0; $i < sizeof($files); $i++)
 		{
-			@copy ($ext_path . $config['dl_download_dir'] . $path . $files[$i], $file_command . $files[$i]);
-			@unlink($ext_path . $config['dl_download_dir'] . $path . $files[$i]);
+			@copy (DL_EXT_FILES_FOLDER . $path . $files[$i], $file_command . $files[$i]);
+			@unlink(DL_EXT_FILES_FOLDER . $path . $files[$i]);
 
 			add_log('admin', 'DL_LOG_FILE_MOVE', $files[$i]);
 		}
@@ -307,8 +307,8 @@ if ($dir_name && $dircreate)
 	$upass = array(' ' => '', '+' => '', '%' => '');
 	$dir_name = strtr(urlencode(strtr(utf8_decode($dir_name), $upas)), $upass);
 
-	@mkdir($ext_path . $config['dl_download_dir'] . $path . '/' . $dir_name);
-	@chmod($ext_path . $config['dl_download_dir'] . $path . '/' . $dir_name, 0777);
+	@mkdir(DL_EXT_FILES_FOLDER . $path . '/' . $dir_name);
+	@chmod(DL_EXT_FILES_FOLDER . $path . '/' . $dir_name, 0777);
 
 	add_log('admin', 'DL_LOG_FOLDER_CREATE', $path . '/' . $dir_name);
 }
@@ -319,7 +319,7 @@ if ($action == 'dirdelete')
 
 	$content_count = 0;
 
-	$sh = @opendir($ext_path . $config['dl_download_dir'] . $path . '/' . $file);
+	$sh = @opendir(DL_EXT_FILES_FOLDER . $path . '/' . $file);
 
 	while (false !== ($subfile=@readdir($sh)))
 	{
@@ -333,7 +333,7 @@ if ($action == 'dirdelete')
 
 	if ($content_count == 0)
 	{
-		@rmdir($ext_path . $config['dl_download_dir'] . $path);
+		@rmdir(DL_EXT_FILES_FOLDER . $path);
 
 		add_log('admin', 'DL_LOG_FOLDER_DROP', $path);
 	}
@@ -350,7 +350,7 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 		$temp_url = '';
 		$temp_dir = array();
 
-		$dl_navi = '<a href="' . $basic_link . '&amp;action=browse">' . $config['dl_download_dir'] . '</a>';
+		$dl_navi = '<a href="' . $basic_link . '&amp;action=browse">' . DL_EXT_FILES_FOLDER . '</a>';
 
 		$dirs = $dirs_delete = $files = $filen = $sizes = $exist = array();
 
@@ -408,18 +408,18 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 			$db->sql_freeresult($result);
 		}
 
-		$dh = @opendir($ext_path . $config['dl_download_dir'] . $path);
+		$dh = @opendir(DL_EXT_FILES_FOLDER . $path);
 
 		while (false !== ($file=@readdir($dh)))
 		{
 			if (substr($file,0,1)!=".")
 			{
-				if (is_dir($ext_path . $config['dl_download_dir'] . $path . '/' . $file))
+				if (is_dir(DL_EXT_FILES_FOLDER . $path . '/' . $file))
 				{
 					$slash = ($path) ? '/' : '';
 					$dirs[] = '<a href="' . $basic_link . '&amp;action=browse&amp;path=' . $path . $slash . $file . '">' . $file . '</a>';
 
-					$sh = @opendir($ext_path . $config['dl_download_dir'] . $path . '/' . $file);
+					$sh = @opendir(DL_EXT_FILES_FOLDER . $path . '/' . $file);
 
 					$content_count = 0;
 
@@ -438,9 +438,9 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 				else
 				{
 					$real_file_name = (isset($real_file_array[$file])) ? $real_file_array[$file] : $file;
-					$files[] = '<a href="' . $ext_path . $config['dl_download_dir'] . $path . '/' . $file.'">' . $real_file_name . '</a>';
+					$files[] = '<a href="' . DL_EXT_FILES_FOLDER . $path . '/' . $file.'">' . $real_file_name . '</a>';
 					$filen[] = $file;
-					$sizes[] = sprintf("%u", @filesize($ext_path . $config['dl_download_dir'] . $path .'/' . $file));
+					$sizes[] = sprintf("%u", @filesize(DL_EXT_FILES_FOLDER . $path .'/' . $file));
 					$exist[] = (in_array($file, $existing_files)) ? true : 0;
 				}
 			}
@@ -470,7 +470,7 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 	);
 
 	$existing_thumbs = 0;
-	@$dir = opendir($ext_path . 'files/thumbs/');
+	@$dir = opendir(DL_EXT_THUMBS_FOLDER);
 
 	while (false !== ($file = @readdir($dir)))
 	{
@@ -517,7 +517,7 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 		$missing_count = 0;
 		for($i = 0; $i < sizeof($files); $i++)
 		{
-			$file_size = ($action != 'unassigned') ? $sizes[$i] : sprintf("%u", @filesize($ext_path . $config['dl_download_dir'] . $files[$i]));
+			$file_size = ($action != 'unassigned') ? $sizes[$i] : sprintf("%u", @filesize(DL_EXT_FILES_FOLDER . $files[$i]));
 
 			$file_size_tmp = \oxpus\dl_ext\includes\classes\ dl_format::dl_size($file_size, 2, 'no');
 			$file_size_out = $file_size_tmp['size_out'];
@@ -563,7 +563,7 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 			$s_file_action = '<select name="file_command">';
 			$s_file_action .= '<option value="del">'.$user->lang['DL_DELETE'].'</option>';
 			$s_file_action .= '<option value="---">---------------</option>';
-			$s_file_action .= \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_dirs($ext_path . $config['dl_download_dir']);
+			$s_file_action .= \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_dirs();
 		}
 		else
 		{

@@ -327,7 +327,7 @@ if($action == 'edit' || $action == 'add')
 		'APPROVE'				=> $approve,
 		'SELECT_CAT'			=> $select_code,
 		'ENCTYPE'				=> $enctype,
-		'THUMBNAIL'				=> $ext_path . '/files/thumbs/' . $thumbnail,
+		'THUMBNAIL'				=> DL_EXT_THUMBS_FOLDER . $thumbnail,
 		'FILE_EXT_SIZE'			=> $file_extern_size_out,
 
 		'S_TODO_LINK_ONOFF'		=> ($config['dl_todo_onoff']) ? true : false,
@@ -428,7 +428,7 @@ else if($action == 'save')
 
 					while ($row = $db->sql_fetchrow($result))
 					{
-						@unlink($ext_path . '/' . $config['dl_download_dir'] . $path . $row['ver_real_file']);
+						@unlink(DL_EXT_FILES_FOLDER . $path . $row['ver_real_file']);
 					}
 
 					$db->sql_freeresult($result);
@@ -556,19 +556,19 @@ else if($action == 'save')
 
 				if ($file_option == 2 && !$file_version)
 				{
-					@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_file_old);
+					@unlink(DL_EXT_FILES_FOLDER . $file_path_old . $real_file_old);
 				}
 
 				$i = 0;
-				while(@file_exists($ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $new_real_file))
+				while(@file_exists(DL_EXT_FILES_FOLDER . $file_path_new . $new_real_file))
 				{
 					$new_real_file = md5($i . $file_name);
 					$i++;
 				}
 
-				@copy($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $file_name, $ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $new_real_file);
-				@chmod($ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $new_real_file, 0777);
-				@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $file_name);
+				@copy(DL_EXT_FILES_FOLDER . $file_path_old . $file_name, DL_EXT_FILES_FOLDER . $file_path_new . $new_real_file);
+				@chmod(DL_EXT_FILES_FOLDER . $file_path_new . $new_real_file, 0777);
+				@unlink(DL_EXT_FILES_FOLDER . $file_path_old . $file_name);
 
 				$real_file_old = $new_real_file;
 			}
@@ -579,15 +579,15 @@ else if($action == 'save')
 					$new_real_file = md5($dl_file['real_file']);
 
 					$i = 0;
-					while(@file_exists($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $new_real_file))
+					while(@file_exists(DL_EXT_FILES_FOLDER . $file_path_old . $new_real_file))
 					{
 						$new_real_file = md5($i . $dl_file['real_file']);
 						$i++;
 					}
 
-					@copy($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_file_old, $ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $new_real_file);
-					@chmod($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $new_real_file, 0777);
-					@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_file_old);
+					@copy(DL_EXT_FILES_FOLDER . $file_path_old . $real_file_old, DL_EXT_FILES_FOLDER . $file_path_old . $new_real_file);
+					@chmod(DL_EXT_FILES_FOLDER . $file_path_old . $new_real_file, 0777);
+					@unlink(DL_EXT_FILES_FOLDER . $file_path_old . $real_file_old);
 				}
 				else
 				{
@@ -599,9 +599,9 @@ else if($action == 'save')
 			{
 				if ($file_path_old != $file_path_new)
 				{
-					@copy($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_file_old, $ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $new_real_file);
-					@chmod($ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $new_real_file, 0777);
-					@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_file_old);
+					@copy(DL_EXT_FILES_FOLDER . $file_path_old . $real_file_old, DL_EXT_FILES_FOLDER . $file_path_new . $new_real_file);
+					@chmod(DL_EXT_FILES_FOLDER . $file_path_new . $new_real_file, 0777);
+					@unlink(DL_EXT_FILES_FOLDER . $file_path_old . $real_file_old);
 
 					$sql = 'SELECT ver_real_file FROM ' . DL_VERSIONS_TABLE . '
 						WHERE dl_id = ' . (int) $df_id;
@@ -611,9 +611,9 @@ else if($action == 'save')
 					{
 						$real_ver_file = $row['ver_real_file'];
 
-						@copy($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_ver_file, $ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $real_ver_file);
-						@chmod($ext_path . '/' . $config['dl_download_dir'] . $file_path_new . $real_ver_file, 0777);
-						@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path_old . $real_ver_file);
+						@copy(DL_EXT_FILES_FOLDER . $file_path_old . $real_ver_file, DL_EXT_FILES_FOLDER . $file_path_new . $real_ver_file);
+						@chmod(DL_EXT_FILES_FOLDER . $file_path_new . $real_ver_file, 0777);
+						@unlink(DL_EXT_FILES_FOLDER . $file_path_old . $real_ver_file);
 					}
 
 					$db->sql_freeresult($result);
@@ -633,24 +633,24 @@ else if($action == 'save')
 			$new_real_file = md5($file_name);
 
 			$i = 0;
-			while(@file_exists($ext_path . '/' . $config['dl_download_dir'] . $file_path . $new_real_file))
+			while(@file_exists(DL_EXT_FILES_FOLDER . $file_path . $new_real_file))
 			{
 				$new_real_file = md5($i . $file_name);
 				$i++;
 			}
 
-			@copy($ext_path . '/' . $config['dl_download_dir'] . $file_path . $file_name, $ext_path . '/' . $config['dl_download_dir'] . $file_path . $new_real_file);
-			@chmod($ext_path . '/' . $config['dl_download_dir'] . $file_path . $new_real_file, 0777);
-			@unlink($ext_path . '/' . $config['dl_download_dir'] . $file_path . $file_name);
+			@copy(DL_EXT_FILES_FOLDER . $file_path . $file_name, DL_EXT_FILES_FOLDER . $file_path . $new_real_file);
+			@chmod(DL_EXT_FILES_FOLDER . $file_path . $new_real_file, 0777);
+			@unlink(DL_EXT_FILES_FOLDER . $file_path . $file_name);
 		}
 
 		if (!$file_extern)
 		{
-			$file_size = sprintf("%u", @filesize($ext_path . '/' . $config['dl_download_dir'] . $file_path . $new_real_file));
+			$file_size = sprintf("%u", @filesize(DL_EXT_FILES_FOLDER . $file_path . $new_real_file));
 
 			if (!$file_size)
 			{
-				trigger_error(sprintf($user->lang['DL_FILE_NOT_FOUND'], $new_real_file, $ext_path . '/' . $config['dl_download_dir'] . $file_path), E_USER_WARNING);
+				trigger_error(sprintf($user->lang['DL_FILE_NOT_FOUND'], $new_real_file, DL_EXT_FILES_FOLDER . $file_path), E_USER_WARNING);
 			}
 		}
 		else
@@ -666,7 +666,7 @@ else if($action == 'save')
 		{
 			$hash_method = $config['dl_file_hash_algo'];
 			$func_hash = $hash_method . '_file';
-			$file_hash = $func_hash($ext_path . '/' . $config['dl_download_dir'] . $file_path . $new_real_file);		
+			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $file_path . $new_real_file);		
 		}
 		else
 		{
@@ -704,7 +704,7 @@ else if($action == 'save')
 				$real_old_file = $db->sql_fetchfield('ver_real_file');
 				$db->sql_freeresult($result);
 
-				@unlink($ext_path . '/' . $config['dl_download_dir'] . $dl_path . $real_old_file);
+				@unlink(DL_EXT_FILES_FOLDER . $dl_path . $real_old_file);
 
 				$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', array(
 					'ver_file_name'		=> $file_name,
@@ -871,11 +871,11 @@ else if($action == 'save')
 					if (!$thumb_error)
 					{
 						$df_id = ($df_id) ? $df_id : $db->sql_nextid();
-						@unlink($ext_path . '/files/thumbs/' . $dl_file['thumbnail']);
-						@unlink($ext_path . '/files/thumbs/' . $df_id . '_' . $thumb_name);
+						@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
+						@unlink(DL_EXT_THUMBS_FOLDER . $df_id . '_' . $thumb_name);
 
 						$thumb_file->realname = $df_id . '_' . $thumb_name;
-						$error = $thumb_file->move_file($ext_path . '/files/thumbs/', false, false, CHMOD_ALL);
+						$error = $thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
 						@chmod($thumb_file->destination_file, 0777);
 
 						$thumb_message = '<br />' . $user->lang['DL_THUMB_UPLOAD'];
@@ -898,7 +898,7 @@ else if($action == 'save')
 					'thumbnail' => '')) . ' WHERE id = ' . (int) $df_id;
 				$db->sql_query($sql);
 
-				@unlink($ext_path . '/files/thumbs/' . $dl_file['thumbnail']);
+				@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
 
 				$thumb_message = '<br />'.$user->lang['DL_THUMB_DEL'];
 			}
@@ -1003,8 +1003,8 @@ else if($action == 'save')
 	}
 
 	// Purge the files cache
-	@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $phpEx);
-	@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $phpEx);
 
 	$message .= $thumb_message . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_DOWNLOADADMIN'], '<a href="' . $basic_link . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
 
@@ -1071,20 +1071,20 @@ else if($action == 'delete')
 			$path = $index[$cat_id]['cat_path'];
 			$file_name = $dl_file['real_file'];
 
-			@unlink($ext_path . '/' . $config['dl_download_dir'] . $path . $file_name);
+			@unlink(DL_EXT_FILES_FOLDER . $path . $file_name);
 
 			if (isset($real_ver_file[$df_id]))
 			{
 				for ($j = 0; $j < sizeof($real_ver_file[$df_id]); $j++)
 				{
-					@copy($ext_path . '/' . $config['dl_download_dir'] . $old_path . $real_ver_file[$df_id][$j], $ext_path . '/' . $config['dl_download_dir'] . $new_path . $real_ver_file[$df_id][$j]);
-					@chmod($ext_path . '/' . $config['dl_download_dir'] . $new_path . $real_ver_file[$df_id][$j], 0777);
-					@unlink($ext_path . '/' . $config['dl_download_dir'] . $old_path . $real_ver_file[$df_id][$j]);
+					@copy(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file[$df_id][$j], DL_EXT_FILES_FOLDER . $new_path . $real_ver_file[$df_id][$j]);
+					@chmod(DL_EXT_FILES_FOLDER . $new_path . $real_ver_file[$df_id][$j], 0777);
+					@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file[$df_id][$j]);
 				}
 			}
 		}
 
-		@unlink($ext_path . '/files/thumbs/' . $dl_file['thumbnail']);
+		@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
 
 		$sql = 'SELECT description, dl_topic FROM ' . DOWNLOADS_TABLE . '
 			WHERE id = ' . (int) $df_id;
@@ -1139,8 +1139,8 @@ else if($action == 'delete')
 		add_log('admin', 'DL_LOG_DEL_FILE', $dl_desc);
 
 		// Purge the files cache
-		@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $phpEx);
-		@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $phpEx);
 
 		$message = $user->lang['DOWNLOAD_REMOVED'] . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_DOWNLOADADMIN'], '<a href="' . $basic_link . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
 

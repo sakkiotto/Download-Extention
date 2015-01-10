@@ -19,7 +19,7 @@ if ( !defined('IN_PHPBB') )
 $cat_auth = array();
 $cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
 
-$physical_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes($ext_path . '/' . $this->config['dl_download_dir']);
+$physical_size = \oxpus\dl_ext\includes\classes\ dl_physical::read_dl_sizes();
 
 if ($physical_size >= $this->config['dl_physical_quota'])
 {
@@ -213,7 +213,7 @@ if ($submit)
 		$real_file = md5($file_name);
 
 		$i = 0;
-		while(@file_exists($ext_path . $this->config['dl_download_dir'] . $dl_path . $real_file))
+		while(@file_exists(DL_EXT_FILES_FOLDER . $dl_path . $real_file))
 		{
 			$real_file = md5($i . $file_name);
 			$i++;
@@ -246,7 +246,7 @@ if ($submit)
 		if (!$file_extern)
 		{
 			$upload_file->realname = $real_file;
-			$upload_file->move_file($ext_path . $this->config['dl_download_dir'] . $dl_path, false, false, CHMOD_ALL);
+			$upload_file->move_file(DL_EXT_FILES_FOLDER . $dl_path, false, false, CHMOD_ALL);
 			@chmod($upload_file->destination_file, 0777);
 
 			$error_count = sizeof($upload_file->error);
@@ -258,7 +258,7 @@ if ($submit)
 
 			$hash_method = $this->config['dl_file_hash_algo'];
 			$func_hash = $hash_method . '_file';
-			$file_hash = $func_hash($ext_path . $this->config['dl_download_dir'] . $dl_path . $real_file);		
+			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $dl_path . $real_file);		
 		}
 		else
 		{
@@ -342,7 +342,7 @@ if ($submit)
 		if (isset($thumb_name) && $thumb_name != '')
 		{
 			$thumb_file->realname = $next_id . '_' . $thumb_name;
-			$thumb_file->move_file($ext_path . 'files/thumbs/', false, false, CHMOD_ALL);
+			$thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
 			@chmod($thumb_file->destination_file, 0777);
 
 			$thumb_message = '<br />' . $this->user->lang['DL_THUMB_UPLOAD'];
@@ -451,8 +451,8 @@ if ($submit)
 		$message = $this->user->lang['DOWNLOAD_ADDED'] . $thumb_message . $approve_message . '<br /><br />' . sprintf($this->user->lang['CLICK_RETURN_DOWNLOADS'], '<a href="' . $this->helper->route('dl_ext_controller', array('cat' => $cat_id)) . '">', '</a>');
 
 		// Purge the files cache
-		@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $this->php_ext);
-		@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $this->php_ext);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
 
 		meta_refresh(3, $this->helper->route('dl_ext_controller', array('cat' => $cat_id)));
 

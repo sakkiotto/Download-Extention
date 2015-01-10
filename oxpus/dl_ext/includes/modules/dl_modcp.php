@@ -232,7 +232,7 @@ else
 		
 							while ($row = $this->db->sql_fetchrow($result))
 							{
-								@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $path . $row['ver_real_file']);
+								@unlink(DL_EXT_FILES_FOLDER . $path . $row['ver_real_file']);
 							}
 		
 							$this->db->sql_freeresult($result);
@@ -382,11 +382,11 @@ else
 		
 				if (isset($thumb_name) && $thumb_name != '')
 				{
-					@unlink($ext_path . 'files/thumbs/' . $dl_file['thumbnail']);
-					@unlink($ext_path . 'files/thumbs/' . $df_id . '_' . $thumb_name);
+					@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
+					@unlink(DL_EXT_THUMBS_FOLDER . $df_id . '_' . $thumb_name);
 		
 					$thumb_file->realname = $df_id . '_' . $thumb_name;
-					$thumb_file->move_file($ext_path . 'files/thumbs/', false, false, CHMOD_ALL);
+					$thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
 					@chmod($thumb_file->destination_file, 0777);
 		
 					$thumb_message = '<br />' . $this->user->lang['DL_THUMB_UPLOAD'];
@@ -401,7 +401,7 @@ else
 						'thumbnail' => '')) . ' WHERE id = ' . (int) $df_id;
 					$this->db->sql_query($sql);
 		
-					@unlink($ext_path . 'files/thumbs/' . $dl_file['thumbnail']);
+					@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
 		
 					$thumb_message = '<br />'.$this->user->lang['DL_THUMB_DEL'];
 				}
@@ -461,13 +461,13 @@ else
 		
 						if ($file_option == 2 && !$file_version)
 						{
-							@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $dl_path . $real_file_old);
+							@unlink(DL_EXT_FILES_FOLDER . $dl_path . $real_file_old);
 						}
 		
 						$real_file_new = md5($file_name);
 		
 						$i = 1;
-						while (file_exists($ext_path . '/' . $this->config['dl_download_dir'] . $dl_path . $real_file_new))
+						while (file_exists(DL_EXT_FILES_FOLDER . $dl_path . $real_file_new))
 						{
 							$real_file_new = $i . md5($file_name);
 							$i++;
@@ -525,7 +525,7 @@ else
 				if (!$file_extern && $file_name && $file_new)
 				{
 					$upload_file->realname = $real_file_new;
-					$upload_file->move_file($ext_path . '/' . $this->config['dl_download_dir'] . $dl_path, false, false, CHMOD_ALL);
+					$upload_file->move_file(DL_EXT_FILES_FOLDER . $dl_path, false, false, CHMOD_ALL);
 					@chmod($upload_file->destination_file, 0777);
 
 					$error_count = sizeof($upload_file->error);
@@ -537,7 +537,7 @@ else
 
 					$hash_method = $this->config['dl_file_hash_algo'];
 					$func_hash = $hash_method . '_file';
-					$file_hash = $func_hash($ext_path . '/' . $this->config['dl_download_dir'] . $dl_path . $real_file_new);
+					$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $dl_path . $real_file_new);
 				}
 
 				// validate custom profile fields
@@ -583,7 +583,7 @@ else
 	
 						if ($file_new)
 						{
-							@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $dl_path . $real_old_file);
+							@unlink(DL_EXT_FILES_FOLDER . $dl_path . $real_old_file);
 						}
 
 						$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
@@ -758,9 +758,9 @@ else
 		
 						if ($new_path != $old_path)
 						{
-							@copy($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_file_old, $ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_file_new);
-							@chmod($ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_file_new, 0777);
-							@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_file_old);
+							@copy(DL_EXT_FILES_FOLDER . $old_path . $real_file_old, DL_EXT_FILES_FOLDER . $new_path . $real_file_new);
+							@chmod(DL_EXT_FILES_FOLDER . $new_path . $real_file_new, 0777);
+							@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_file_old);
 		
 							$sql = 'SELECT ver_real_file FROM ' . DL_VERSIONS_TABLE . '
 								WHERE dl_id = ' . (int) $df_id;
@@ -769,9 +769,9 @@ else
 							while ($row = $this->db->sql_fetchrow($result))
 							{
 								$real_ver_file = $row['ver_real_file'];
-								@copy($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_ver_file, $ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_ver_file);
-								@chmod($ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_ver_file, 0777);
-								@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_ver_file);
+								@copy(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file, DL_EXT_FILES_FOLDER . $new_path . $real_ver_file);
+								@chmod(DL_EXT_FILES_FOLDER . $new_path . $real_ver_file, 0777);
+								@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file);
 							}
 		
 							$this->db->sql_freeresult($result);
@@ -787,8 +787,8 @@ else
 					}
 		
 					// Purge the files cache
-					@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $this->php_ext);
-					@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $this->php_ext);
+					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
+					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
 				}
 			}
 		
@@ -914,17 +914,17 @@ else
 						$real_file	= $row['real_file'];
 						$df_id		= $row['df_id'];
 		
-						@unlink($ext_path . '/files/thumbs/' . $row['thumbnail']);
+						@unlink(DL_EXT_THUMBS_FOLDER . $row['thumbnail']);
 		
 						if ($del_file)
 						{
-							@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $path . $real_file);
+							@unlink(DL_EXT_FILES_FOLDER . $path . $real_file);
 		
 							if (isset($real_ver_file[$df_id]))
 							{
 								for ($i = 0; $i < sizeof($real_ver_file[$df_id]); $i++)
 								{
-									@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $path . $real_ver_file[$df_id][$i]);
+									@unlink(DL_EXT_FILES_FOLDER . $path . $real_ver_file[$df_id][$i]);
 								}
 							}
 						}
@@ -975,8 +975,8 @@ else
 					}
 		
 					// Purge the files cache
-					@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $this->php_ext);
-					@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $this->php_ext);
+					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
+					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
 		
 					\oxpus\dl_ext\includes\classes\ dl_topic::delete_topic($dl_topics);
 				}
@@ -1069,7 +1069,7 @@ else
 				$thumbnail_explain	= sprintf($this->user->lang['DL_THUMB_DIM_SIZE'], $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize'], \oxpus\dl_ext\includes\classes\ dl_format::dl_size($this->config['dl_thumb_fsize']));
 				$this->template->assign_var('S_ALLOW_THUMBS', true);
 		
-				$thumbnail = $ext_path . 'files/thumbs/' . $thumbnail;
+				$thumbnail = DL_EXT_THUMBS_FOLDER . $thumbnail;
 				if (file_exists($thumbnail))
 				{
 					$this->template->assign_var('S_THUMBNAIL', true);
@@ -1351,17 +1351,17 @@ else
 		
 					if ($new_path != $old_path)
 					{
-						@copy($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_file, $ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_file);
-						@chmod($ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_file, 0777);
-						@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_file);
+						@copy(DL_EXT_FILES_FOLDER . $old_path . $real_file, DL_EXT_FILES_FOLDER . $new_path . $real_file);
+						@chmod(DL_EXT_FILES_FOLDER . $new_path . $real_file, 0777);
+						@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_file);
 		
 						if (isset($real_ver_file[$df_id]))
 						{
 							for ($j = 0; $j < sizeof($real_ver_file[$df_id]); $j++)
 							{
-								@copy($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_ver_file[$df_id][$j], $ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_ver_file[$df_id][$j]);
-								@chmod($ext_path . '/' . $this->config['dl_download_dir'] . $new_path . $real_ver_file[$df_id][$j], 0777);
-								@unlink($ext_path . '/' . $this->config['dl_download_dir'] . $old_path . $real_ver_file[$df_id][$j]);
+								@copy(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file[$df_id][$j], DL_EXT_FILES_FOLDER . $new_path . $real_ver_file[$df_id][$j]);
+								@chmod(DL_EXT_FILES_FOLDER . $new_path . $real_ver_file[$df_id][$j], 0777);
+								@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file[$df_id][$j]);
 							}
 						}
 					}
@@ -1387,8 +1387,8 @@ else
 				$this->db->sql_query($sql);
 		
 				// Purge the files cache
-				@unlink($ext_path . 'files/cache/data_dl_cat_counts.' . $this->php_ext);
-				@unlink($ext_path . 'files/cache/data_dl_file_preset.' . $this->php_ext);
+				@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
+				@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
 			}
 		
 			$action = 'manage';

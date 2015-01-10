@@ -97,8 +97,8 @@ if ($view_perm > 1)
 		}
 
 		// Purge the auth cache
-		@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
-		@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
+		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
 	}
 	else
 	{
@@ -409,8 +409,8 @@ if($action == 'save_perm')
 	}
 
 	// Purge the auth cache
-	@unlink($ext_path . 'files/cache/data_dl_auth.' . $phpEx);
-	@unlink($ext_path . 'files/cache/data_dl_cats.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
+	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
 
 	$message = sprintf($user->lang['CLICK_RETURN_DOWNLOADADMIN'], '<a href="' . $basic_link . '">', '</a>') . adm_back_link($this->u_action);
 

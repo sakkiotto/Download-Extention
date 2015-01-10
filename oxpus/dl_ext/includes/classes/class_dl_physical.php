@@ -56,13 +56,17 @@ class dl_physical extends dl_mod
 		return $exist_files;
 	}
 
-	public static function read_dl_dirs($download_dir, $path = '')
+	public static function read_dl_dirs($download_dir = '', $path = '')
 	{
 		global $user, $cur, $unas_files;
 
 		$folders = '';
 
-		$download_dir = str_replace('//', '/', $download_dir);
+		if (!$download_dir)
+		{
+			$download_dir = DL_EXT_FILES_FOLDER;
+			$download_dir = str_replace('//', '/', $download_dir);
+		}
 
 		$dl_dir = substr($download_dir, 0, strlen($download_dir)-1);
 
@@ -86,11 +90,15 @@ class dl_physical extends dl_mod
 		return $folders;
 	}
 
-	public static function read_dl_files($download_dir, $path = '', $unas_files = array())
+	public static function read_dl_files($download_dir = '', $path = '', $unas_files = array())
 	{
 		$files = '';
 
-		$download_dir = str_replace('//', '/', $download_dir);
+		if (!$download_dir)
+		{
+			$download_dir = DL_EXT_FILES_FOLDER;
+			$download_dir = str_replace('//', '/', $download_dir);
+		}
 
 		$dl_dir = ($path) ? $download_dir : substr($download_dir, 0, strlen($download_dir)-1);
 
@@ -110,58 +118,30 @@ class dl_physical extends dl_mod
 		return $files;
 	}
 
-	public static function read_dl_sizes($download_dir)
+	public static function read_dl_sizes($download_dir = '')
 	{
 		$file_size = 0;
 
-		$download_dir = str_replace('//', '/', $download_dir);
-
-		if (@function_exists('scandir'))
+		if (!$download_dir)
 		{
-			$dirs = array_diff(scandir($download_dir), array(".", ".."));
-			$dir_array = array();
+			$download_dir = DL_EXT_FILES_FOLDER;
+			$download_dir = str_replace('//', '/', $download_dir);
+		}
 
-			foreach($dirs as $d)
+		$dirs = array_diff(scandir($download_dir), array(".", ".."));
+		$dir_array = array();
+
+		foreach($dirs as $d)
+		{
+			if (is_dir($download_dir . '/' . $d))
 			{
-				if (is_dir($download_dir . '/' . $d))
-				{
-					$file_size += self::read_dl_sizes($download_dir . '/' . $d);
-				}
-				else
-				{
-					$file_size += sprintf("%u", @filesize($download_dir . '/' . $d));
-				}
+				$file_size += self::read_dl_sizes($download_dir . '/' . $d);
+			}
+			else
+			{
+				$file_size += sprintf("%u", @filesize($download_dir . '/' . $d));
 			}
 		}
-		else
-		{
-			$file_size = self::_old_read_dl_sizes($download_dir);
-		}
-
-		return $file_size;
-	}
-
-	// Internal function for PHP 4 compliant
-	private static function _old_read_dl_sizes($download_dir, $path = '')
-	{
-		$file_size = 0;
-
-		$download_dir = str_replace('//', '/', $download_dir);
-
-		$dl_dir = substr($download_dir, 0, strlen($download_dir)-1);
-
-		@$dir = opendir($dl_dir . $path);
-
-		while (false !== ($file=@readdir($dir)))
-		{
-			if ($file{0} != ".")
-			{
-				$file_size += sprintf("%u", @filesize($dl_dir . $path . '/' . $file));
-				$file_size += self::_old_read_dl_sizes($download_dir, $path . '/' . $file);
-			}
-		}
-
-		@closedir($dir);
 
 		return $file_size;
 	}
@@ -223,6 +203,218 @@ class dl_physical extends dl_mod
 		$max_upload_size = min($post_max_size, $upload_max_size);
 
 		return dl_format::dl_size($max_upload_size, 0, 'combine');
+	}
+
+	private static function _move_dl_basis($source_path, $dest_path)
+	{
+		if (substr($source_path, -1) == '/')
+		{
+			$source_path = substr($source_path, 0, -1);
+		}
+
+		if (substr($dest_path, -1) == '/')
+		{
+			$dest_path = substr($dest_path, 0, -1);
+		}
+
+		if (!@is_dir($dest_path))
+		{
+			@mkdir($dest_path);
+			@chmod($dest_path, 0755);
+			if (!@is_dir($dest_path))
+			{
+				return false;
+			}
+		}
+
+		$objects = scandir($source_path);
+		foreach ($objects as $object)
+		{
+			if ($object != '.' && $object != '..')
+			{
+				if (filetype($source_path . '/' . $object) == 'dir')
+				{
+					$success = self::_move_dl_basis($source_path . '/' . $object, $dest_path . '/' . $object);
+					if (!$success)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					@copy($source_path . '/' . $object, $dest_path . '/' . $object);
+					@chmod($dest_path . '/' . $object, 0777);
+					if (!file_exists($dest_path . '/' . $object))
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private static function _drop_dl_basis($source_path)
+	{
+		if (substr($source_path, -1) == '/')
+		{
+			$source_path = substr($source_path, 0, -1);
+		}
+
+		if (is_dir($source_path))
+		{
+			$objects = scandir($source_path);
+			foreach ($objects as $object)
+			{
+				if ($object != '.' && $object != '..')
+				{
+					if (@is_dir($source_path . '/' . $object))
+					{
+						$success = self::_drop_dl_basis($source_path . '/' . $object);
+					}
+					else
+					{
+						@unlink($source_path . '/' . $object);
+					}
+				}
+			}
+			reset($objects);
+			@rmdir($source_path);
+			if (@file_exists($source_path))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/*
+	* Moves the folder base for all files controlled by the extension from inside to outside
+	* the extension folder or backward from outsite into the extension folder.
+	* Regard:
+	* The normal way is to host all files outside the extension folder, so updating the
+	* extension can be done as written in the ACP or within other extensions like the
+	* "Upload Extension".				
+	* This will be used on ACP config module while changing the folder base
+	* The folder name will not longer be aviable for edit by an admin and is now fix setted.
+	*/	
+	public static function switch_ext_file_path($source_path, $dest_path, $cur_dl_dir, $phpbb_root_path, $ext_path)
+	{
+		// disable the board to avoid new/edit downloads while moving the file base!!
+		set_config('board_disable', true);
+
+		// wait a moment before continue to give the users, forum and database the chance to stop without errors
+		sleep(2); // Do not increase this to break the extension module with a possible bad error!!
+
+		switch ($cur_dl_dir)
+		{
+			case 1:
+				@mkdir($phpbb_root_path . 'store/oxpus');
+				@chmod($phpbb_root_path . 'store/oxpus', 0755);
+				@mkdir($phpbb_root_path . 'store/oxpus/dl_ext');
+				@chmod($phpbb_root_path . 'store/oxpus/dl_ext', 0755);
+				$handle = fopen($phpbb_root_path . 'store/.htaccess', 'w');
+				fputs($handle, "<Files *>\n");
+				fputs($handle, "	Order Deny,Allow\n");
+				fputs($handle, "	Allow from localhost 127.0.0.1 " . generate_board_url() . "\n");
+				fputs($handle, "</Files>");
+				fclose($handle);
+			break;
+			case 2:
+				@mkdir($ext_path . 'files');
+				@chmod($ext_path . 'files', 0755);
+			break;
+		}
+
+		$move_success = self::_move_dl_basis($source_path, $dest_path);
+
+		if (!$move_success)
+		{
+			$return = 1; // Can't build new file base!
+		}
+		else
+		{
+			if (!self::_drop_dl_basis($source_path))
+			{
+				$return = 2; // Old file base can't be dropped!
+			}
+			else
+			{
+				$return = -1; // File base successfull moved. Yeah!
+			}
+		}
+
+		switch ($cur_dl_dir)
+		{
+			case 1:
+				@rmdir($ext_path . 'files');
+			break;
+			case 2:
+				@rmdir($phpbb_root_path . 'store/oxpus/dl_ext');
+				@rmdir($phpbb_root_path . 'store/oxpus');
+				$handle = fopen($phpbb_root_path . 'store/.htaccess', 'w');
+				fwrite($handle, "<Files *>\n");
+				fwrite($handle, "	Order Allow,Deny\n");
+				fwrite($handle, "	Deny from All\n");
+				fwrite($handle, "</Files>");
+				fclose($handle);
+			break;
+		}
+
+		// welcome back ;-)
+		set_config('board_disable', false);
+
+		return $return;
+	}
+
+	/*
+	* Read the existing downloads folder tree to select a path within the categories management
+	* instead enter the complete path "old school" manually.
+	*/	
+	public static function get_file_base_tree($file_base, $path, $level = 0)
+	{
+		$tree = '';
+		if (substr($file_base, -1, 1) != '/')
+		{
+			$file_base .= '/';
+		}
+
+		$handle = @opendir($file_base);
+
+		while (($entry = @readdir($handle)) !== false)
+		{
+			if (@is_dir($file_base . $entry) && $entry[0] != '.')
+			{
+				$separator = '';
+				for($i = 0; $i < $level; $i++)
+				{
+					$separator .= '&nbsp;-&nbsp;';
+				}
+
+				$check_path = substr($path, 0, -1);
+				if ($entry == $check_path)
+				{
+					$selected = ' selected="selected"';
+				}
+				else
+				{
+					$selected = '';
+				}
+
+				$cat_path = str_replace(DL_EXT_FILES_WEBFOLDER, '', $file_base . $entry);
+				$tree .= '<option value="' . $cat_path . '/"' . $selected . '>' . $separator . $entry . '/</option>';
+
+				$level++;
+				$tree .= self::get_file_base_tree($file_base . $entry, $path, $level);
+				$level--;
+			}
+		}
+
+		@closedir($handle);
+
+		return $tree;
 	}
 }
 
