@@ -1137,5 +1137,3 @@ if ($this->config['dl_similar_dl'])
 /*
 * The end... Yes? Yes!
 */
-
-?>

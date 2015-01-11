@@ -167,5 +167,3 @@ class dl_extra extends dl_mod
 		echo $config['dl_ext_version'];
 	}
 }
-
-?>

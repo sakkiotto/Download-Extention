@@ -261,5 +261,3 @@ if (sizeof($index) || $cat)
 	*/
 	$this->template->assign_display('dl_footer');
 }
-
-?>

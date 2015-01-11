@@ -471,5 +471,3 @@ else
 $this->template->set_filenames(array(
 	'body' => 'dl_stat_body.html')
 );
-
-?>

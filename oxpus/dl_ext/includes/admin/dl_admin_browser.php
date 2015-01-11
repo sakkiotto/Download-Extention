@@ -63,7 +63,7 @@ function save_ua_file($agent_title, $agent_strings, $data_file)
 	}
 
 	$df = fopen($data_file, 'w');
-	fwrite($df, $file_content . "\n?>");
+	fwrite($df, $file_content);
 	fclose($df);
 
 	if (file_exists($data_file))
@@ -357,5 +357,3 @@ if (!$confirm_delete)
 	$template->assign_var('S_DL_BROWSER', true);
 	$template->assign_display('browser');
 }
-
-?>

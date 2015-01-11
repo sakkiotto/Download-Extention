@@ -86,13 +86,13 @@ class main_module
 		if ($config['dl_download_dir'] == 2)
 		{
 			$filebase_prefix = $filebase_web_prefix = $folder_base = $phpbb_root_path . 'store/oxpus/dl_ext/';
-			$folder_desc = $filebase_web_prefix = $ext_path_web . 'files/';
+			$folder_desc = $ext_path_web . 'files/';
 		}
 		else
 		{
 			$filebase_prefix = $folder_base = $ext_path . 'files/';
-			$folder_desc = $phpbb_root_path . 'store/oxpus/dl_ext/';
 			$filebase_web_prefix = $ext_path_web . 'files/';
+			$folder_desc = $phpbb_root_path . 'store/oxpus/dl_ext/';
 		}
 
 		define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
@@ -948,5 +948,3 @@ class main_module
 		return $sql;
 	}
 }
-
-?>

@@ -202,5 +202,3 @@ else
 }
 
 page_header();
-
-?>

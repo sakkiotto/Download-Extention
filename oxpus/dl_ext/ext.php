@@ -13,5 +13,3 @@ namespace oxpus\dl_ext;
 class ext extends \phpbb\extension\base
 {
 }
-
-?>

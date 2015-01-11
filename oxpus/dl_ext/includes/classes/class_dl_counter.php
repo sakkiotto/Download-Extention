@@ -92,5 +92,3 @@ class dl_counter extends dl_mod
 		return $total;
 	}
 }
-
-?>

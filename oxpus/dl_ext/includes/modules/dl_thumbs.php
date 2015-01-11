@@ -265,5 +265,3 @@ $this->template->assign_vars(array(
 	'S_FORM_ACTION'		=> $this->helper->route('dl_ext_controller', array('view' => 'thumbs')),
 	'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields))
 );
-
-?>

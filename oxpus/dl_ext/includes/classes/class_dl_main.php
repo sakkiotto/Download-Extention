@@ -272,5 +272,3 @@ class dl_main extends dl_mod
 		return true;
 	}
 }
-
-?>

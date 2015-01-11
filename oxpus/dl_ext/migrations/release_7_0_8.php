@@ -32,5 +32,3 @@ class release_7_0_8 extends \phpbb\db\migration\migration
 		);
 	}
 }
-
-?>

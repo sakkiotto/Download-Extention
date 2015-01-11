@@ -82,5 +82,3 @@ class dl_files extends dl_mod
 		return ($df_id) ? ((isset($dl_files[0])) ? $dl_files[0] : array()) : $dl_files;
 	}
 }
-
-?>

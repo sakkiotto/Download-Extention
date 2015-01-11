@@ -60,5 +60,3 @@ if ($df_id && $rate_point)
 	echo ($json_out);
 	flush();
 }
-
-?>

@@ -132,5 +132,3 @@ if (sizeof($dl_files))
 }
 
 page_footer();
-
-?>

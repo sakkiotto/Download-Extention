@@ -385,5 +385,3 @@ else
 		'S_DL_SORT_OPTIONS'		=> $s_search_fields)
 	);
 }
-
-?>

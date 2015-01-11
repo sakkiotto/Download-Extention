@@ -229,5 +229,3 @@ if (!isset($confirm_delete))
 
 	$template->assign_display('banlist');
 }
-
-?>

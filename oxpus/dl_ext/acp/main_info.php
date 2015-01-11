@@ -37,5 +37,3 @@ class main_info
 		);
 	}
 }
-
-?>

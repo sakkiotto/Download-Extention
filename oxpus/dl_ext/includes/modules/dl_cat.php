@@ -540,5 +540,3 @@ $this->template->assign_vars(array(
 	'U_DL_SEARCH'	=> (sizeof($index) || $cat) ? $this->helper->route('dl_ext_controller', array('view' => 'search')) : '',
 	'U_DL_AJAX'		=> $this->helper->route('dl_ext_controller', array('view' => 'ajax')),
 ));
-
-?>

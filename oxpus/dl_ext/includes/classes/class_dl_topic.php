@@ -692,5 +692,3 @@ class dl_topic extends dl_mod
 		}
 	}
 }
-
-?>

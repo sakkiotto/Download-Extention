@@ -1143,5 +1143,3 @@ if (!$dl_template_in_use)
 
 	$template->assign_display('categories');
 }
-
-?>

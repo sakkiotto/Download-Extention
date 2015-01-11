@@ -168,5 +168,3 @@ class dl_hacklist extends dl_mod
 		return $dl_files;
 	}
 }
-
-?>

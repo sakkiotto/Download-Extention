@@ -584,5 +584,3 @@ else
 		redirect($this->helper->route('dl_ext_controller'));
 	}
 }
-
-?>

@@ -683,5 +683,3 @@ class release_7_0_0 extends \phpbb\db\migration\migration
 		$db->sql_multi_insert($this->table_prefix . 'dl_rem_traf', $sql_insert);
 	}
 }
-
-?>

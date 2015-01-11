@@ -33,5 +33,3 @@ class release_7_0_9 extends \phpbb\db\migration\migration
 		);
 	}
 }
-
-?>

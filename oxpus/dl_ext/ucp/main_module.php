@@ -283,5 +283,3 @@ class main_module
 		));
 	}
 }
-
-?>

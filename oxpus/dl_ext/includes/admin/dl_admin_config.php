@@ -899,5 +899,3 @@ function select_filebase($value)
 
 	return $s_select;
 }
-
-?>

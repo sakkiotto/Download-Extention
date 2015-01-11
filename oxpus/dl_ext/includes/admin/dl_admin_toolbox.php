@@ -594,5 +594,3 @@ if ($action <> 'check_thumbnails')
 }
 
 $template->assign_display('toolbox');
-
-?>

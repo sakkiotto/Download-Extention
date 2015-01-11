@@ -508,5 +508,3 @@ class dl_init extends dl_mod
 		return $browser_name;
 	}
 }
-
-?>

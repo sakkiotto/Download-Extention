@@ -287,5 +287,3 @@ class dl_status extends dl_mod
 		return array('status' => $status, 'file_name' => $file_name, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail);
 	}
 }
-
-?>

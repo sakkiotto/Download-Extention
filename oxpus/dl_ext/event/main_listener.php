@@ -373,8 +373,30 @@ class main_listener implements EventSubscriberInterface
 	public function add_user_traffic_for_post($event)
 	{
 		$ext_path = $this->phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
+		$ext_path_web = $this->phpbb_path_helper->update_web_root_path($ext_path);
 		$table_prefix = $this->table_prefix;
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
+
+		if (!defined('DL_EXT_CACHE_FOLDER'))
+		{
+			// Define the basic file storage placement
+			if ($this->config['dl_download_dir'] == 2)
+			{
+				$filebase_prefix = $this->root_path . 'store/oxpus/dl_ext/';
+				$filebase_web_prefix = generate_board_url() . '/store/oxpus/dl_ext/';
+			}
+			else
+			{
+				$filebase_prefix = $ext_path . 'files/';
+				$filebase_web_prefix = $ext_path_web . 'files/';
+			}
+	
+			define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
+			define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
+			define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
+			define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
+			define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+		}
 
 		include_once($ext_path . '/includes/classes/class_dlmod.' . $this->php_ext);
 		$dl_mod = new \oxpus\dl_ext\includes\classes\ dl_mod($this->root_path, $this->php_ext, $ext_path);
@@ -414,8 +436,30 @@ class main_listener implements EventSubscriberInterface
 	public function drop_user_traffic_for_post($event)
 	{
 		$ext_path = $this->phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
+		$ext_path_web = $this->phpbb_path_helper->update_web_root_path($ext_path);
 		$table_prefix = $this->table_prefix;
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
+
+		if (!defined('DL_EXT_CACHE_FOLDER'))
+		{
+			// Define the basic file storage placement
+			if ($this->config['dl_download_dir'] == 2)
+			{
+				$filebase_prefix = $this->root_path . 'store/oxpus/dl_ext/';
+				$filebase_web_prefix = generate_board_url() . '/store/oxpus/dl_ext/';
+			}
+			else
+			{
+				$filebase_prefix = $ext_path . 'files/';
+				$filebase_web_prefix = $ext_path_web . 'files/';
+			}
+	
+			define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
+			define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
+			define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
+			define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
+			define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+		}
 
 		include_once($ext_path . '/includes/classes/class_dlmod.' . $this->php_ext);
 		$dl_mod = new \oxpus\dl_ext\includes\classes\ dl_mod($this->root_path, $this->php_ext, $ext_path);

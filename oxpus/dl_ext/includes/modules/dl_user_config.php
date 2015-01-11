@@ -226,5 +226,3 @@ if (!$this->config['dl_sort_preform'])
 }
 
 $this->template->assign_var('S_DL_UCP_CONFIG', true);
-
-?>

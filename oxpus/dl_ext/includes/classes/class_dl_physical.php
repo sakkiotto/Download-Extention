@@ -403,7 +403,7 @@ class dl_physical extends dl_mod
 					$selected = '';
 				}
 
-				$cat_path = str_replace(DL_EXT_FILES_WEBFOLDER, '', $file_base . $entry);
+				$cat_path = str_replace(DL_EXT_FILES_FOLDER, '', $file_base . $entry);
 				$tree .= '<option value="' . $cat_path . '/"' . $selected . '>' . $separator . $entry . '/</option>';
 
 				$level++;
@@ -417,5 +417,3 @@ class dl_physical extends dl_mod
 		return $tree;
 	}
 }
-
-?>

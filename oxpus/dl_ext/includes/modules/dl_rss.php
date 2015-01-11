@@ -45,6 +45,24 @@ if ($this->config['dl_rss_enable'])
 		unset($row);
 	}
 
+	// Define the basic file storage placement
+	if ($this->config['dl_download_dir'] == 2)
+	{
+		$filebase_prefix = $this->root_path . 'store/oxpus/dl_ext/';
+		$filebase_web_prefix = generate_board_url() . '/store/oxpus/dl_ext/';
+	}
+	else
+	{
+		$filebase_prefix = $ext_path . 'files/';
+		$filebase_web_prefix = $ext_path_web . 'files/';
+	}
+
+	define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
+	define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
+	define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
+	define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
+	define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+
 	/*
 	* include and create the main class
 	*/
@@ -211,5 +229,3 @@ $this->template->assign_vars(array(
 ));
 
 page_footer();
-
-?>

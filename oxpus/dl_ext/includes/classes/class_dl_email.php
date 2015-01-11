@@ -231,5 +231,3 @@ class dl_email extends dl_mod
 		$messenger->save_queue();
 	}
 }
-
-?>

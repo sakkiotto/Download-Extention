@@ -1293,5 +1293,3 @@ $agent_strings[] = "140|Mozilla";
 $agent_strings[] = "141|AOL";
 $agent_strings[] = "142|Avant Browser";
 $agent_strings[] = "143|IE";
-
-?>

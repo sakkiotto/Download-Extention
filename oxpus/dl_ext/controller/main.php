@@ -286,7 +286,7 @@ class main
 		* include and create the main class
 		*/
 		include($ext_path . '/includes/classes/class_dlmod.' . $this->php_ext);
-		$dl_mod = new \oxpus\dl_ext\includes\classes\ dl_mod($this->root_path, $this->php_ext, $ext_path);
+		$dl_mod = new \oxpus\dl_ext\includes\classes\ dl_mod($this->root_path, $this->php_ext, $ext_path, DL_EXT_CACHE_FOLDER);
 		$dl_mod->register();
 		\oxpus\dl_ext\includes\classes\ dl_init::init($ext_path);
 
@@ -1087,5 +1087,3 @@ class main
 		page_footer();
 	}
 }
-
-?>

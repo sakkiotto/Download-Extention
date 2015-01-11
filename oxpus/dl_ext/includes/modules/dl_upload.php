@@ -636,5 +636,3 @@ $this->template->assign_vars(array(
 // Init and display the custom fields with the existing data
 $cp->get_profile_fields($df_id);
 $cp->generate_profile_fields($this->user->get_iso_lang_id());
-
-?>

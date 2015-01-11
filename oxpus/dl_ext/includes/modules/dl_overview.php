@@ -169,5 +169,3 @@ if (sizeof($dl_files))
 
 	$this->template->assign_var('S_ENABLE_RATE', (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false);
 }
-
-?>

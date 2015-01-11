@@ -23,7 +23,7 @@ if (!defined('IN_PHPBB'))
 */
 class dl_cache extends dl_mod
 {
-	public function __construct($ext_path)
+	public function __construct()
 	{
 		
 		return;
@@ -508,5 +508,3 @@ class dl_cache extends dl_mod
 		return @unlink(DL_EXT_CACHE_FOLDER . $filename);
 	}
 }
-
-?>

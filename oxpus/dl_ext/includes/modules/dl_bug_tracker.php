@@ -1034,5 +1034,3 @@ if ($this->user->data['is_registered'])
 {
 	$this->template->assign_var('S_ADD_NEW_REPORT', true);
 }
-
-?>

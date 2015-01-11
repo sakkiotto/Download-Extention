@@ -190,5 +190,3 @@ $lang = array_merge($lang, array(
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Die Anzahl letzter Downloads, die der Benutzer auf dem Portal sieht.<br />Dabei wird die letzte Änderungszeit der Downloads verwendet, so daß auch ältere Downloads wieder ganz oben auf der Liste stehen können.',
 ));
-
-?>

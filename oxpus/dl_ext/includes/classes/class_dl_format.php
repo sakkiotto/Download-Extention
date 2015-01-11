@@ -150,5 +150,3 @@ class dl_format extends dl_mod
 		return $config_value;
 	}
 }
-
-?>

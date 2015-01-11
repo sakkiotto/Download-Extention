@@ -85,5 +85,3 @@ class dl_nav extends dl_mod
 		return ($disp_art == 'url') ? $tmp_nav : $path_dl;
 	}
 }
-
-?>

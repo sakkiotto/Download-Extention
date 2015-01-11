@@ -425,5 +425,3 @@ for ($i = 0; $i < sizeof($acl_cat_names); $i++)
 $template->assign_var('S_DL_TRAFFIC', true);
 
 $template->assign_display('traffic');
-
-?>

@@ -279,5 +279,3 @@ $template->assign_vars(array(
 $template->assign_var('S_DL_STATS', true);
 
 $template->assign_display('stats');
-
-?>

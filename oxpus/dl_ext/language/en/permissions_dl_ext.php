@@ -46,5 +46,3 @@ $lang = array_merge($lang, array(
 	'ACL_A_DL_FIELDS'		=> 'Can manage user defined fields',
 	'ACL_A_DL_BROWSER'		=> 'Can manage User Agents',
 ));
-
-?>

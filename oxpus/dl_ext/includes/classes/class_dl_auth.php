@@ -323,5 +323,3 @@ class dl_auth extends dl_mod
 		return $bug_tracker;
 	}
 }
-
-?>
