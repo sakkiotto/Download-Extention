@@ -100,7 +100,7 @@ if ($search_keywords != '' && !$search_author)
 			$counter = 0;
 			for ($i = 0; $i < sizeof($search_words); $i++)
 			{
-				if (preg_match_all('/' . preg_quote($search_words[$i], '/') . '/iu', $search_result))
+				if (preg_match_all('/' . preg_quote($search_words[$i], '/') . '/iu', $search_result, $matches))
 				{
 					$counter++;
 				}

@@ -36,10 +36,20 @@ class release_7_0_10 extends \phpbb\db\migration\migration
 
 	public function drop_wrong_cache_files()
 	{
-		@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_auth.' . $this->php_ext);
-		@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_black.' . $this->php_ext);
-		@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_cat_counts.' . $this->php_ext);
-		@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_cats.' . $this->php_ext);
-		@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_file_preset.' . $this->php_ext);
+		$drop_files = array(
+			'auth',
+			'black',
+			'cat_counts',
+			'cats',
+			'file_preset',
+		);
+
+		foreach($drop_files as $file)
+		{
+			if (@file_exists($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_' . $file . '.' . $this->php_ext))
+			{
+				@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_FOLDERdata_dl_' . $file . '.' . $this->php_ext);
+			}
+		}							
 	}
 }

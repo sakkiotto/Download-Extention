@@ -175,9 +175,9 @@ if ($total_data)
 
 	$filter_string = str_replace('*', '', str_replace('%', '', strtolower($filter_string)));
 
-	while ($row = $db->sql_fetchrow($result))
+	if ($search_filter_by && $filter_string)
 	{
-		if ($search_filter_by && $filter_string)
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$sql_search_string = strtolower($row[$search_filter_by]);
 			if (strpos($sql_search_string, $filter_string) !== false)

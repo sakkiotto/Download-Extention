@@ -341,7 +341,7 @@ if (!$dl_files['extern'])
 			$this->template->assign_block_vars('hash_row', array(
 				'DL_VERSION'		=> $key,
 				'DL_FILE_NAME'		=> $value['file'],
-				'DL_HASH_METHOD'	=> $hash_table[$dl_key]['type'],
+				'DL_HASH_METHOD'	=> $value['type'],
 				'DL_HASH'			=> $value['hash'],
 			));
 		}
