@@ -74,8 +74,8 @@ var dl_ajax_url = '{U_DL_AJAX}';
 				<dd style="width: 10%; text-align: center;"><span>{downloads.FILE_KLICKS}<br />{downloads.FILE_OVERALL_KLICKS}</span></dd>
 				<!-- BEGIN comments -->
 				<dd style="width: <!-- IF S_ENABLE_RATE -->15<!-- ELSE -->30<!-- ENDIF -->%; text-align: center;"><span class="small">
-					<!-- IF downlods.comments.U_COMMENT_POST --><a href="{downloads.comments.U_COMMENT_POST}" class="postdetails">{L_DL_POST_COMMENT}</a><!-- ENDIF -->
-					<!-- IF downlods.comments.U_COMMENT_SHOW -->{downloads.comments.BREAK}
+					<!-- IF downloads.comments.U_COMMENT_POST --><a href="{downloads.comments.U_COMMENT_POST}" class="postdetails">{L_DL_POST_COMMENT}</a><!-- ENDIF -->
+					<!-- IF downloads.comments.U_COMMENT_SHOW -->{downloads.comments.BREAK}
 					<a href="{downloads.comments.U_COMMENT_SHOW}">{L_DL_VIEW_COMMENTS}</a><!-- ENDIF -->
 					</span>
 				</dd>
