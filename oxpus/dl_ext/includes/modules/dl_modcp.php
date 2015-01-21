@@ -1493,7 +1493,7 @@ else
 		
 					'U_CAT_VIEW'	=> $cat_view,
 					'U_EDIT'		=> $this->helper->route('dl_ext_controller', array('view' => 'modcp', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id, 'modcp' => 1)),
-					'U_DOWNLOAD'	=> $this->helper->route('dl_ext_controller', array('view' => 'detail', 'dl_id' => $file_id, 'modcp' => 1, 'cat_id' => $cat_id)),
+					'U_DOWNLOAD'	=> $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $file_id, 'dl_id' => $file_id, 'modcp' => 1, 'cat_id' => $cat_id)),
 				));
 			}
 			$this->db->sql_freeresult($result);
