@@ -208,9 +208,8 @@ if ($total_data)
 	{
 		$pagination = $phpbb_container->get('pagination');
 		$pagination->generate_template_pagination(
-			$this->u_action,
+			$this->u_action . "&amp;sorting=$sorting&amp;sort_order=$sort_order&amp;show_guests=$show_guests&amp;filtering=$filter_by&amp;filter_string=$filter_string",
 			'pagination', 'start', $page_data, $config['dl_links_per_page'], $start);
-			
 		$template->assign_vars(array(
 			'PAGE_NUMBER'	=> $pagination->on_page($page_data, $config['dl_links_per_page'], $start),
 			'TOTAL_DL'		=> $user->lang('VIEW_DL_STATS', $page_data),
