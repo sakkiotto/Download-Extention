@@ -780,7 +780,7 @@ class main
 					'MESSAGE_TITLE'		=> $this->user->lang['DL_BROKEN'],
 					'MESSAGE_TEXT'		=> $this->user->lang['DL_REPORT_CONFIRM_CODE'],
 
-					'S_CONFIRM_ACTION'	=> $ext_path,
+					'S_CONFIRM_ACTION'	=> $this->helper->route('dl_ext_controller'),
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 				));
 
