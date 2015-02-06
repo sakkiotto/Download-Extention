@@ -2,7 +2,7 @@ Subject: New Download
 
 Hello {USERNAME},
 
-you receive this email because of a new or edited download on {SITENAME} in the category {CATEGORY} which must be approved:
+You receive this email because of a new or edited download on {SITENAME} in the category {CATEGORY} which must be approved:
 
 ---------------------------
 {DOWNLOAD}
