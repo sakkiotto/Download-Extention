@@ -634,7 +634,7 @@ $lang = array_merge($lang, array(
 	'DL_TRAFFICS_GUESTS'			=> 'Limit overall traffic for guests',
 	'DL_TRANSLATION'				=> 'Download Extension English language &copy; by OXPUS',
 
-	'DL_UA_FILE_NOT_WRITABLE'	=> 'Die file with the user agents is not writable!<br />Please check the file permissions to be able to save your data.',
+	'DL_UA_FILE_NOT_WRITABLE'	=> 'The file with this user agents is not writable!<br />Please check the file permissions to be able to save your data.',
 	'DL_UNAPPROVED'				=> '[ unapproved ]',
 	'DL_UNASSIGNED_FILES'		=> 'Check for unassigned downloads',
 	'DL_UNKNOWN_FILE'			=> 'Unknown file:',
