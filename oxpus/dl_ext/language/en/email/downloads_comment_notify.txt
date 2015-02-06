@@ -2,7 +2,7 @@ Subject: New Download Comment
 
 Hello {USERNAME},
 
-you have received this email because there is a new download comment on {SITENAME}for one of your subscribed downloads:
+You have received this email because there is a new download comment on {SITENAME} for one of your subscribed downloads:
 
 ---------------------------
 Category {CATEGORY}
