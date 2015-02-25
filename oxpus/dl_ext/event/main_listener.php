@@ -32,7 +32,7 @@ class main_listener implements EventSubscriberInterface
 			'core.delete_user_after'				=> 'delete_user',
 			'core.submit_post_end'					=> 'add_user_traffic_for_post',
 			'core.modify_posting_parameters'		=> 'drop_user_traffic_for_post',
-			'core.modify_text_for_display_after'	=> 'convert_link_to_download_name',
+			'core.modify_text_for_display_before'	=> 'convert_link_to_download_name',
 			'core.permissions'						=> 'add_permission_cat',
 		);
 	}
@@ -526,33 +526,41 @@ class main_listener implements EventSubscriberInterface
 
 	public function dl_mod_callback($part)
 	{
-		if($part[1] == 'app.' . $this->php_ext . '/dl_ext/view=detail&df_id=')
+		$ext_path = $this->phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
+		$table_prefix = $this->table_prefix;
+		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
+
+		$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
+			WHERE id = ' . (int) $part[3];
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$title = $row['description'];
+		$desc_uid = $row['desc_uid'];
+		$desc_bitfield = $row['desc_bitfield'];
+		$desc_flags = $row['desc_flags'];
+		$this->db->sql_freeresult($result);
+
+		$title = generate_text_for_display($title, $desc_uid, $desc_bitfield, $desc_flags);
+
+		if ($title)
 		{
-			$ext_path = $this->phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
-			$table_prefix = $this->table_prefix;
-			include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
-	
-			$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
-				WHERE id = ' . (int) $part[2];
-			$result = $this->db->sql_query($sql);
-			$row = $this->db->sql_fetchrow($result);
-			$title = $row['description'];
-			$desc_uid = $row['desc_uid'];
-			$desc_bitfield = $row['desc_bitfield'];
-			$desc_flags = $row['desc_flags'];
-			$this->db->sql_freeresult($result);
-	
-			$title = generate_text_for_display($title, $desc_uid, $desc_bitfield, $desc_flags);
-	
 			return $title;
 		}
-	
-		return $part[1] . $part[2];
+		else
+		{
+			return $part[0];
+		}
 	}
 
 	public function convert_link_to_download_name($event)
 	{
-		$event['text'] = preg_replace_callback("#(app\." . $this->php_ext . "\/dl_ext\/view=detail&df_id=)(\d+)#i", array('self', 'dl_mod_callback'), $event['text']);
+		$content = $event['text'];
+		$replacements = array('&amp;', '?');
+		$placeholders = array('--AMPERSAND--', '--QUESTIONAIRE--');
+		$content = str_replace($replacements, $placeholders, $content);
+		$content = preg_replace_callback("#(app\." . $this->php_ext . ")(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(<\/a>)#i", array('self', 'dl_mod_callback'), $content);
+		$content = str_replace($placeholders, $replacements, $content);
+		$event['text'] = $content;
 	}
 
 	public function add_permission_cat($event)
