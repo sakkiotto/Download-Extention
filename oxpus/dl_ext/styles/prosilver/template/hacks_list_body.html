@@ -21,9 +21,9 @@
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd style="width: 40%;">{L_DL_NAME}</dd>
-					<dd style="width: 40%;">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd style="width: 20%;">{L_DL_HACK_AUTOR}</dd>
+					<dd style="width: 40%; display: block;">{L_DL_NAME}</dd>
+					<dd style="width: 40%; display: block;">{L_DL_FILE_DESCRIPTION}</dd>
+					<dd style="width: 20%; display: block;">{L_DL_HACK_AUTOR}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -31,9 +31,9 @@
 		<!-- BEGIN listrow -->
 			<li class="row<!-- IF listrow.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
 				<dl>
-					<dd style="width: 40%;"><b>{listrow.HACK_NAME}</b><div class="notice"><strong>{L_DL_CAT_NAME}:</strong> {listrow.CAT_NAME}</div></dd>
-					<dd style="width: 40%;">{listrow.HACK_DESCRIPTION}</dd>
-					<dd style="width: 20%;">
+					<dd style="width: 40%; display: block;"><b>{listrow.HACK_NAME}</b><div class="notice"><strong>{L_DL_CAT_NAME}:</strong> {listrow.CAT_NAME}</div></dd>
+					<dd style="width: 40%; display: block;">{listrow.HACK_DESCRIPTION}</dd>
+					<dd style="width: 20%; display: block;">
 						{listrow.HACK_AUTHOR}
 						<br />
 						{listrow.HACK_AUTHOR_WEBSITE}
