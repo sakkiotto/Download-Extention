@@ -50,7 +50,7 @@ var dl_ajax_url = '{U_DL_AJAX}';
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dd style="width: 50%;">{L_DL_INFO} &bull; {L_DL_NAME}<br />{L_DL_FILE_DESCRIPTION}</dd>
+				<dd style="width: 50%; display: block;">{L_DL_INFO} &bull; {L_DL_NAME}<br />{L_DL_FILE_DESCRIPTION}</dd>
 				<dd style="width: 10%; text-align: center;">{L_DL_FILE_SIZE}</dd>
 				<dd style="width: 10%; text-align: center;">{L_DL_KLICKS}<br />{L_DL_OVERALL_KLICKS}</dd>
 				<!-- BEGIN comment_header -->
@@ -64,7 +64,7 @@ var dl_ajax_url = '{U_DL_AJAX}';
 		<!-- BEGIN downloads -->
 		<li class="row">
 			<dl>
-				<dd style="width: 50%;"><div>
+				<dd style="width: 50%; display: block;"><div>
 					{downloads.STATUS}&nbsp;<a href="{downloads.U_FILE}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;{downloads.HACK_VERSION}&nbsp;{downloads.MINI_IMG}
 					<!-- IF downloads.U_DIRECT_EDIT -->&nbsp;[ <a href="{downloads.U_DIRECT_EDIT}">{L_DL_EDIT_FILE}</a> ]<!-- ENDIF -->
 					</div>
