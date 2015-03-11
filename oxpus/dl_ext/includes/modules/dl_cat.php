@@ -204,35 +204,24 @@ if (sizeof($index) > 0)
 
 				if ($mini_icon[$sub_id]['new'] && !$mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new.png" alt="" />';
+					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new.png" alt="" style="max-height: 12px; max-width: 12px;" />';
 				}
 				else if (!$mini_icon[$sub_id]['new'] && $mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_edit.png" alt="" />';
+					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_edit.png" alt="" style="max-height: 12px; max-width: 12px;" />';
 				}
 				else if ($mini_icon[$sub_id]['new'] && $mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new_edit.png" alt="" />';
+					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new_edit.png" alt="" style="max-height: 12px; max-width: 12px;" />';
 				}
 				else
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_default.png" alt="" />';
-				}
-
-				if (isset($cat_sublevel['description'][$j]) && $cat_sublevel['description'][$j] != '')
-				{
-					$subcat_desc = censor_text($cat_sublevel['description'][$j]);
-					$subcat_desc = generate_text_for_display($subcat_desc, $cat_sublevel['desc_uid'][$j], $cat_sublevel['desc_bitfield'][$j], $cat_sublevel['desc_flags'][$j]);
-				}
-				else
-				{
-					$subcat_desc = '';
+					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_default.png" alt="" style="max-height: 12px; max-width: 12px;" />';
 				}
 
 				$this->template->assign_block_vars($block.'.sub.sublevel_row', array(
 					'L_SUBLEVEL' => $cat_sublevel['cat_name'][$j],
 					'SUBLEVEL_COUNT' => $cat_sublevel['total'][$j] + \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count($cat_sublevel['cat_id'][$j]),
-					'SUBLEVEL_DESC' => $subcat_desc,
 					'M_SUBLEVEL' => $mini_cat_icon,
 					'M_SUBLEVEL_ICON' => (isset($cat_sublevel['cat_icon'][$j])) ? $cat_sublevel['cat_icon'][$j] : '',
 					'U_SUBLEVEL' => $cat_sublevel['cat_path'][$j])

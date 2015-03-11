@@ -7,27 +7,26 @@
 <div class="forabg">
 	<div class="inner">
 
-	<table class="table1" cellspacing="0" width="100%">
-	<thead>
-	<tr style="color: #FFFFFF;">
-		<th style="width: 25%">{L_DL_FILE_DESCRIPTION}</th>
-		<th style="width: 75%">{L_DL_MOD_TODO}</th>
-	</tr>
-	</thead>
-	<tbody>
-	<!-- BEGIN todolist_row -->
-	<tr class="row<!-- IF todolist_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
-		<td style="width: 25%" valign="top"><a href="{todolist_row.FILE_LINK}"><strong>{todolist_row.FILENAME}</strong></a>&nbsp;<span>{todolist_row.HACK_VERSION}</span></td>
-		<td style="width: 75%" valign="top"><span class="small">{todolist_row.TODO}</span></td>
-	</tr>
-	<!-- END todolist_row -->
-	<!-- IF S_NO_TODOLIST -->
-	<tr class="row bg1">
-		<td valign="top" colspan="2"><span>{L_DL_NO_MOD_TODO}</span></td>
-	</tr>
-	<!-- ENDIF -->
-	</tbody>
-	</table>
+		<ul class="topiclist">
+			<li class="header">
+				<dl>
+					<dt>{L_DL_MOD_TODO}</dt>
+				</dl>
+			</li>
+		</ul>
+
+		<ul class="topiclist forums">
+		<!-- BEGIN todolist_row -->
+			<li class="row">
+				<dl>
+					<dt><a href="{todolist_row.FILE_LINK}" class="forumtitle">{todolist_row.FILENAME}</a>&nbsp;<span>{todolist_row.HACK_VERSION}</span><br /><div class="postbody"><div class="notice">{todolist_row.TODO}</div></div></dt>
+				</dl>
+			</li>
+		<!-- END todolist_row -->
+		<!-- IF S_NO_TODOLIST -->
+		<div ><span>{L_DL_NO_MOD_TODO}</span></div>
+		<!-- ENDIF -->
+		</ul>
 
 	</div>
 </div>

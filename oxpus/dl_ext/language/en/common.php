@@ -351,6 +351,7 @@ $lang = array_merge($lang, array(
 	'DL_LAST_TIME'				=> ' Last download <strong>%s</strong>',
 	'DL_LAST_TIME_EXTERN'		=> ' Last download from external URL on <strong>%s</strong>',
 	'DL_LATEST_COMMENTS'		=> 'Displays the latest X comments on download details',
+	'DL_LATEST_DOWNLOAD'		=> 'Latest download',
 	'DL_LATEST_DOWNLOADS'		=> 'Latest downloads',
 	'DL_LATEST_UPLOADS'			=> 'Latest uploads',
 	'DL_LATEST_VERSION'			=> 'Latest Version',

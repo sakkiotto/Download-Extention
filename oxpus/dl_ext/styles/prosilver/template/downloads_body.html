@@ -50,12 +50,11 @@ var dl_ajax_url = '{U_DL_AJAX}';
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dd style="width: 50%; display: block;">{L_DL_INFO} &bull; {L_DL_NAME}<br />{L_DL_FILE_DESCRIPTION}</dd>
-				<dd style="width: 10%; text-align: center;">{L_DL_FILE_SIZE}</dd>
-				<dd style="width: 10%; text-align: center;">{L_DL_KLICKS}<br />{L_DL_OVERALL_KLICKS}</dd>
+				<dt><div class="list-inner">{L_DL_INFO} &bull; {L_DL_NAME}<br />{L_DL_FILE_DESCRIPTION}</div></dt>
+				<dd class="topics">{L_DL_FILE_SIZE}</dd>
+				<dd class="posts">{L_DL_KLICKS}<br />{L_DL_OVERALL_KLICKS}</dd>
 				<!-- BEGIN comment_header -->
-				<dd style="width: <!-- IF S_ENABLE_RATE -->15<!-- ELSE -->30<!-- ENDIF -->%; text-align: center;">{L_DL_COMMENTS}</dd>
-				<!-- IF S_ENABLE_RATE --><dd style="width: <!-- IF comment_header.S_FIRST_ROW -->15<!-- ELSE -->30<!-- ENDIF -->%; text-align: center;">{L_DL_RATING}</dd><!-- ENDIF -->
+				<dd class="lastpost" style="display: block;"><!-- IF S_ENABLE_RATE -->{L_DL_RATING}<!-- ELSE -->&nbsp;<!-- ENDIF --></dd>
 				<!-- END comment_header -->
 			</dl>
 		</li>
@@ -64,24 +63,22 @@ var dl_ajax_url = '{U_DL_AJAX}';
 		<!-- BEGIN downloads -->
 		<li class="row">
 			<dl>
-				<dd style="width: 50%; display: block;"><div>
-					{downloads.STATUS}&nbsp;<a href="{downloads.U_FILE}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;{downloads.HACK_VERSION}&nbsp;{downloads.MINI_IMG}
+				<dt><div class="postbody">{downloads.STATUS}&nbsp;<a href="{downloads.U_FILE}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;{downloads.HACK_VERSION}&nbsp;{downloads.MINI_IMG}
 					<!-- IF downloads.U_DIRECT_EDIT -->&nbsp;[ <a href="{downloads.U_DIRECT_EDIT}">{L_DL_EDIT_FILE}</a> ]<!-- ENDIF -->
-					</div>
 					<div class="notice">{downloads.LONG_DESC}</div>
-				</dd>
-				<dd style="width: 10%; text-align: center;"><span>{downloads.FILE_SIZE}</span></dd>
-				<dd style="width: 10%; text-align: center;"><span>{downloads.FILE_KLICKS}<br />{downloads.FILE_OVERALL_KLICKS}</span></dd>
+					</div>
+				</dt>
+				<dd class="topics">{downloads.FILE_SIZE}</dd>
+				<dd class="posts"><div>{downloads.FILE_KLICKS} &bull; {downloads.FILE_OVERALL_KLICKS}</div></dd>
 				<!-- BEGIN comments -->
-				<dd style="width: <!-- IF S_ENABLE_RATE -->15<!-- ELSE -->30<!-- ENDIF -->%; text-align: center;"><span class="small">
-					<!-- IF downloads.comments.U_COMMENT_POST --><a href="{downloads.comments.U_COMMENT_POST}" class="postdetails">{L_DL_POST_COMMENT}</a><!-- ENDIF -->
-					<!-- IF downloads.comments.U_COMMENT_SHOW -->{downloads.comments.BREAK}
-					<a href="{downloads.comments.U_COMMENT_SHOW}">{L_DL_VIEW_COMMENTS}</a><!-- ENDIF -->
-					</span>
+				<dd class="lastposts" style="display: block;">
+					<!-- IF S_ENABLE_RATE and downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}<br />{downloads.RATINGS}</div><!-- ENDIF -->
+					<ul class="post-buttons">
+						<li><strong>{L_DL_COMMENTS}</strong> &nbsp; </li> 
+						<!-- IF downloads.comments.U_COMMENT_POST --><li><a href="{downloads.comments.U_COMMENT_POST}" class="button icon-button edit-icon" title="{L_DL_POST_COMMENT}"><span>{L_DL_POST_COMMENT}</span></a></li><!-- ENDIF -->
+						<!-- IF downloads.comments.U_COMMENT_SHOW --><li><a href="{downloads.comments.U_COMMENT_SHOW}" class="button icon-button info-icon" title="{L_DL_VIEW_COMMENTS}"><span>{L_DL_VIEW_COMMENTS}</span></a></li><!-- ENDIF -->
+					</ul>
 				</dd>
-				<!-- IF S_ENABLE_RATE -->
-				<dd style="width: <!-- IF comments.S_FIRST_ROW -->15<!-- ELSE -->30<!-- ENDIF -->%; text-align: center;"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
-				<!-- ENDIF -->
 				<!-- END comments -->
 			</dl>
 		</li>

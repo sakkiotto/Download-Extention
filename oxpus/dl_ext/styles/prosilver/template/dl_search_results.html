@@ -8,10 +8,8 @@
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="posts">{L_DL_INFO}</dd>
-					<dd class="info">{L_DL_FILE_DESCRIPTION}<br />{L_DL_DETAIL}</dd>
-					<dd class="info">{L_DL_CAT_NAME}</dd>
-					<dd class="time">{L_DL_FILE_NAME}</dd>
+					<dt>{L_DL_FILE_DESCRIPTION}</dt>
+					<dd class="lastpost" style="display: block;"><span>&nbsp;</span></dd>
 				</dl>
 			</li>
 		</ul>
@@ -20,10 +18,14 @@
 		<!-- BEGIN searchresults -->
 			<li class="row<!-- IF searchresults.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
 				<dl>
-					<dd class="posts"><b>{searchresults.STATUS}</b></dd>
-					<dd class="info"><a href="{searchresults.U_FILE_LINK}" class="topictitle">{searchresults.DESCRIPTION}</a>&nbsp;{searchresults.MINI_ICON}<br /><span class="small">{searchresults.LONG_DESC}</span></dd>
-					<dd class="info"><a href="{searchresults.U_CAT_LINK}" class="forumtitle">{searchresults.CAT_NAME}</a></dd>
-					<dd class="time">{searchresults.FILE_NAME}</dd>
+					<dt>
+						<strong>{searchresults.STATUS}</strong> <a href="{searchresults.U_FILE_LINK}" class="topictitle">{searchresults.DESCRIPTION}</a> {searchresults.MINI_ICON}</dt>
+						<div class="postbody"><div class="notice">{searchresults.LONG_DESC}</div></div>
+					</dt>
+					<dd class="lastpost">
+						<div><strong>{L_DL_CAT_NAME}: </strong><a href="{searchresults.U_CAT_LINK}">{searchresults.CAT_NAME}</a></div>
+						<div><strong>{L_DL_FILE_NAME}: </strong>{searchresults.FILE_NAME}</div>
+					</dd>
 				</dl>
 			</li>
 		<!-- END searchresults -->

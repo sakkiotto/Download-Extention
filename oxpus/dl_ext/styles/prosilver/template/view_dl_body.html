@@ -100,59 +100,75 @@ var active_cat = 0;
 			<br />
 
 			<ul class="topiclist">
-			<li>
-				<dl class="row bg1">
+			<li class="row">
+				<dl>
 					<dt><label>{L_DL_FILE_NAME}</label></dt>
-					<dd class="lastpost"><label>{downloads.FILE_NAME}</label></dd>
+					<dd class="lastpost" style="display: block;"><label>{downloads.FILE_NAME}</label></dd>
 				</dl>
-				<!-- BEGIN real_filetime -->
-				<dl class="row bg2">
-					<dt><label>{L_DL_REAL_FILETIME}</label></dt>
-					<dd class="lastpost"><label>{downloads.real_filetime.REAL_FILETIME}</label></dd>
-				</dl>
-				<!-- END real_filetime -->
-		<!-- END downloads -->
-				<!-- BEGIN hacklist -->
-				<dl class="row bg1">
-					<dt><label>{L_DL_HACK_AUTOR}</label></dt>
-					<dd class="lastpost"><label>{hacklist.HACK_AUTHOR}{hacklist.HACK_AUTHOR_WEBSITE}</label></dd>
-				</dl>
-				<!-- END hacklist -->
-				<!-- BEGIN downloads -->
-				<!-- BEGIN bug_tracker -->
-				<dl class="row bg2">
-					<dt><label>{L_DL_BUG_TRACKER}</label></dt>
-					<dd class="lastpost"><label><a href="{downloads.bug_tracker.U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
-				</dl>
-				<!-- END bug_tracker -->
-				<!-- IF S_SHOW_TOPIC_LINK -->
-				<dl class="row bg1">
-					<dt><label>{L_TOPIC}</label></dt>
-					<dd class="lastpost"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
-				</dl>
-				<!-- ENDIF -->
-				<dl class="row bg2">
-					<dt><label>{L_DL_FILE_SIZE}</label></dt>
-					<dd class="lastpost"><label>{downloads.FILE_SIZE}</label></dd>
-				</dl>
-				<dl class="row bg1">
-					<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
-					<dd class="lastpost"><label>{downloads.FILE_KLICKS} / {downloads.FILE_OVERALL_KLICKS}</label></dd>
-				</dl>
-				<!-- END downloads -->
-				<!-- BEGIN hacklist -->
-				<dl class="row bg2">
-					<dt><label>{L_DL_HACK_DL_URL}</label></dt>
-					<dd class="lastpost"><label>{hacklist.HACK_DL_URL}</label></dd>
-				</dl>
-				<!-- END hacklist -->
-				<!-- IF S_ENABLE_RATE -->
-				<dl class="row bg1">
-					<dt><label>{L_DL_RATING}</label>{RATINGS}</dt>
-					<dd class="lastpost"><div id="rating_{DF_ID}">{RATING_IMG}</div></dd>
-				</dl>
-				<!-- ENDIF -->
 			</li>
+			<!-- BEGIN real_filetime -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_REAL_FILETIME}</label></dt>
+					<dd class="lastpost" style="display: block;"><label>{downloads.real_filetime.REAL_FILETIME}</label></dd>
+				</dl>
+			</li>
+			<!-- END real_filetime -->
+		<!-- END downloads -->
+			<!-- BEGIN hacklist -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_HACK_AUTOR}</label></dt>
+					<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_AUTHOR}{hacklist.HACK_AUTHOR_WEBSITE}</label></dd>
+				</dl>
+			</li>
+			<!-- END hacklist -->
+			<!-- BEGIN downloads -->
+			<!-- BEGIN bug_tracker -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_BUG_TRACKER}</label></dt>
+					<dd class="lastpost" style="display: block;"><label><a href="{downloads.bug_tracker.U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
+				</dl>
+			</li>
+			<!-- END bug_tracker -->
+			<!-- IF S_SHOW_TOPIC_LINK -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_TOPIC}</label></dt>
+					<dd class="lastpost" style="display: block;"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
+				</dl>
+			</li>
+			<!-- ENDIF -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_FILE_SIZE}</label></dt>
+					<dd class="lastpost" style="display: block;"><label>{downloads.FILE_SIZE}</label></dd>
+				</dl>
+			</li>
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
+					<dd class="lastpost" style="display: block;"><label>{downloads.FILE_KLICKS} / {downloads.FILE_OVERALL_KLICKS}</label></dd>
+				</dl>
+			</li>
+			<!-- END downloads -->
+			<!-- BEGIN hacklist -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_HACK_DL_URL}</label></dt>
+					<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_DL_URL}</label></dd>
+				</dl>
+			</li>
+			<!-- END hacklist -->
+			<!-- IF S_ENABLE_RATE -->
+			<li class="row">
+				<dl>
+					<dt><label>{L_DL_RATING}</label>{RATINGS}</dt>
+					<dd class="lastpost" style="display: block;"><div id="rating_{DF_ID}">{RATING_IMG}</div></dd>
+				</dl>
+			</li>
+			<!-- ENDIF -->
 			</ul>
 
 		</div>

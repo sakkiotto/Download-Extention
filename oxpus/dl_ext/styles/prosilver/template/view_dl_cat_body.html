@@ -11,9 +11,8 @@
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dd style="width: 60%; 60%; display: block;">{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</ds>
-				<dd class="posts">{L_DL_CAT_FILES}</dd>
-				<dd class="lastpost"><span>{L_DL_LATEST_DOWNLOADS}</span></dd>
+				<dt style="min-width: 60%;">{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</dt>
+				<dd style="display: block;">{L_DL_DETAIL}</dd>
 			</dl>
 		</li>
 	</ul>
@@ -28,8 +27,9 @@
 		<!-- BEGIN downloads -->
 		<li class="row">
 			<dl>
-				<dd style="width: 60%; display: block;"><span class="forum-image">{downloads.MINI_IMG}</span>
-					<span class="forum-image"><!-- IF downloads.CAT_ICON --><img src="{downloads.CAT_ICON}" alt="" title="{downloads.CAT_NAME}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></span>
+				<dd style="width: 60%; display: block;">
+					<span class="forum-image">{downloads.MINI_IMG}</span>
+					<!-- IF downloads.CAT_ICON --><span class="forum-image"><img src="{downloads.CAT_ICON}" alt="" title="{downloads.CAT_NAME}" /></span><!-- ENDIF -->
 					<a href="{downloads.U_CAT_VIEW}" class="forumtitle">{downloads.CAT_NAME}</a><br />
 					<span class="small">{downloads.CAT_DESC}</span>
 					<!-- IF .downloads.pagination -->
@@ -48,26 +48,20 @@
 					<!-- ENDIF -->
 					<!-- IF S_SUB_ON_INDEX -->
 					<!-- BEGIN sub -->
-					<table class="table1" cellspacing="0" border="0" width="100%">
+					<hr />
 					<!-- BEGIN sublevel_row -->
-					<tr class="row bg<!-- IF downloads.sub.sublevel_row.S_ROW_COUNT is even -->1<!-- ELSE -->2<!-- ENDIF -->">
-						<td style="width: 90%;"><span class="forum-image">{downloads.sub.sublevel_row.M_SUBLEVEL}</span>
-							<span class="forum-image"><!-- IF subcats.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{subcats.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{subcats.sub.sublevel_row.L_SUBLEVEL}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></span>
-							<a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small"><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a><br />
-							<span style="font-size: 7pt;">&nbsp;&nbsp;&nbsp;{downloads.sub.sublevel_row.SUBLEVEL_DESC}</span>
-						</td>
-						<td style="width: 10%;" align="center"><span class="small">{downloads.sub.sublevel_row.SUBLEVEL_COUNT}<br />{L_DL_CAT_FILES}</span></td>
-					</tr>
+					<div>
+						{downloads.sub.sublevel_row.M_SUBLEVEL}<!-- IF downloads.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{downloads.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{downloads.sub.sublevel_row.L_SUBLEVEL}" style="max-height: 12px; max-width: 12px;" /><!-- ENDIF --> &nbsp; <a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small"><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a><!-- IF downloads.sub.sublevel_row.SUBLEVEL_COUNT --> &nbsp; <span class="small">{downloads.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}</span><!-- ENDIF -->
+					</div>
 					<!-- END sublevel_row -->
-					</table>
 					<!-- END sub -->
 					<!-- ENDIF -->
 				</dd>
-				<dd class="posts"><span class="small"><b>{downloads.CAT_DL}</b></span></dd>
+				<dd style="display: block;">
+					<div><strong>{downloads.CAT_DL}</strong> {L_DL_CAT_FILES}</div>
 				<!-- IF downloads.CAT_LAST_DL -->
-                <dd class="lastpost">
-                    <span><a href="{downloads.U_CAT_LAST_LINK}" class="small">{downloads.CAT_LAST_DL}</a></span><br />
-                    <span class="topicdetails"><a href="{downloads.U_CAT_LAST_USER}" class="small">{downloads.CAT_LAST_USER}</a><!-- IF downloads.CAT_LAST_TIME -->&nbsp;&bull;&nbsp;<!-- ENDIF -->{downloads.CAT_LAST_TIME}</span>
+                    <div><strong>{L_DL_LATEST_DOWNLOAD}</strong> <a href="{downloads.U_CAT_LAST_LINK}">{downloads.CAT_LAST_DL}</a></div>
+                    <div><a href="{downloads.U_CAT_LAST_USER}">{downloads.CAT_LAST_USER}</a><!-- IF downloads.CAT_LAST_TIME -->&nbsp;&bull;&nbsp;{downloads.CAT_LAST_TIME}<!-- ENDIF --></div>
                 </dd>
                 <!-- ENDIF -->
 			</dl>

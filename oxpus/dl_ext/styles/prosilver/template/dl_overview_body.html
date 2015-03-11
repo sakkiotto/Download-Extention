@@ -17,12 +17,11 @@ var dl_ajax_url = '{U_DL_AJAX}';
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd style="width: 5%; display: block;">{L_DL_INFO}</dd>
-					<dd style="width: <!-- IF S_ENABLE_RATE -->60%<!-- ELSE -->80%<!-- ENDIF -->; display: block;">{L_DL_NAME}</dd>
-					<dd style="width: 5%;">{L_DL_FILE_SIZE}</dd>
-					<dd style="width: 10%;">{L_DL_KLICKS} /<br />{L_DL_OVERALL_KLICKS}</dd>
+					<dt>{L_DL_NAME}</dt>
+					<dd class="topics">{L_DL_FILE_SIZE}</dd>
+					<dd class="posts">{L_DL_KLICKS} /<br />{L_DL_OVERALL_KLICKS}</dd>
 					<!-- IF S_ENABLE_RATE -->
-					<dd style="width: 20%;" class="extra">{L_DL_RATING}</dd>
+					<dd class="lastpost" style="display: block;">{L_DL_RATING}</dd>
 					<!-- ENDIF -->
 				</dl>
 			</li>
@@ -32,12 +31,11 @@ var dl_ajax_url = '{U_DL_AJAX}';
 			<!-- BEGIN downloads -->
 			<li class="row">
 				<dl>
-					<dd style="width: 5%; display: block; text-align: center;">{downloads.STATUS}</dd>
-					<dd style="width: <!-- IF S_ENABLE_RATE -->60%<!-- ELSE -->80%<!-- ENDIF -->; display: block;"><a href="{downloads.U_DL_LINK}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;<span>{downloads.HACK_VERSION}</span><br />{L_DL_CAT_NAME}: <a href="{downloads.U_CAT_VIEW}">{downloads.CAT_NAME}</a></dd>
-					<dd style="width: 5%; text-align: center;">{downloads.FILE_SIZE}</dd>
-					<dd style="width: 10%; text-align: center;">{downloads.FILE_KLICKS} | {downloads.FILE_OVERALL_KLICKS}</dd>
+					<dt style="display: block;">{downloads.STATUS} <a href="{downloads.U_DL_LINK}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;<span>{downloads.HACK_VERSION}</span><br />{L_DL_CAT_NAME}: <a href="{downloads.U_CAT_VIEW}">{downloads.CAT_NAME}</a></dt>
+					<dd class="topics">{downloads.FILE_SIZE}</dd>
+					<dd class="posts">{downloads.FILE_KLICKS} | {downloads.FILE_OVERALL_KLICKS}</dd>
 					<!-- IF S_ENABLE_RATE -->
-					<dd style="width: 20%; text-align: center;"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
+					<dd class="lastpost" style="display: block;"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
 					<!-- ENDIF -->
 				</dl>
 			</li>
