@@ -386,6 +386,17 @@ class main
 			$description = $this->user->lang['DL_DOWNLOAD'];
 		}
 
+		if ($cat_id || $cat)
+		{
+			$check_cat = ($cat_id) ? $cat_id : $cat;
+
+			$check_index = \oxpus\dl_ext\includes\classes\ dl_main::full_index($this->helper);
+			if (!isset($check_index[$check_cat]))
+			{
+				redirect($this->helper->route('dl_ext_controller'));
+			}
+		}
+				
 		if ($cat_id)
 		{
 			$cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::user_auth($cat_id, 'auth_view');

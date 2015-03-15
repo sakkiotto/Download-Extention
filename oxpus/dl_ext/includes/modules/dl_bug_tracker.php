@@ -33,6 +33,21 @@ while ($row = $this->db->sql_fetchrow($result))
 }
 $this->db->sql_freeresult($result);
 
+if (isset($fav_id))
+{
+	$sql = 'SELECT * FROM ' . DL_BUGS_TABLE . '
+		WHERE report_id = ' . (int) $fav_id;
+	$result = $this->db->sql_query($sql);
+	$dl_exists = $this->db->sql_affectedrows($result);
+	$this->db->sql_freeresult($result);
+
+	if (!$dl_exists)
+	{
+		$fav_id = 0;
+		$action = '';
+	}
+}
+
 if (sizeof($dl_ids))
 {
 	$sql = 'DELETE FROM ' . DL_BUGS_TABLE . '
