@@ -2,6 +2,12 @@
 
 <p>{L_DL_CAT_EDIT_EXPLAIN}</p>
 
+<div>{U_CAT_NAV}</div>
+
+<fieldset class="quick">
+	<a href="{U_IDX_ACTION}<!-- IF S_IDX_TYPE == 'c' -->f<!-- ELSE -->c<!-- ENDIF -->" alt="" title=""><!-- IF S_IDX_TYPE == 'c' -->{L_DL_ACP_IDX_TYPE_F}<!-- ELSE -->{L_DL_ACP_IDX_TYPE_C}<!-- ENDIF --></a>
+</fieldset>
+
 <form action="{S_CATEGORY_ACTION}" method="post" id="dl_cat">
 
 <table width="100%" cellpadding="3" cellspacing="1" class="table1">
@@ -13,10 +19,11 @@
 </thead>
 <tbody>
 <!-- BEGIN categories -->
-<tr valign="top">
-	<td><!-- IF categories.CAT_ICON --><img src="{categories.CAT_ICON}" alt="" title="{categories.CAT_NAME}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
-	<td><label>{categories.CAT_NAME}</label></td>
-	<td>
+<tr valign="top" class="row1">
+	<td style="width: 30px;"><img src="{categories.CAT_FOLDER}" alt="{categories.CAT_NAME}" title="{categories.CAT_NAME}" /></td>
+	<td><div class="forumtitle"><!-- IF categories.CAT_ICON --><img src="{categories.CAT_ICON}" alt="{categories.CAT_NAME}" title="{categories.CAT_NAME}" />&nbsp;<!-- ENDIF -->
+		<!-- IF categories.U_CAT_OPEN --><a href="{categories.U_CAT_OPEN}" title=""><!-- ENDIF --><strong>{categories.CAT_NAME}</strong><!-- IF categories.U_CAT_OPEN --></a><!-- ENDIF --></div><!-- IF categories.CAT_DESCRIPTION --><br /><span>{categories.CAT_DESCRIPTION}</span><!-- ENDIF --></td>
+	<td style="text-align: center;">
 		<!-- IF categories.S_FIRST_ROW && not categories.S_LAST_ROW -->
 		{ICON_MOVE_UP_DISABLED}
 		<a href="{categories.U_CATEGORY_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
@@ -47,13 +54,13 @@
 </tbody>
 </table>
 
-<table width="100%" cellpadding="3" cellspacing="1" border="0">
-<tr>
-	<!-- IF S_TOTAL_STATS --><td><a href="{U_DELETE_STATS_ALL}">{L_DELETE_STATS_ALL}</a></td><!-- ENDIF -->
-	<td><a href="{U_SORT_LEVEL_ZERO}">{L_DL_SUB_SORT_ASC_ZERO}</a></td>
-	<!-- IF S_TOTAL_COMMENTS --><td><a href="{U_DELETE_COMMENTS_ALL}">{L_DELETE_COMMENTS_ALL}</a></td><!-- ENDIF -->
-</tr>
-</table>
+<!-- IF S_SORT_MAIN or S_TOTAL_STATS or S_TOTAL_COMMENTS -->
+<fieldset>
+	<!-- IF S_SORT_MAIN --><a href="{U_SORT_LEVEL_ZERO}" class="button2">{L_DL_SUB_SORT_ASC_ZERO}</a><!-- ENDIF -->
+	<!-- IF S_TOTAL_STATS --><a href="{U_DELETE_STATS_ALL}" class="button2">{L_DELETE_STATS_ALL}</a><!-- ENDIF -->
+	<!-- IF S_TOTAL_COMMENTS --><a href="{U_DELETE_COMMENTS_ALL}" class="button2">{L_DELETE_COMMENTS_ALL}</a><!-- ENDIF -->
+</fieldset>
+<!-- ENDIF -->
 
 <fieldset class="quick">
 	<input type="hidden" name="action" value="add" />

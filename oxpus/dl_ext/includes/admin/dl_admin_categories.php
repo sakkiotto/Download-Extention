@@ -70,6 +70,7 @@ $diff_topic_user	= $request->variable('dl_diff_topic_user', $config['dl_diff_top
 $topic_user			= $request->variable('dl_topic_user', $config['dl_topic_user']);
 $topic_more_details	= $request->variable('topic_more_details', 1);
 $show_file_hash		= $request->variable('show_file_hash', 0);
+$idx_type			= $request->variable('type', 'c');
 
 $error = false;
 $error_msg = '';
@@ -94,10 +95,10 @@ if($action == 'edit' || $action == 'add')
 		$description		= $index[$cat_id]['description'];
 		$rules				= $index[$cat_id]['rules'];
 		$cat_path			= $index[$cat_id]['cat_path'];
-		$cat_parent			= '<select name="parent">';
-		$cat_parent			.= '<option value="0">&nbsp;»&nbsp;'.$user->lang['DL_CAT_INDEX'].'</option>';
-		$cat_parent			.= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
-		$cat_parent			.= '</select>';
+		$s_cat_parent		= '<select name="parent">';
+		$s_cat_parent		.= '<option value="0">&nbsp;»&nbsp;'.$user->lang['DL_CAT_INDEX'].'</option>';
+		$s_cat_parent		.= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
+		$s_cat_parent		.= '</select>';
 		$desc_uid			= $index[$cat_id]['desc_uid'];
 		$rules_uid			= $index[$cat_id]['rules_uid'];
 		$desc_bitfield		= $index[$cat_id]['desc_bitfield'];
@@ -152,10 +153,10 @@ if($action == 'edit' || $action == 'add')
 
 		$cat_path			= ($path) ? $path : '/';
 		$cat_parent_id		= $cat_parent;
-		$cat_parent			= '<select name="parent">';
-		$cat_parent			.= '<option value="0">&nbsp;»&nbsp;'.$user->lang['DL_CAT_INDEX'].'</option>';
-		$cat_parent			.= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $cat_parent_id, 'auth_view', -1);
-		$cat_parent			.= '</select>';
+		$s_cat_parent		= '<select name="parent">';
+		$s_cat_parent		.= '<option value="0">&nbsp;»&nbsp;'.$user->lang['DL_CAT_INDEX'].'</option>';
+		$s_cat_parent		.= \oxpus\dl_ext\includes\classes\ dl_extra::dl_dropdown(0, 0, $cat_parent_id, 'auth_view', -1);
+		$s_cat_parent		.= '</select>';
 		$cat_remain_traffic	= $cat_traffic;
 		$perm_cat_id		= $perms_copy_from;
 		$perms_copy_from	= '<select name="perms_copy_from">';
@@ -290,6 +291,8 @@ if($action == 'edit' || $action == 'add')
 
 	add_form_key('dl_adm_cats');
 
+	$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 	$template->assign_vars(array(
 		'L_DL_CAT_PATH_EXPLAIN'			=> 'DL_CAT_PATH',
 		'L_DL_NAME_EXPLAIN'				=> 'DL_CAT_NAME',
@@ -330,7 +333,7 @@ if($action == 'edit' || $action == 'add')
 		'CAT_NAME'				=> $cat_name,
 		'DESCRIPTION'			=> $description,
 		'RULES'					=> $rules,
-		'CAT_PARENT'			=> $cat_parent,
+		'CAT_PARENT'			=> $s_cat_parent,
 		'CAT_TRAFFIC'			=> $cat_traffic_out,
 		'ALLOW_THUMBS_YES'		=> $allow_thumbs_yes,
 		'ALLOW_THUMBS_NO'		=> $allow_thumbs_no,
@@ -618,6 +621,8 @@ else if($action == 'save_cat')
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
+	$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 	$message .= "<br /><br />" . sprintf($user->lang['CLICK_RETURN_CATEGORYADMIN'], '<a href="' . $basic_link . '">', '</a>') . adm_back_link($this->u_action);
 
 	trigger_error($message);
@@ -734,6 +739,8 @@ else if($action == 'delete' && $cat_id && !\oxpus\dl_ext\includes\classes\ dl_ma
 		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $phpEx);
 		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $phpEx);
 
+		$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 		$message = $user->lang['DL_CATEGORY_REMOVED'] . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_CATEGORYADMIN'], '<a href="' . $basic_link . '">', '</a>') . adm_back_link($this->u_action);
 
 		trigger_error($message);
@@ -761,6 +768,8 @@ else if($action == 'delete' && $cat_id && !\oxpus\dl_ext\includes\classes\ dl_ma
 		);
 
 		add_form_key('dl_adm_cats');
+
+		$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
 		$template->assign_vars(array(
 			'MESSAGE_TITLE' => $user->lang['INFORMATION'],
@@ -812,6 +821,8 @@ else if($action == 'delete_stats')
 
 			add_form_key('dl_adm_cats');
 
+			$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 			$template->assign_vars(array(
 				'MESSAGE_TITLE' => $user->lang['INFORMATION'],
 				'MESSAGE_TEXT' => ($cat_id == 'all') ? $user->lang['DL_CONFIRM_ALL_STATS_DELETE'] : sprintf($user->lang['DL_CONFIRM_CAT_STATS_DELETE'], $cat_name),
@@ -847,6 +858,8 @@ else if($action == 'delete_stats')
 
 	if (!$dl_confirm_stat_delete)
 	{
+		$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 		redirect($basic_link);
 	}
 }
@@ -877,6 +890,8 @@ else if($action == 'delete_comments')
 		);
 
 		add_form_key('dl_adm_cats');
+
+		$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
 		$template->assign_vars(array(
 			'MESSAGE_TITLE' => $user->lang['INFORMATION'],
@@ -912,6 +927,7 @@ else if($action == 'delete_comments')
 
 	if (!$dl_confirm_comm_delete)
 	{
+		$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 		redirect($basic_link);
 	}
 }
@@ -963,6 +979,8 @@ else if($action == 'category_order')
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cats.' . $phpEx);
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
+	$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 	redirect($basic_link);
 }
 else if($action == 'asc_sort')
@@ -990,6 +1008,8 @@ else if($action == 'asc_sort')
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_auth.' . $phpEx);
 
 	add_log('admin', 'DL_LOG_CAT_SORT_ASC');
+
+	$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
 	redirect($basic_link);
 }
@@ -1024,100 +1044,126 @@ if (!$dl_template_in_use)
 	$stats_total = 0;
 	$comments_total = 0;
 
+	$basic_link_idx		= $basic_link . '&amp;parent=' . $cat_parent . '&amp;type=';
+	$basic_link_open	= $basic_link . '&amp;parent=#CAT#&amp;type=' . $idx_type;
+	$basic_link			.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
+
 	foreach (array_keys($index) as $key)
 	{
 		$cat_id = $key;
-		$cat_name = $index[$cat_id]['cat_name'];
-		$cat_icon = $index[$cat_id]['cat_icon'];
 
-		$cat_edit = "{$basic_link}&amp;action=edit&amp;cat_id=$cat_id";
-
-		$cat_sub = \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count($cat_id);
-
-		if ($cat_sub)
+		if (($idx_type == 'c' && $index[$cat_id]['parent'] == $cat_parent) || $idx_type == 'f')
 		{
-			$cat_delete = '';
+			$cat_name = ($idx_type == 'c') ? $index[$cat_id]['cat_name_nav'] : $index[$cat_id]['cat_name'];
+			$cat_description = nl2br($index[$cat_id]['description']);
+			$cat_icon = $index[$cat_id]['cat_icon'];
+	
+			$cat_edit = "{$basic_link}&amp;action=edit&amp;cat_id=$cat_id";
+	
+			$cat_sub = \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count($cat_id);
+			$cat_sub_count = \oxpus\dl_ext\includes\classes\ dl_main::count_sublevel($cat_id);
+	
+			if ($cat_sub)
+			{
+				$cat_delete = '';
+			}
+			else
+			{
+				$cat_delete = "{$basic_link}&amp;action=delete&amp;cat_id=$cat_id";
+			}
+	
+			$dl_move_up = "{$basic_link}&amp;action=category_order&amp;move=0&amp;cat_id=$cat_id";
+			$dl_move_down = "{$basic_link}&amp;action=category_order&amp;move=1&amp;cat_id=$cat_id";
+
+			$cat_folder = 'images/icon_folder.gif';
+			if ($cat_sub_count)
+			{
+				$cat_folder = 'images/icon_subfolder.gif';
+			}
+
+			if ($cat_sub_count > 1)
+			{
+				$l_sort_asc = $user->lang['DL_SUB_SORT_ASC'];
+				$dl_sort_asc = "{$basic_link}&amp;action=asc_sort&amp;cat_id=$cat_id";
+			}
+			else
+			{
+				$l_sort_asc = '';
+				$dl_sort_asc = '';
+			}
+	
+			$l_delete_stats = '';
+			$l_delete_comments = '';
+			$u_delete_stats = '';
+			$u_delete_comments = '';
+	
+			if (isset($stats_cats[$cat_id]))
+			{
+				$l_delete_stats = $user->lang['DL_STATS_DELETE'];
+				$u_delete_stats = "{$basic_link}&amp;action=delete_stats&amp;cat_id=$cat_id";
+				$stats_total++;
+			}
+	
+			if (isset($comments_cats[$cat_id]))
+			{
+				$l_delete_comments = $user->lang['DL_COMMENTS_DELETE'];
+				$u_delete_comments = "{$basic_link}&amp;action=delete_comments&amp;cat_id=$cat_id";
+				$comments_total++;
+			}
+	
+			$template->assign_block_vars('categories', array(
+				'L_DELETE_STATS'		=> $l_delete_stats,
+				'L_DELETE_COMMENTS'		=> $l_delete_comments,
+				'L_SORT_ASC'			=> $l_sort_asc,
+	
+				'CAT_NAME'				=> $cat_name,
+				'CAT_DESCRIPTION'		=> $cat_description,
+				'CAT_FOLDER'			=> $cat_folder,
+				'CAT_ICON'				=> $cat_icon,
+	
+				'U_CAT_EDIT'			=> $cat_edit,
+				'U_CAT_DELETE'			=> $cat_delete,
+				'U_CATEGORY_MOVE_UP'	=> $dl_move_up,
+				'U_CATEGORY_MOVE_DOWN'	=> $dl_move_down,
+				'U_CATEGORY_ASC_SORT'	=> $dl_sort_asc,
+				'U_DELETE_STATS'		=> $u_delete_stats,
+				'U_DELETE_COMMENTS'		=> $u_delete_comments,
+				'U_CAT_OPEN'			=> ($cat_sub_count && $idx_type == 'c') ? str_replace('#CAT#', $cat_id, $basic_link_open) : '',
+			));
+		}
+	
+		if ($stats_total)
+		{
+			$l_delete_stats_all = $user->lang['DL_STATS_DELETE_ALL'];
+			$u_delete_stats_all = "{$basic_link}&amp;action=delete_stats&amp;cat_id=-1";
+			$template->assign_var('S_TOTAL_STATS', true);
 		}
 		else
 		{
-			$cat_delete = "{$basic_link}&amp;action=delete&amp;cat_id=$cat_id";
+			$l_delete_stats_all = '';
+			$u_delete_stats_all = '';
 		}
-
-		$dl_move_up = "{$basic_link}&amp;action=category_order&amp;move=0&amp;cat_id=$cat_id";
-		$dl_move_down = "{$basic_link}&amp;action=category_order&amp;move=1&amp;cat_id=$cat_id";
-
-		if (\oxpus\dl_ext\includes\classes\ dl_main::count_sublevel($cat_id) > 1)
+	
+		if ($comments_total)
 		{
-			$l_sort_asc = $user->lang['DL_SUB_SORT_ASC'];
-			$dl_sort_asc = "{$basic_link}&amp;action=asc_sort&amp;cat_id=$cat_id";
+			$l_delete_comments_all = $user->lang['DL_COMMENTS_DELETE_ALL'];
+			$u_delete_comments_all = "{$basic_link}&amp;action=delete_comments&amp;cat_id=-1";
+			$template->assign_var('S_TOTAL_COMMENTS', true);
 		}
 		else
 		{
-			$l_sort_asc = '';
-			$dl_sort_asc = '';
+			$l_delete_comments_all = '';
+			$u_delete_comments_all = '';
 		}
-
-		$l_delete_stats = '';
-		$l_delete_comments = '';
-		$u_delete_stats = '';
-		$u_delete_comments = '';
-
-		if (isset($stats_cats[$cat_id]))
-		{
-			$l_delete_stats = $user->lang['DL_STATS_DELETE'];
-			$u_delete_stats = "{$basic_link}&amp;action=delete_stats&amp;cat_id=$cat_id";
-			$stats_total++;
-		}
-
-		if (isset($comments_cats[$cat_id]))
-		{
-			$l_delete_comments = $user->lang['DL_COMMENTS_DELETE'];
-			$u_delete_comments = "{$basic_link}&amp;action=delete_comments&amp;cat_id=$cat_id";
-			$comments_total++;
-		}
-
-		$template->assign_block_vars('categories', array(
-			'L_DELETE_STATS'		=> $l_delete_stats,
-			'L_DELETE_COMMENTS'		=> $l_delete_comments,
-			'L_SORT_ASC'			=> $l_sort_asc,
-
-			'CAT_NAME'				=> $cat_name,
-			'CAT_ICON'				=> $cat_icon,
-
-			'U_CAT_EDIT'			=> $cat_edit,
-			'U_CAT_DELETE'			=> $cat_delete,
-			'U_CATEGORY_MOVE_UP'	=> $dl_move_up,
-			'U_CATEGORY_MOVE_DOWN'	=> $dl_move_down,
-			'U_CATEGORY_ASC_SORT'	=> $dl_sort_asc,
-			'U_DELETE_STATS'		=> $u_delete_stats,
-			'U_DELETE_COMMENTS'		=> $u_delete_comments)
-		);
 	}
 
-	if ($stats_total)
+	$cat_navi = '';
+	if ($cat_parent <> 0)
 	{
-		$l_delete_stats_all = $user->lang['DL_STATS_DELETE_ALL'];
-		$u_delete_stats_all = "{$basic_link}&amp;action=delete_stats&amp;cat_id=-1";
-		$template->assign_var('S_TOTAL_STATS', true);
+		$tmp_nav = array();
+		$cat_navi = \oxpus\dl_ext\includes\classes\ dl_nav::nav($helper, $cat_parent, 'acp', $tmp_nav, $basic_link_open);
 	}
-	else
-	{
-		$l_delete_stats_all = '';
-		$u_delete_stats_all = '';
-	}
-
-	if ($comments_total)
-	{
-		$l_delete_comments_all = $user->lang['DL_COMMENTS_DELETE_ALL'];
-		$u_delete_comments_all = "{$basic_link}&amp;action=delete_comments&amp;cat_id=-1";
-		$template->assign_var('S_TOTAL_COMMENTS', true);
-	}
-	else
-	{
-		$l_delete_comments_all = '';
-		$u_delete_comments_all = '';
-	}
-
+	
 	$template->assign_vars(array(
 		'L_DELETE_STATS_ALL'	=> $l_delete_stats_all,
 		'L_DELETE_COMMENTS_ALL'	=> $l_delete_comments_all,
@@ -1126,11 +1172,15 @@ if (!$dl_template_in_use)
 		'CAT_NAME'				=> $cat_name,
 
 		'S_CATEGORY_ACTION'		=> $basic_link,
+		'S_IDX_TYPE'			=> $idx_type,
+		'S_SORT_MAIN'			=> ($cat_parent == 0) ? true : false,
 
 		'U_SORT_LEVEL_ZERO'		=> "{$basic_link}&amp;action=asc_sort&amp;cat_id=0",
 		'U_DELETE_STATS_ALL'	=> $u_delete_stats_all,
-		'U_DELETE_COMMENTS_ALL'	=> $u_delete_comments_all)
-	);
+		'U_DELETE_COMMENTS_ALL'	=> $u_delete_comments_all,
+		'U_IDX_ACTION'			=> $basic_link_idx,
+		'U_CAT_NAV'				=> $cat_navi,
+	));
 
 	/*
 	* show the default page
