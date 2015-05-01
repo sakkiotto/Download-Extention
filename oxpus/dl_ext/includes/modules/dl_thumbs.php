@@ -154,16 +154,17 @@ if ($submit && !$action)
 	if (isset($thumb_name) && $thumb_name != '')
 	{
 		$cur_time = time();
-		$thumb_tmp_link = DL_EXT_THUMBS_FOLDER . $cur_time . '_' . $thumb_name;
+		$thumb_tmp_link = $cur_time . '_' . $thumb_name;
 
-		while (!file_exists($thumb_tmp_link))
+		while (!file_exists(DL_EXT_THUMBS_FOLDER . $thumb_tmp_link))
 		{
 			$thumb_file->realname = $thumb_tmp_link;
-			$thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
+			$dest_folder = str_replace($this->root_path, '', substr(DL_EXT_THUMBS_FOLDER, 0, -1));
+			$thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 			@chmod($thumb_file->destination_file, 0777);
 
 			$cur_time = time();
-			$thumb_tmp_link = DL_EXT_THUMBS_FOLDER . $cur_time . '_' . $thumb_name;
+			$thumb_tmp_link = $cur_time . '_' . $thumb_name;
 		}
 
 		$img_link = $cur_time . '_' . $thumb_name;;

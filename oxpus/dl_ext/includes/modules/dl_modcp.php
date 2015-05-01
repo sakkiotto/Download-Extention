@@ -386,7 +386,8 @@ else
 					@unlink(DL_EXT_THUMBS_FOLDER . $df_id . '_' . $thumb_name);
 		
 					$thumb_file->realname = $df_id . '_' . $thumb_name;
-					$thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
+					$dest_folder = str_replace($this->root_path, '', substr(DL_EXT_THUMBS_FOLDER, 0, -1));
+					$thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 					@chmod($thumb_file->destination_file, 0777);
 		
 					$thumb_message = '<br />' . $this->user->lang['DL_THUMB_UPLOAD'];
@@ -525,7 +526,16 @@ else
 				if (!$file_extern && $file_name && $file_new)
 				{
 					$upload_file->realname = $real_file_new;
-					$upload_file->move_file(DL_EXT_FILES_FOLDER . $dl_path, false, false, CHMOD_ALL);
+					if (substr($dl_path, -1) == '/')
+					{
+						$dest_path = DL_EXT_FILES_FOLDER . substr($dl_path, 0, -1);
+					}
+					else
+					{
+						$dest_path = DL_EXT_FILES_FOLDER . $dl_path;
+					}
+					$dest_path = str_replace($this->root_path, '', $dest_path);
+					$upload_file->move_file($dest_path, false, false, CHMOD_ALL);
 					@chmod($upload_file->destination_file, 0777);
 
 					$error_count = sizeof($upload_file->error);

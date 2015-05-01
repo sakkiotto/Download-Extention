@@ -875,7 +875,8 @@ else if($action == 'save')
 						@unlink(DL_EXT_THUMBS_FOLDER . $df_id . '_' . $thumb_name);
 
 						$thumb_file->realname = $df_id . '_' . $thumb_name;
-						$error = $thumb_file->move_file(DL_EXT_THUMBS_FOLDER, false, false, CHMOD_ALL);
+						$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_THUMBS_FOLDER, 0, -1));
+						$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 						@chmod($thumb_file->destination_file, 0777);
 
 						$thumb_message = '<br />' . $user->lang['DL_THUMB_UPLOAD'];
