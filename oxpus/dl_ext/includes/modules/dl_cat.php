@@ -432,13 +432,13 @@ if ($cat && $total_downloads)
 				}
 			break;
 			case 2:
-				if (\oxpus\dl_ext\includes\classes\ dl_auth::user_admin() || dl_auth::user_auth($cat, 'auth_mod'))
+				if (\oxpus\dl_ext\includes\classes\ dl_auth::user_admin() || \oxpus\dl_ext\includes\classes\ dl_auth::user_auth($cat, 'auth_mod'))
 				{
 					$cat_edit_link = true;
 				}
 			break;
 			case 3:
-				if (\oxpus\dl_ext\includes\classes\ dl_auth::user_admin() || dl_auth::user_auth($cat, 'auth_mod') || ($this->config['dl_edit_own_downloads'] && $dl_files[$i]['add_user'] == $this->user->data['user_id']))
+				if (\oxpus\dl_ext\includes\classes\ dl_auth::user_admin() || \oxpus\dl_ext\includes\classes\ dl_auth::user_auth($cat, 'auth_mod') || ($this->config['dl_edit_own_downloads'] && $dl_files[$i]['add_user'] == $this->user->data['user_id']))
 				{
 					$cat_edit_link = true;
 				}
