@@ -31,6 +31,7 @@ $lang = array_merge($lang, array(
 	'ACP_DOWNLOADS'		=> 'Downloads',
 	'ADD_NEW_DOWNLOAD'	=> 'Neuen Download hinzufügen',
 
+	'CLICK_VIEW_NEW_VERSION'				=> 'Du hast eine neue Version des Downloads eingestellt.<br />Diese Version wurde zunächst gesperrt, um eine Beschreibung und weitere Anhänge hinzufügen zu können,<br />bevor die Version öffentlich sichtbar wird.<br />%sKlick hier, um die Version anzusehen, zu bearbeiten und freizuschalten.%s', 
 	'CLICK_RETURN_BANLISTADMIN'				=> '%sKlick hier, um zur Bannliste zurückzukehren%s',
 	'CLICK_RETURN_BROWSERADMIN'				=> '%sKlick hier, um zur Browserverwaltung zurückzukehren%s',
 	'CLICK_RETURN_BUG_TRACKER'				=> '%sKlick hier, um zum Bug Tracker zurückzukehren%s',
@@ -462,6 +463,7 @@ $lang = array_merge($lang, array(
 	'DL_NO_PERMS_COPY'					=> 'Nicht kopieren / Berechtigungen beibehalten',
 	'DL_NO_USER_AGENTS_FILE'			=> 'Es wurde keine Datei mit User Agents gefunden!',
 	'DL_NO_UPLOAD_TRAFFIC'				=> 'Sorry, kein Upload Traffic übrig. Bitte kontaktiere den Admin, wenn Du diese Datei hochladen möchtest',
+	'DL_NOT_ACTIVE'						=> 'gesperrt',
 	'DL_NOT_AVAILIBLE'					=> 'nicht verfügbar',
 	'DL_NOT_UP_TO_DATE'					=> '%s ist nicht aktuell',
 
@@ -682,6 +684,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_DELETE'				=> 'Nachfolgend ausgewählte Versionen löschen',
 	'DL_VERSION_DELETE_EXPLAIN'		=> 'Achtung: Wenn du Versionen löscht, werden alle weiteren durchgeführten Änderungen zu diesen Download verworfen und nicht gespeichert!',
 	'DL_VERSION_REPLACE'			=> 'Ersetze folgende Version durch neue Datei',
+	'DL_VERSIONS'					=> 'Versionen',
 	'DL_VIEW_COMMENTS'				=> 'Anzeigen',
 	'DL_VIEW_LINK'					=> 'Download anzeigen',
 	'DL_VIEW_PERM'					=> 'Effektive Berechtigungen anzeigen',

@@ -132,6 +132,13 @@ else
 	}
 }
 
+$ver_can_load = false;
+
+if (($user_is_mod || $user_is_admin || $user_is_founder) || ($this->config['dl_edit_own_downloads'] && $dl_file['add_user'] == $this->user->data['user_id']))
+{
+	$ver_can_load = true;
+}
+
 switch ($this->config['dl_download_vc'])
 {
 	case 1:
@@ -247,19 +254,24 @@ if ($check_status['auth_dl'] && $dl_file['id'])
 	// Prepare correct file for download
 	if ($file_version)
 	{
-		$sql = 'SELECT ver_file_name, ver_real_file, ver_file_size FROM ' . DL_VERSIONS_TABLE . '
+		$sql = 'SELECT ver_file_name, ver_real_file, ver_file_size, ver_active FROM ' . DL_VERSIONS_TABLE . '
 			WHERE ver_id = ' . (int) $file_version;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
-		$dl_file_name = $row['ver_file_name'];
-		$dl_real_file = $row['ver_real_file'];
-		$dl_file_size = $row['ver_file_size'];
+		$dl_file_name	= $row['ver_file_name'];
+		$dl_real_file	= $row['ver_real_file'];
+		$dl_file_size	= $row['ver_file_size'];
+		$dl_ver_active	= $row['ver_active'];
 		$this->db->sql_freeresult($result);
 
 		if (!$dl_file_name)
 		{
 			trigger_error('DL_NO_ACCESS');
 		}
+		else if (!$dl_ver_active && !$ver_can_load)
+		{
+			trigger_error('DL_NO_ACCESS');
+		}			
 		else
 		{
 			if ($dl_file['extern'])

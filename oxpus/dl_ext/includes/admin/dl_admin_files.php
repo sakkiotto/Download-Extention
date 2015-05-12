@@ -432,12 +432,34 @@ else if($action == 'save')
 					}
 
 					$db->sql_freeresult($result);
+
+					$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+						WHERE ' . $db->sql_in_set('ver_id', $dl_ids);
+					$result = $db->sql_query($sql);
+
+					while ($row = $db->sql_fetchrow($result))
+					{
+						switch ($row['file_type'])
+						{
+							case 1:
+								@unlink(DL_EXT_VER_IMAGES_FOLDER . $row['real_name']);
+							break;
+							default:
+								@unlink(DL_EXT_VER_FILES_FOLDER . $row['real_name']);
+						}
+					}
+
+					$db->sql_freeresult($result);
 				}
 			}
 
 			if (sizeof($dl_ids))
 			{
 				$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
+					WHERE ' . $db->sql_in_set('ver_id', $dl_ids);
+				$db->sql_query($sql);
+
+				$sql = 'DELETE FROM ' . DL_VER_FILES_TABLE . '
 					WHERE ' . $db->sql_in_set('ver_id', $dl_ids);
 				$db->sql_query($sql);
 			}
@@ -451,6 +473,8 @@ else if($action == 'save')
 		{
 			trigger_error('FORM_INVALID');
 		}
+
+		$new_version			= false;
 
 		$description			= $request->variable('description', '', true);
 		$file_traffic			= $request->variable('file_traffic', 0);
@@ -691,9 +715,11 @@ else if($action == 'save')
 					'ver_change_time'	=> ($file_option) ? time() : $dl_file['change_time'],
 					'ver_add_user'		=> ($file_option) ? $user->data['user_id'] : $dl_file['add_user'],
 					'ver_change_user'	=> ($file_option) ? $user->data['user_id'] : $dl_file['change_user'],
+					'ver_active'		=> 0,
 				));
 
 				$db->sql_query($sql);
+				$new_version = $db->sql_nextid();
 			}
 			else if ($file_option == 2 && $file_version)
 			{
@@ -712,7 +738,8 @@ else if($action == 'save')
 					'ver_file_hash'		=> $file_hash,
 					'ver_file_size'		=> $file_size,
 					'ver_change_time'	=> time(),
-					'ver_change_user'	=> $user->data['user_id'])) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
+					'ver_change_user'	=> $user->data['user_id'],
+				)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
 
 				$db->sql_query($sql);
 			}
@@ -1007,7 +1034,15 @@ else if($action == 'save')
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $phpEx);
 	@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $phpEx);
 
-	$message .= $thumb_message . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_DOWNLOADADMIN'], '<a href="' . $basic_link . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
+	$ver_message = '';
+
+	if ($new_version)
+	{
+		$version_url	= $helper->route('dl_ext_controller', array('view' => 'version', 'ver_id' => $new_version));
+		$ver_message	= '<br /><br />' . sprintf($user->lang['CLICK_VIEW_NEW_VERSION'], '<a href="' . $version_url . '">', '</a>');
+	}
+
+	$message .= $thumb_message . "<br /><br />" . sprintf($user->lang['CLICK_RETURN_DOWNLOADADMIN'], '<a href="' . $basic_link . '&amp;cat_id=' . $cat_id . '">', '</a>') . $ver_message . adm_back_link($this->u_action);
 
 	trigger_error($message);
 }
@@ -1083,6 +1118,24 @@ else if($action == 'delete')
 					@unlink(DL_EXT_FILES_FOLDER . $old_path . $real_ver_file[$df_id][$j]);
 				}
 			}
+
+			$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+				WHERE ' . $db->sql_in_set('ver_id', $ver_ids);
+			$result = $db->sql_query($sql);
+
+			while ($row = $db->sql_fetchrow($result))
+			{
+				switch ($row['file_type'])
+				{
+					case 1:
+						@unlink(DL_EXT_VER_IMAGES_FOLDER . $row['real_name']);
+					break;
+					default:
+						@unlink(DL_EXT_VER_FILES_FOLDER . $row['real_name']);
+				}
+			}
+
+			$db->sql_freeresult($result);
 		}
 
 		@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
@@ -1109,6 +1162,10 @@ else if($action == 'delete')
 		if (sizeof($ver_ids))
 		{
 			$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
+				WHERE ' . $db->sql_in_set('ver_id', $ver_ids);
+			$db->sql_query($sql);
+
+			$sql = 'DELETE FROM ' . DL_VER_FILES_TABLE . '
 				WHERE ' . $db->sql_in_set('ver_id', $ver_ids);
 			$db->sql_query($sql);
 		}

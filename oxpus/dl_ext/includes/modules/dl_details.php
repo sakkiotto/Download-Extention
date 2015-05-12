@@ -42,14 +42,81 @@ $cat_id = $dl_files['cat'];
 $cat_auth = array();
 $cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
 
-if (!$this->auth->acl_get('a_') && !$cat_auth['auth_mod'])
-{
-	$modcp = 0;
-}
-
 /*
 * check the permissions
 */
+$user_can_alltimes_load = false;
+
+if (($cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !\oxpus\dl_ext\includes\classes\ dl_auth::user_banned())
+{
+	$modcp = ($modcp) ? 1 : 0;
+	$user_can_alltimes_load = true;
+	$user_is_mod = true;
+}
+else
+{
+	$modcp = 0;
+	$user_is_mod = false;
+}
+
+// Prepare all permissions for the current user
+$captcha_active = true;
+$user_is_guest = false;
+$user_is_admin = false;
+$user_is_founder = false;
+
+if (!$this->user->data['is_registered'])
+{
+	$user_is_guest = true;
+}
+else
+{
+	if ($this->auth->acl_get('a_'))
+	{
+		$user_is_admin = true;
+	}
+
+	if ($this->user->data['user_type'] == USER_FOUNDER)
+	{
+		$user_is_founder = true;
+	}
+}
+
+switch ($this->config['dl_download_vc'])
+{
+	case 0:
+		$captcha_active = false;
+	break;
+
+	case 1:
+		if (!$user_is_guest)
+		{
+			$captcha_active = false;
+		}
+	break;
+
+	case 2:
+		if ($user_is_mod || $user_is_admin || $user_is_founder)
+		{
+			$captcha_active = false;
+		}
+	break;
+
+	case 3:
+		if ($user_is_admin || $user_is_founder)
+		{
+			$captcha_active = false;
+		}
+	break;
+
+	case 4:
+		if ($user_is_founder)
+		{
+			$captcha_active = false;
+		}
+	break;
+}
+
 $check_status = array();
 $check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
 
@@ -277,8 +344,15 @@ if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_
 */
 $hash_method = $this->config['dl_file_hash_algo'];
 $func_hash = $hash_method . '_file';
-$hash_table = array();
+$hash_table_tmp = $hash_table = $hash_ary = array();
 $hash_tab = false;
+$ver_tab = false;
+$ver_can_edit = false;
+
+if (($user_is_mod || $user_is_admin || $user_is_founder) || ($this->config['dl_edit_own_downloads'] && $dl_files['add_user'] == $this->user->data['user_id']))
+{
+	$ver_can_edit = true;
+}
 
 if (!$dl_files['extern'])
 {
@@ -295,19 +369,22 @@ if (!$dl_files['extern'])
 	if ($index[$cat_id]['show_file_hash'])
 	{
 		$dl_key = $dl_files['description'] . (($dl_files['hack_version']) ? ' ' . $dl_files['hack_version'] : ' (' . $this->user->lang['DL_CURRENT_VERSION'] . ')');
-		$hash_table[$dl_key]['hash'] = ($dl_files['file_hash']) ? $dl_files['file_hash'] : '';
-		$hash_table[$dl_key]['file'] = $dl_files['file_name'];
-		$hash_table[$dl_key]['type'] = ($dl_files['file_hash']) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $dl_files['file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
+		$hash_table_tmp[$dl_key]['hash'] = ($dl_files['file_hash']) ? $dl_files['file_hash'] : '';
+		$hash_table_tmp[$dl_key]['file'] = $dl_files['file_name'];
+		$hash_table_tmp[$dl_key]['type'] = ($dl_files['file_hash']) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $dl_files['file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
+		$hash_ary[] = $dl_key;
 	}
 	
-	$sql = 'SELECT ver_id, ver_version, ver_real_file, ver_file_hash, ver_file_name, ver_change_time FROM ' . DL_VERSIONS_TABLE . '
-		WHERE dl_id = ' . (int) $df_id . '
-		ORDER BY ver_version DESC, ver_change_time DESC';
+	$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
+		WHERE dl_id = ' . (int) $df_id . "
+		ORDER BY ver_version DESC, ver_change_time DESC";
 	$result = $this->db->sql_query($sql);
 	$total_releases = $this->db->sql_affectedrows($result);
-	
+
 	if ($total_releases)
 	{
+		$version_array = $ver_key_ary = array();
+
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$ver_file_hash = $row['ver_file_hash'];
@@ -322,14 +399,57 @@ if (!$dl_files['extern'])
 				}
 			}
 			
-			if ($index[$cat_id]['show_file_hash'])
+			$dl_key = $dl_files['description'] . (($row['ver_version']) ? ' ' . $row['ver_version'] : ' (' . $this->user->format_date($row['ver_change_time']) . ')');
+
+			if ($index[$cat_id]['show_file_hash'] && ($row['ver_active'] || $ver_can_edit))
 			{
-				$dl_key = $dl_files['description'] . (($row['ver_version']) ? ' ' . $row['ver_version'] : ' (' . $this->user->format_date($row['ver_change_time']) . ')');
-				$hash_table[$dl_key]['hash'] = ($ver_file_hash) ? $ver_file_hash : '';
-				$hash_table[$dl_key]['file'] = $row['ver_file_name'];
-				$hash_table[$dl_key]['type'] = ($ver_file_hash) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $row['ver_file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
+				$hash_table_tmp[$dl_key]['hash'] = ($ver_file_hash) ? $ver_file_hash : '';
+				$hash_table_tmp[$dl_key]['file'] = $row['ver_file_name'];
+				$hash_table_tmp[$dl_key]['type'] = ($ver_file_hash) ? $hash_method : sprintf($this->user->lang['DL_FILE_NOT_FOUND'], $row['ver_file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
+				$hash_ary[] = $dl_key;
+			}
+
+			if ($row['ver_active'] || $ver_can_edit)
+			{
+				$ver_tab = true;
+				$ver_desc = censor_text($row['ver_text']);
+				$ver_desc = generate_text_for_display($ver_desc, $row['ver_uid'], $row['ver_bitfield'], $row['ver_flags']);
+				if (strlen($ver_desc) > 150)
+				{
+					$ver_desc = substr($ver_desc, 0, 100) . ' [...]';
+				}
+
+				$ver_tmp = ($row['ver_version']) ? $row['ver_version'] : $row['ver_change_time'];
+				$ver_key_ary[] = $ver_tmp;
+				$version_array[$ver_tmp] = array(
+					'VER_TITLE'			=> $dl_key,
+					'VER_TIME'			=> $this->user->format_date($row['ver_change_time']),
+					'VER_DESC'			=> $ver_desc,
+					'VER_ACTIVE'		=> $row['ver_active'],
+					'S_USER_PERM'		=> $ver_can_edit,
+					'U_VERSION'			=> $this->helper->route('dl_ext_controller', array('view' => 'version', 'action' => 'detail', 'ver_id' => $row['ver_id'], 'df_id' => $df_id)),
+					'U_VERSION_EDIT'	=> $this->helper->route('dl_ext_controller', array('view' => 'version', 'action' => 'edit', 'ver_id' => $row['ver_id'], 'df_id' => $df_id)),
+				);
 			}
 		}
+
+		natsort($ver_key_ary);
+		$ver_key_ary = array_reverse($ver_key_ary);
+		foreach ($ver_key_ary as $key => $value)
+		{
+			$this->template->assign_block_vars('ver_cell', $version_array[$value]);
+		}
+		unset($ver_key_ary);
+		unset($version_array);
+
+		natsort($hash_ary);
+		$hash_ary = array_unique(array_reverse($hash_ary));
+		foreach ($hash_ary as $key => $value)
+		{
+			$hash_table[$value] = $hash_table_tmp[$value];
+		}
+		unset($hash_ary);
+		unset($hash_table_tmp);
 	}
 	
 	$this->db->sql_freeresult($result);
@@ -546,78 +666,6 @@ if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] &
 * Hotlink or not hotlink, that is the question :-P
 * And we will check a broken download inclusive the visual confirmation here ...
 */
-$user_can_alltimes_load = false;
-
-if (($cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !\oxpus\dl_ext\includes\classes\ dl_auth::user_banned())
-{
-	$modcp = ($modcp) ? 1 : 0;
-	$user_can_alltimes_load = true;
-	$user_is_mod = true;
-}
-else
-{
-	$modcp = 0;
-	$user_is_mod = false;
-}
-
-// Prepare the captcha permissions for the current user
-$captcha_active = true;
-$user_is_guest = false;
-$user_is_admin = false;
-$user_is_founder = false;
-
-if (!$this->user->data['is_registered'])
-{
-	$user_is_guest = true;
-}
-else
-{
-	if ($this->auth->acl_get('a_'))
-	{
-		$user_is_admin = true;
-	}
-
-	if ($this->user->data['user_type'] == USER_FOUNDER)
-	{
-		$user_is_founder = true;
-	}
-}
-
-switch ($this->config['dl_download_vc'])
-{
-	case 0:
-		$captcha_active = false;
-	break;
-
-	case 1:
-		if (!$user_is_guest)
-		{
-			$captcha_active = false;
-		}
-	break;
-
-	case 2:
-		if ($user_is_mod || $user_is_admin || $user_is_founder)
-		{
-			$captcha_active = false;
-		}
-	break;
-
-	case 3:
-		if ($user_is_admin || $user_is_founder)
-		{
-			$captcha_active = false;
-		}
-	break;
-
-	case 4:
-		if ($user_is_founder)
-		{
-			$captcha_active = false;
-		}
-	break;
-}
-
 if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 {
 	if (!$dl_files['broken'] || ($dl_files['broken'] && !$this->config['dl_report_broken_lock']) || $user_can_alltimes_load)
@@ -656,9 +704,18 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 			$s_hidden_fields = array_merge($s_hidden_fields, array('view' => 'detail'));
 		}
 
+		if (!$ver_can_edit && !$user_can_alltimes_load)
+		{
+			$sql_ver_where = ' AND v.ver_active = 1 ';
+		}
+		else
+		{
+			$sql_ver_where = '';
+		}
+
 		$sql = 'SELECT v.ver_id, v.ver_change_time, v.ver_version, u.username FROM ' . DL_VERSIONS_TABLE . ' v
 			LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = v.ver_change_user
-			WHERE v.dl_id = ' . (int) $df_id . '
+			WHERE v.dl_id = ' . (int) $df_id . $sql_ver_where . '
 			ORDER BY v.ver_version DESC, v.ver_change_time DESC';
 		$result = $this->db->sql_query($sql);
 		$total_releases = $this->db->sql_affectedrows($result);
@@ -1068,9 +1125,10 @@ else
 $detail_cat_names = array(
 	0 => $this->user->lang['DL_FILE_DESCRIPTION'],
 	1 => $this->user->lang['DL_DETAIL'],
-	2 => ($s_comments_tab) ? $this->user->lang['DL_LAST_COMMENT'] : '',
+	2 => ($ver_tab) ? $this->user->lang['DL_VERSIONS'] : '',
 	3 => ($extra_tab) ? $this->user->lang['DL_MOD_LIST_SHORT'] : '',
 	4 => ($hash_tab) ? $this->user->lang['DL_MOD_FILE_HASH_TABLE'] : '',
+	5 => ($s_comments_tab) ? $this->user->lang['DL_LAST_COMMENT'] : '',
 );
 
 for ($i = 0; $i < sizeof($detail_cat_names); $i++)
@@ -1082,6 +1140,11 @@ for ($i = 0; $i < sizeof($detail_cat_names); $i++)
 			'CAT_ID'	=> $i,
 		));
 	}
+}
+
+if ($ver_tab)
+{
+	$this->template->assign_var('VER_TAB', true);
 }
 
 /**

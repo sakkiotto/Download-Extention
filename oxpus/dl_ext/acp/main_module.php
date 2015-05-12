@@ -99,6 +99,10 @@ class main_module
 		define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
 		define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
 		define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+		define('DL_EXT_VER_FILES_FOLDER',	$filebase_prefix . 'version/files/');
+		define('DL_EXT_VER_FILES_WFOLDER',	$filebase_web_prefix . 'version/files/');
+		define('DL_EXT_VER_IMAGES_FOLDER',	$filebase_prefix . 'version/images/');
+		define('DL_EXT_VER_IMAGES_WFOLDER',	$filebase_web_prefix . 'version/images/');
 
 		include_once($ext_path . 'includes/helpers/dl_constants.' . $phpEx);
 

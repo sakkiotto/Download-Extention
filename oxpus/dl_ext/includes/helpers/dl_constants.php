@@ -36,4 +36,5 @@ define('DL_RATING_TABLE',		$table_prefix . 'dl_ratings');
 define('DL_REM_TRAF_TABLE',		$table_prefix . 'dl_rem_traf');
 define('DL_STATS_TABLE',		$table_prefix . 'dl_stats');
 define('DL_VERSIONS_TABLE',		$table_prefix . 'dl_versions');
+define('DL_VER_FILES_TABLE',	$table_prefix . 'dl_ver_files');
 define('DOWNLOADS_TABLE',		$table_prefix . 'downloads');

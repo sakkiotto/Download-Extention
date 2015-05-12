@@ -4,7 +4,7 @@ Hotschi's Downloads
 # phpBB 3.1 Downloads Extension
 
 Downloads Extension for [phpBB 3.1] (https://www.phpbb.com/)
-Based on Hotschi's Download MOD 6.5.31 for phpBB 3.0 
+Based on Hotschi's Download MOD 6.5.32 for phpBB 3.0 
 
 ## Description
 

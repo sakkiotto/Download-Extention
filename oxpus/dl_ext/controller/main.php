@@ -125,6 +125,10 @@ class main
 		define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
 		define('DL_EXT_FILES_FOLDER',		$filebase_prefix . 'downloads/');
 		define('DL_EXT_FILES_WEBFOLDER',	$filebase_web_prefix . 'downloads/');
+		define('DL_EXT_VER_FILES_FOLDER',	$filebase_prefix . 'version/files/');
+		define('DL_EXT_VER_FILES_WFOLDER',	$filebase_web_prefix . 'version/files/');
+		define('DL_EXT_VER_IMAGES_FOLDER',	$filebase_prefix . 'version/images/');
+		define('DL_EXT_VER_IMAGES_WFOLDER',	$filebase_web_prefix . 'version/images/');
 
 		$this->template->assign_vars(array(
 			'EXT_PATH_WEB'		=> $ext_path_web,
@@ -230,7 +234,7 @@ class main
 			$dl_mod_link_show = false;
 		}
 
-		if ($this->user->data['is_bot'] && in_array($view, array('ajax', 'broken', 'bug_tracker', 'fav', 'help', 'load', 'modcp', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'hacks')))
+		if ($this->user->data['is_bot'] && in_array($view, array('ajax', 'broken', 'bug_tracker', 'fav', 'help', 'load', 'modcp', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'hacks', 'version')))
 		{
 			$view = '';
 		}
@@ -425,6 +429,7 @@ class main
 				$nav_string['link'][] = array('view' => 'overall');
 				$nav_string['name'][] = $this->user->lang['DL_OVERVIEW'];
 			break;
+			case 'version':
 			case 'detail':
 				$nav_string['link'][] = array('view' => 'detail', 'df_id' => $df_id);
 				$nav_string['name'][] = $this->user->lang['DL_DETAIL'] . ': ' . $description;
@@ -929,6 +934,10 @@ class main
 		{
 			include($ext_path . '/includes/modules/dl_details.' . $this->php_ext);
 		}
+		else if ($view == 'version')
+		{
+			include($ext_path . '/includes/modules/dl_version.' . $this->php_ext);
+		}
 		else if ($view == 'thumbs')
 		{
 			if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
@@ -1072,7 +1081,7 @@ class main
 			include($ext_path . '/includes/modules/dl_cat.' . $this->php_ext);
 		}
 
-		$view_check = array('broken', 'bug_tracker', 'comment', 'detail', 'fav', 'load', 'modcp', 'overall', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'view');
+		$view_check = array('broken', 'bug_tracker', 'comment', 'detail', 'fav', 'load', 'modcp', 'overall', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'view', 'version');
 
 		if (in_array($view, $view_check))
 		{

@@ -31,6 +31,7 @@ $lang = array_merge($lang, array(
 	'ACP_DOWNLOADS' 	=> 'Downloads',
 	'ADD_NEW_DOWNLOAD'	=> 'Add a new download',
 
+	'CLICK_VIEW_NEW_VERSION'				=> 'You have added a new release of this download.<br />This release was locked for now, to be able to add a description and additional attachments<br />before this release becames the public status.<br />%sClick here to open, edit and unlock this release.%s', 
 	'CLICK_RETURN_BANLISTADMIN'				=> '%sClick here to return to the banlist%s',
 	'CLICK_RETURN_BROWSERADMIN'				=> '%sClick here to return to the browsers%s',
 	'CLICK_RETURN_BUG_TRACKER'				=> '%sClick here to return to the bug tracker%s',
@@ -464,6 +465,7 @@ $lang = array_merge($lang, array(
 	'DL_NO_PERMS_COPY'					=> 'Do not copy / keep current permissions',
 	'DL_NO_UPLOAD_TRAFFIC'				=> 'Sorry, but there is no upload traffic left. Please contact the admin if you want to upload this file',
 	'DL_NO_USER_AGENTS_FILE'			=> 'User agent file not found!',
+	'DL_NOT_ACTIVE'						=> 'locked',
 	'DL_NOT_AVAILIBLE'					=> 'not availible',
 	'DL_NOT_UP_TO_DATE'					=> '%s is not up to date',
 
@@ -684,6 +686,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_DELETE'				=> 'Delete the following selected versions',
 	'DL_VERSION_DELETE_EXPLAIN'		=> 'Attention: If you will delete versions, all other changes for this download will be ignored and not saved!',
 	'DL_VERSION_REPLACE'			=> 'Replace the following release with the new file',
+	'DL_VERSIONS'					=> 'Releases',
 	'DL_VIEW_COMMENTS'				=> 'Show',
 	'DL_VIEW_LINK'					=> 'View Download',
 	'DL_VIEW_PERM'					=> 'View effective permissions',

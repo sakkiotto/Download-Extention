@@ -236,12 +236,34 @@ else
 							}
 		
 							$this->db->sql_freeresult($result);
+
+							$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+								WHERE ' . $this->db->sql_in_set('ver_id', $dl_ids);
+							$result = $this->db->sql_query($sql);
+		
+							while ($row = $this->db->sql_fetchrow($result))
+							{
+								switch ($row['file_type'])
+								{
+									case 1:
+										@unlink(DL_EXT_VER_IMAGES_FOLDER . $row['real_name']);
+									break;
+									default:
+										@unlink(DL_EXT_VER_FILES_FOLDER . $row['real_name']);
+								}
+							}
+		
+							$this->db->sql_freeresult($result);
 						}
 					}
 		
 					if (sizeof($dl_ids))
 					{
 						$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
+							WHERE ' . $this->db->sql_in_set('ver_id', $dl_ids);
+						$this->db->sql_query($sql);
+
+						$sql = 'DELETE FROM ' . DL_VER_FILES_TABLE . '
 							WHERE ' . $this->db->sql_in_set('ver_id', $dl_ids);
 						$this->db->sql_query($sql);
 					}
@@ -251,6 +273,8 @@ else
 			}
 			else
 			{
+				$new_version			= false;
+
 				$approve				= $this->request->variable('approve', 0);
 				$description			= $this->request->variable('description', '', true);
 				$file_traffic			= $this->request->variable('file_traffic', 0);
@@ -578,9 +602,13 @@ else
 							'ver_change_time'	=> ($file_option) ? time() : $dl_file['change_time'],
 							'ver_add_user'		=> ($file_option) ? $this->user->data['user_id'] : $dl_file['add_user'],
 							'ver_change_user'	=> ($file_option) ? $this->user->data['user_id'] : $dl_file['change_user'],
+							'ver_active'		=> 0,
+							'ver_text'			=> '',
 						));
 	
 						$this->db->sql_query($sql);
+
+						$new_version = $this->db->sql_nextid();
 					}
 					else if ($file_option == 2 && $file_version)
 					{
@@ -805,23 +833,34 @@ else
 			// Update Custom Fields
 			$cp->update_profile_field_data($df_id, $cp_data);
 		
+			$ver_message = '';
+
+			if ($new_version)
+			{
+				$version_url	= $this->helper->route('dl_ext_controller', array('view' => 'version', 'ver_id' => $new_version));
+				$ver_message	= '<br /><br />' . sprintf($this->user->lang['CLICK_VIEW_NEW_VERSION'], '<a href="' . $version_url . '">', '</a>');
+			}
+
 			if ($own_edit)
 			{
 				$meta_url	= $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id));
-				$message	= $this->user->lang['DOWNLOAD_UPDATED'] . $thumb_message . '<br /><br />' . sprintf($this->user->lang['CLICK_RETURN_DOWNLOAD_DETAILS'], '<a href="' . $meta_url . '">', '</a>');
+				$message	= $this->user->lang['DOWNLOAD_UPDATED'] . $thumb_message . '<br /><br />' . sprintf($this->user->lang['CLICK_RETURN_DOWNLOAD_DETAILS'], '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 			else
 			{
 				$meta_url		= $this->helper->route('dl_ext_controller', array('view' => 'modcp', 'action' => 'manage', 'cat_id' => $cat_id));
 				$return_string	= ($action == 'approve') ? $this->user->lang['CLICK_RETURN_MODCP_APPROVE'] : $this->user->lang['CLICK_RETURN_MODCP_MANAGE'];
-				$message		= $this->user->lang['DOWNLOAD_UPDATED'] . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>');
+				$message		= $this->user->lang['DOWNLOAD_UPDATED'] . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 		
-			meta_refresh(3, $meta_url);
-		
-			trigger_error($message);
+			if (!$new_version)
+			{
+				meta_refresh(3, $meta_url);
+			}
 		
 			$action = 'manage';
+
+			trigger_error($message);
 		}
 		
 		if ($action == 'delete' && $cat_id)
@@ -898,7 +937,7 @@ else
 		
 					if ($del_file)
 					{
-						$sql = 'SELECT dl_id, ver_real_file FROM ' . DL_VERSIONS_TABLE . '
+						$sql = 'SELECT ver_id, dl_id, ver_real_file FROM ' . DL_VERSIONS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
 						$result = $this->db->sql_query($sql);
 		
@@ -937,6 +976,24 @@ else
 									@unlink(DL_EXT_FILES_FOLDER . $path . $real_ver_file[$df_id][$i]);
 								}
 							}
+
+							$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+								WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
+							$result = $this->db->sql_query($sql);
+		
+							while ($row = $this->db->sql_fetchrow($result))
+							{
+								switch ($row['file_type'])
+								{
+									case 1:
+										@unlink(DL_EXT_VER_IMAGES_FOLDER . $row['real_name']);
+									break;
+									default:
+										@unlink(DL_EXT_VER_FILES_FOLDER . $row['real_name']);
+								}
+							}
+		
+							$this->db->sql_freeresult($result);
 						}
 		
 						if ($row['dl_topic'])
@@ -968,6 +1025,10 @@ else
 						$this->db->sql_query($sql);
 		
 						$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
+							WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
+						$this->db->sql_query($sql);
+		
+						$sql = 'DELETE FROM ' . DL_VER_FILES_TABLE . '
 							WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
 						$this->db->sql_query($sql);
 		
