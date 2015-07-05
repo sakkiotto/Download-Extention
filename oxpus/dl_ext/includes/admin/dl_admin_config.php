@@ -29,6 +29,8 @@ if (!$submit)
 	add_form_key('dl_adm_config');
 }
 
+$s_hidden_fields = array();
+
 switch ($view)
 {
 	default:
@@ -91,10 +93,38 @@ switch ($view)
 				'dl_ext_new_window'			=> array('lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'),
 				'dl_report_broken_message'	=> array('lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'),
 				'dl_latest_comments'		=> array('lang' => 'DL_LATEST_COMMENTS',		'validate' => 'int',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LATEST_COMMENTS'),
-				'dl_similar_dl'				=> array('lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'),
-				'dl_similar_limit'			=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
 			)
 		);
+
+		$fulltext_dl_search_enabled = false;
+		global $dbms;
+		if (substr(strtolower($dbms),0,5) == 'mysql')
+		{
+			$sql = 'SHOW INDEX FROM ' . DOWNLOADS_TABLE;
+			$result = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($result))
+			{
+				if ($row['Key_name'] == 'desc_search')
+				{
+					$fulltext_dl_search_enabled = true;
+				}
+			}
+			$db->sql_freeresult($result);
+		}
+
+		if ($fulltext_dl_search_enabled)
+		{
+			$display_vars['vars'] = array_merge($display_vars['vars'], array(
+				'legend4'				=> '',
+		
+				'dl_similar_limit'		=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
+			));
+		}
+		else
+		{
+			$s_hidden_fields = array('dl_similar_limit' => 0);
+		} 
+
 	break;
 	case 'protect':
 		$display_vars = array(
@@ -513,6 +543,7 @@ $template->assign_vars(array(
 
 	'S_ERROR'			=> (sizeof($error)) ? true : false,
 	'ERROR_MSG'			=> implode('<br />', $error),
+	'S_HIDDEN_FIELDS'	=> (sizeof($s_hidden_fields)) ? build_hidden_fields($s_hidden_fields) : '',
 	'S_MODE_SELECT'		=> $mode_select,
 	'U_MODE_SELECT'		=> $this->u_action,
 
