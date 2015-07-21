@@ -716,6 +716,7 @@ else if($action == 'save')
 					'ver_add_user'		=> ($file_option) ? $user->data['user_id'] : $dl_file['add_user'],
 					'ver_change_user'	=> ($file_option) ? $user->data['user_id'] : $dl_file['change_user'],
 					'ver_active'		=> 0,
+					'ver_text'			=> '',
 				));
 
 				$db->sql_query($sql);
