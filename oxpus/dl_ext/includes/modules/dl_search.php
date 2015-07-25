@@ -176,7 +176,7 @@ if ($search_keywords != '' && !$search_author)
 			}
 
 			$cat_name			= $row['cat_name'];
-			$u_cat_link			= $this->helper->route('dl_ext_controller', array('view' => 'detail', 'cat' => $cat_id));
+			$u_cat_link			= $this->helper->route('dl_ext_controller', array('cat' => $cat_id));
 
 			$description		= $row['description'];
 			$desc_uid			= $row['desc_uid'];

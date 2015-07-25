@@ -117,7 +117,7 @@ switch ($view)
 			$display_vars['vars'] = array_merge($display_vars['vars'], array(
 				'legend4'				=> '',
 		
-				'dl_similar_limit'		=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
+				'dl_similar_dl'		=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
 			));
 		}
 		else
