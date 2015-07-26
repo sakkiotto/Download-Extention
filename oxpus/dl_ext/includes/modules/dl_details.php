@@ -441,16 +441,16 @@ if (!$dl_files['extern'])
 		}
 		unset($ver_key_ary);
 		unset($version_array);
-
-		natsort($hash_ary);
-		$hash_ary = array_unique(array_reverse($hash_ary));
-		foreach ($hash_ary as $key => $value)
-		{
-			$hash_table[$value] = $hash_table_tmp[$value];
-		}
-		unset($hash_ary);
-		unset($hash_table_tmp);
 	}
+
+	natsort($hash_ary);
+	$hash_ary = array_unique(array_reverse($hash_ary));
+	foreach ($hash_ary as $key => $value)
+	{
+		$hash_table[$value] = $hash_table_tmp[$value];
+	}
+	unset($hash_ary);
+	unset($hash_table_tmp);
 	
 	$this->db->sql_freeresult($result);
 	
