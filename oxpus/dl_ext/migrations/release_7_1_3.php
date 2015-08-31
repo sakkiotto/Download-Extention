@@ -31,43 +31,4 @@ class release_7_1_3 extends \phpbb\db\migration\migration
 			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
 		);
 	}
-
-	public function update_schema()
-	{
-		return array(
-			'add_tables'	=> array(
-				$this->table_prefix . 'dl_ver_files' => array(
-					'COLUMNS'		=> array(
-						'ver_file_id'	=> array('UINT', null, 'auto_increment'),
-						'dl_id'			=> array('INT:11', 0),
-						'ver_id'		=> array('INT:11', 0),
-						'real_name'		=> array('VCHAR', ''),
-						'file_name'		=> array('VCHAR', ''),
-						'file_title'	=> array('VCHAR', ''),
-						'file_type'		=> array('BOOL', 0),	// 0 = files, 1 = images
-					),
-					'PRIMARY_KEY'	=> 'ver_file_id'
-				),
-			),
-
-			'add_columns'	=> array(
-				$this->table_prefix . 'dl_versions'		=> array(
-					'ver_text'			=> array('MTEXT_UNI', ''),
-					'ver_uid'			=> array('CHAR:8', ''),
-					'ver_bitfield'		=> array('VCHAR', ''),
-					'ver_flags'			=> array('UINT:11', 0),
-					'ver_active'		=> array('BOOL', 0),
-				),
-			),
-		);
-	}
-
-	public function revert_schema()
-	{
-		return array(
-			'drop_tables' => array(
-				$this->table_prefix . 'dl_ver_files',
-			),
-		);
-	}
 }

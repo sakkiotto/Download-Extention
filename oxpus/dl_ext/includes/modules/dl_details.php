@@ -59,7 +59,9 @@ else
 	$user_is_mod = false;
 }
 
-// Prepare all permissions for the current user
+/*
+* Prepare all permissions for the current user
+*/
 $captcha_active = true;
 $user_is_guest = false;
 $user_is_admin = false;
@@ -125,7 +127,9 @@ if (!$dl_files['id'])
 	trigger_error('DL_NO_PERMISSION');
 }
 
-// Check saved thumbs
+/*
+* Check saved thumbs
+*/
 $sql = 'SELECT * FROM ' . DL_IMAGES_TABLE . '
 	WHERE dl_id = ' . (int) $df_id;
 $result = $this->db->sql_query($sql);
@@ -585,17 +589,6 @@ $warn_bitfield			= $dl_files['warn_bitfield'];
 $warn_flags				= $dl_files['warn_flags'];
 $warning				= generate_text_for_display($warning, $warn_uid, $warn_bitfield, $warn_flags);
 
-$mod_list				= $dl_files['mod_list'];
-
-if ($mod_list)
-{
-	$mod_desc			= $dl_files['mod_desc'];
-	$mod_desc_uid		= $dl_files['mod_desc_uid'];
-	$mod_desc_bitfield	= $dl_files['mod_desc_bitfield'];
-	$mod_desc_flags		= $dl_files['mod_desc_flags'];
-	$mod_desc			= generate_text_for_display($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags);
-}
-
 /*
 * Hacklist
 */
@@ -609,33 +602,45 @@ if ($dl_files['hacklist'] && $this->config['dl_use_hacklist'])
 }
 
 /*
-* MOD block
+* Block for extra informations - The MOD Block ;-)
 */
-if ($mod_list && $index[$cat_id]['allow_mod_desc'])
+if ($dl_files['mod_list'])
 {
-	$this->template->assign_var('S_MOD_LIST', true);
+	$mod_desc			= $dl_files['mod_desc'];
+	$mod_desc_uid		= $dl_files['mod_desc_uid'];
+	$mod_desc_bitfield	= $dl_files['mod_desc_bitfield'];
+	$mod_desc_flags		= $dl_files['mod_desc_flags'];
+	$mod_desc			= generate_text_for_display($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags);
 
-	if ($test)
+	if ($index[$cat_id]['allow_mod_desc'])
 	{
-		$this->template->assign_block_vars('modlisttest', array('MOD_TEST' => $test));
-	}
-
-	if ($mod_desc)
-	{
-		$this->template->assign_block_vars('modlistdesc', array('MOD_DESC' => $mod_desc));
-	}
-
-	if ($warning)
-	{
-		$this->template->assign_block_vars('modwarning', array('MOD_WARNING' => $warning));
-	}
-
-	if ($require)
-	{
-		$this->template->assign_block_vars('modrequire', array('MOD_REQUIRE' => $require));
+		$this->template->assign_var('S_MOD_LIST', true);
+	
+		if ($test)
+		{
+			$this->template->assign_block_vars('modlisttest', array('MOD_TEST' => $test));
+		}
+	
+		if ($mod_desc)
+		{
+			$this->template->assign_block_vars('modlistdesc', array('MOD_DESC' => $mod_desc));
+		}
+	
+		if ($warning)
+		{
+			$this->template->assign_block_vars('modwarning', array('MOD_WARNING' => $warning));
+		}
+	
+		if ($require)
+		{
+			$this->template->assign_block_vars('modrequire', array('MOD_REQUIRE' => $require));
+		}
 	}
 }
 
+/*
+* ToDO's? ToDo's!
+*/
 if ($todo)
 {
 	$this->template->assign_var('S_MOD_TODO', true);
@@ -724,6 +729,7 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 		{
 			$s_select_version = '<select name="file_version">';
 			$s_select_version .= '<option value="0" selected="selected">' . $this->user->lang['DL_VERSION_CURRENT'] . '</option>';
+			$version_array = array();
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
@@ -732,7 +738,14 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 				$ver_time		= $this->user->format_date($row['ver_change_time']);
 				$ver_username	= ($row['username']) ? ' [ ' . $row['username'] . ' ]' : '';
 
-				$s_select_version .= '<option value="' . $ver_id . '">' . $ver_version . ' - ' . $ver_time . $ver_username . '</option>';
+				$version_array[$ver_version . ' - ' . $ver_time . $ver_username] = $ver_id;
+			}
+
+			natsort($version_array);
+			$version_array = array_unique(array_reverse($version_array));
+			foreach($version_array as $key => $value)
+			{
+				$s_select_version .= '<option value="' . $value . '">' . $key . '</option>';
 			}
 
 			$s_select_version .= '</select>';
@@ -885,7 +898,7 @@ $this->template->assign_block_vars('downloads', array(
 /*
 * Enabled Bug Tracker for this download category?
 */
-if ($index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'])
+if ($index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'] && $this->user->data['is_registered'])
 {
 	$this->template->assign_block_vars('downloads.bug_tracker', array(
 		'U_BUG_TRACKER'			=> $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'df_id' => $df_id)),
@@ -968,7 +981,7 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 }
 
 /*
-* Urgh, the real filetime..... Heavy information, very important :D
+* Urgh, the real filetime..... Heavy information, very important :-D
 */
 if ($this->config['dl_show_real_filetime'] && !$dl_files['extern'])
 {
@@ -1062,28 +1075,26 @@ if (!$this->user->data['is_bot'] && \oxpus\dl_ext\includes\classes\ dl_auth::use
 * A little bit more values and strings for the template *bfg*
 */
 $this->template->assign_vars(array(
-	'HASH_TAB'		=> $hash_tab,
-	'FAVORITE'		=> $l_favorite,
-	'EDIT_IMG'		=> $this->user->lang['DL_EDIT_FILE'],
-	'CAT_RULE'		=> (isset($cat_rule)) ? $cat_rule : '',
-	'CAT_TRAFFIC'	=> (isset($cat_traffic)) ? sprintf($this->user->lang['DL_CAT_TRAFFIC_MAIN'], $cat_traffic) : '',
+	'HASH_TAB'			=> $hash_tab,
+	'FAVORITE'			=> $l_favorite,
+	'EDIT_IMG'			=> $this->user->lang['DL_EDIT_FILE'],
+	'CAT_RULE'			=> (isset($cat_rule)) ? $cat_rule : '',
+	'CAT_TRAFFIC'		=> (isset($cat_traffic)) ? sprintf($this->user->lang['DL_CAT_TRAFFIC_MAIN'], $cat_traffic) : '',
+	'VER_TAB'			=> ($ver_tab) ? true : false,
 
-	'I_DL_BUTTON'	=> '<img src="' . $ext_path_images . 'dl_button.png" alt="' . $this->user->lang['DL_DOWNLOAD'] . '" />',
-	'S_DL_ACTION'	=> $this->helper->route('dl_ext_controller'),
-	'S_ENABLE_RATE'	=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
+	'I_DL_BUTTON'		=> '<img src="' . $ext_path_images . 'dl_button.png" alt="' . $this->user->lang['DL_DOWNLOAD'] . '" />',
 
-	'U_TOPIC'		=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
-	'U_EDIT'		=> $this->helper->route('dl_ext_controller', array('view' => 'modcp', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id)),
-	'U_EDIT_THUMBS'	=> $this->helper->route('dl_ext_controller', array('view' => 'thumbs', 'df_id' => $file_id, 'cat_id' => $cat_id)),
-	'U_FAVORITE'	=> $u_favorite,
-	'U_DL_SEARCH'	=> $this->helper->route('dl_ext_controller', array('view' => 'search')),
-	'U_DL_AJAX'		=> $this->helper->route('dl_ext_controller', array('view' => 'ajax')),
+	'S_DL_ACTION'		=> $this->helper->route('dl_ext_controller'),
+	'S_ENABLE_RATE'		=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
+	'S_SHOW_TOPIC_LINK'	=> ($dl_files['dl_topic']) ? true : false,
+
+	'U_TOPIC'			=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
+	'U_EDIT'			=> $this->helper->route('dl_ext_controller', array('view' => 'modcp', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id)),
+	'U_EDIT_THUMBS'		=> $this->helper->route('dl_ext_controller', array('view' => 'thumbs', 'df_id' => $file_id, 'cat_id' => $cat_id)),
+	'U_FAVORITE'		=> $u_favorite,
+	'U_DL_SEARCH'		=> $this->helper->route('dl_ext_controller', array('view' => 'search')),
+	'U_DL_AJAX'			=> $this->helper->route('dl_ext_controller', array('view' => 'ajax')),
 ));
-
-if ($dl_files['dl_topic'])
-{
-	$this->template->assign_var('S_SHOW_TOPIC_LINK', true);
-}
 
 /**
 * Custom Download Fields
@@ -1113,7 +1124,7 @@ if (isset($dl_fields['row']) && sizeof($dl_fields['row']))
 	}
 }
 
-if (($mod_list && $index[$cat_id]['allow_mod_desc']) || $todo || (isset($dl_fields['row']) && sizeof($dl_fields['row'])))
+if (($dl_files['mod_list'] && $index[$cat_id]['allow_mod_desc']) || $todo || (isset($dl_fields['row']) && sizeof($dl_fields['row'])))
 {
 	$extra_tab = true;
 }
@@ -1140,11 +1151,6 @@ for ($i = 0; $i < sizeof($detail_cat_names); $i++)
 			'CAT_ID'	=> $i,
 		));
 	}
-}
-
-if ($ver_tab)
-{
-	$this->template->assign_var('VER_TAB', true);
 }
 
 /**
@@ -1198,5 +1204,5 @@ if ($this->config['dl_similar_dl'])
 }
 
 /*
-* The end... Yes? Yes!
+* The end... Yes? Yes! Puh...
 */

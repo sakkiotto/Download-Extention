@@ -686,6 +686,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_DELETE'				=> 'Delete the following selected versions',
 	'DL_VERSION_DELETE_EXPLAIN'		=> 'Attention: If you will delete versions, all other changes for this download will be ignored and not saved!',
 	'DL_VERSION_REPLACE'			=> 'Replace the following release with the new file',
+	'DL_VERSION_REPLACE_EXPLAIN'	=> 'The download will only be updated, if no new file is uploaded.',
 	'DL_VERSIONS'					=> 'Releases',
 	'DL_VIEW_COMMENTS'				=> 'Show',
 	'DL_VIEW_LINK'					=> 'View Download',

@@ -77,8 +77,8 @@ $row_user = $this->db->sql_fetchfield('user_id');
 $this->db->sql_freeresult($result);
 
 $allow_manage = 0;
-    if (($row_user == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'])
-	{
+if (($row_user == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'])
+{
 	$allow_manage = true;
 }
 

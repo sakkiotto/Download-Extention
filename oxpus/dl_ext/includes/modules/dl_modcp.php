@@ -1287,15 +1287,25 @@ else
 			$s_select_version = '<select name="file_version">';
 			$s_select_ver_del = '<select name="file_ver_del[]" multiple="multiple" size="' . $multiple_size . '">';
 			$s_select_version .= '<option value="0" selected="selected">' . $this->user->lang['DL_VERSION_CURRENT'] . '</option>';
-		
+
+			$version_array = array();
+
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$s_select_version .= '<option value="' . $row['ver_id'] . '">' . $row['ver_version'] . ' - ' . $this->user->format_date($row['ver_change_time']) . '</option>';
-				$s_select_ver_del .= '<option value="' . $row['ver_id'] . '">' . $row['ver_version'] . ' - ' . $this->user->format_date($row['ver_change_time']) . '</option>';
+				$version_array[$row['ver_version'] . ' - ' . $this->user->format_date($row['ver_change_time'])] = $row['ver_id'];
 			}
 		
 			$this->db->sql_freeresult($result);
-		
+
+			natsort($version_array);
+			$version_array = array_unique(array_reverse($version_array));
+
+			foreach($version_array as $key => $value)
+			{
+				$s_select_version .= '<option value="' . $value . '">' . $key . '</option>';
+				$s_select_ver_del .= '<option value="' . $value . '">' . $key . '</option>';
+			}
+
 			$s_select_version .= '</select>';
 			$s_select_ver_del .= '</select>';
 		
