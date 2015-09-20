@@ -544,11 +544,11 @@ class main_listener implements EventSubscriberInterface
 
 		if ($title)
 		{
-			return $title;
+			return $title . '</a>';
 		}
 		else
 		{
-			return $part[0];
+			return $part[0] . '</a>';
 		}
 	}
 
