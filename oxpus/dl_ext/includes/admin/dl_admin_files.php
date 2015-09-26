@@ -1097,7 +1097,6 @@ else if($action == 'delete')
 		$real_ver_file = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$ver_ids[] = $row['ver_id'];
 			$real_ver_file[$row['dl_id']] = $row['ver_real_file'];
 		}
 
@@ -1121,7 +1120,7 @@ else if($action == 'delete')
 			}
 
 			$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
-				WHERE ' . $db->sql_in_set('ver_id', $ver_ids);
+					WHERE dl_id = ' . (int) $df_id;
 			$result = $db->sql_query($sql);
 
 			while ($row = $db->sql_fetchrow($result))

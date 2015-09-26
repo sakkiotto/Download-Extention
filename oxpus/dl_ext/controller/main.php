@@ -94,6 +94,14 @@ class main
 
 	public function handle($view = '')
 	{
+		if (isset($this->user->data['user_wrong_email']))
+		{
+			if ($this->user->data['user_wrong_email'] != 0)
+			{
+				trigger_error($this->user->lang['DL_NO_PERMISSION']);
+			}
+		}
+
 		include($this->root_path . 'includes/functions_user.' . $this->php_ext);
 		include($this->root_path . 'includes/functions_display.' . $this->php_ext);
 		include($this->root_path . 'includes/bbcode.' . $this->php_ext);
