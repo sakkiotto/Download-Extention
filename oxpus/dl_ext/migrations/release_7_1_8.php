@@ -10,9 +10,9 @@
 
 namespace oxpus\dl_ext\migrations;
 
-class release_7_1_7 extends \phpbb\db\migration\migration
+class release_7_1_8 extends \phpbb\db\migration\migration
 {
-	var $dl_ext_version = '7.1.7';
+	var $dl_ext_version = '7.1.8';
 
 	public function effectively_installed()
 	{
@@ -21,7 +21,7 @@ class release_7_1_7 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dl_ext\migrations\release_7_1_6');
+		return array('\oxpus\dl_ext\migrations\release_7_1_7');
 	}
 
 	public function update_data()
