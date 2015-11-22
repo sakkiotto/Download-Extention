@@ -403,7 +403,7 @@ class dl_physical extends dl_mod
 					$selected = '';
 				}
 
-				$cat_path = str_replace(DL_EXT_FILES_FOLDER, '', $file_base . $entry);
+				$cat_path = str_replace(DL_EXT_FILES_FOLDER, '', $file_base . $entry . '/');
 				$entry_path = str_replace(DL_EXT_FILES_FOLDER, '', $file_base);
 				$tree[] = array(
 					'cat_path'	=> $cat_path,
