@@ -486,6 +486,7 @@ $lang = array_merge($lang, array(
 	'DL_OVERVIEW'				=> 'Overall list',
 	'DL_OVERVIEW_LINK'			=> 'Display link to overall list',
 
+	'DL_PAGE_BUG_TRACKER'		=> 'Bug Tracker',
 	'DL_PAGE_DL_HACKSLIST'		=> 'Hackslist',
 	'DL_PAGE_DOWNLOADS'			=> 'Downloads',
 	'DL_PATH_NOT_EXIST'			=> 'The entered folder <u>%s</u> can not be found under <u>phpbb_forum_root/%s</u>!<br /><br />The complete path based on your setting will be <u>phpbb_forum_root/%s</u>.<br />This folder can not be used, because the needed permissions are missing or the folder still not exists.<br /><br />So please check the permissions for this path or enter a valid foldername.<br />If the folder just not exists, then please create it <u>now</u> within a ftp client<br />and set the permissions to CHMOD 0777.<br />Alternative you can use the toolbox to create the folder.',

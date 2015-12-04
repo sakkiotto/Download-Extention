@@ -484,6 +484,7 @@ $lang = array_merge($lang, array(
 	'DL_OVERVIEW'				=> 'Gesamtübersicht',
 	'DL_OVERVIEW_LINK'			=> 'Link zur Gesamtübersicht anzeigen',
 
+	'DL_PAGE_BUG_TRACKER'		=> 'Bug Tracker',
 	'DL_PAGE_DL_HACKSLIST'		=> 'Hacksliste',
 	'DL_PAGE_DOWNLOADS'			=> 'Downloads',
 	'DL_PATH_NOT_EXIST'			=> 'Der angegebene Dateipfad <u>%s</u> kann nicht in <u>phpbb_forum_root/%s</u> gefunden werden!<br /><br />Der komplette Pfad würde gemäß deiner Angabe <u>phpbb_forum_root/%s</u> lauten.<br />Darauf kann nicht zugegriffen werden, weil entweder die Zugriffsrechte fehlen oder der Order nicht existiert.<br /><br />Bitte prüfe daher die Zugriffsrechte für den Pfad oder trage einen anderen gültigen Ordner ein.<br />Wenn du den Ordner noch nicht angelegt hast, dann tue dieses bitte <u>jetzt</u> mit einem FTP-Client<br />und setze die Zugriffsrechte des Ordners auf CHMOD 0777.<br />Alternativ dazu kannst du den Ordner auch mit der Toolbox anlegen.',

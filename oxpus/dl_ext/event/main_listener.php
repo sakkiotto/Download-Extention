@@ -269,29 +269,40 @@ class main_listener implements EventSubscriberInterface
 
 	public function add_dl_ext_viewonline($event)
 	{
-		if ($event['row']['session_page'] === 'app.php/dl_ext' || $event['row']['session_page'] === 'app.' . $this->php_ext . '/dl_ext.php')
+		if (strpos($event['row']['session_page'], '/dl_ext') !== false)
 		{
-			if (strpos($event['row']['session_page'], 'view=hacks'))
-			{
-				$dl_main_link = $this->helper->route('dl_ext_controller');
-				if (strpos($dl_main_link, 'app.' . $this->php_ext . '/dl_ext') === false)
-				{
-					$dl_main_link = str_replace('/dl_ext', '/app.' . $this->php_ext . '/dl_ext', $dl_main_link);
-				}
-
-				$event['location'] = $this->user->lang('DL_PAGE_DOWNLOADS');
-				$event['location_url'] = $dl_main_link;
-			}
-			else
+			if (strpos($event['row']['session_page'], 'app.php/dl_ext/?view=hacks') !== false)
 			{
 				$dl_hacks_link = $this->helper->route('dl_ext_controller', array('view' => 'hacks'));
 				if (strpos($dl_hacks_link, 'app.' . $this->php_ext . '/dl_ext') === false)
 				{
 					$dl_hacks_link = str_replace('/dl_ext', '/app.' . $this->php_ext . '/dl_ext', $dl_hacks_link);
 				}
-
+	
 				$event['location'] = $this->user->lang('DL_PAGE_DL_HACKSLIST');
 				$event['location_url'] = $dl_hacks_link;
+			}
+			else if (strpos($event['row']['session_page'], 'app.php/dl_ext/?view=bug_tracker') !== false)
+			{
+				$dl_main_link = $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker'));
+				if (strpos($dl_main_link, 'app.' . $this->php_ext . '/dl_ext') === false)
+				{
+					$dl_main_link = str_replace('/dl_ext', '/app.' . $this->php_ext . '/dl_ext', $dl_main_link);
+				}
+	
+				$event['location'] = $this->user->lang('DL_PAGE_BUG_TRACKER');
+				$event['location_url'] = $dl_main_link;
+			}
+			else
+			{
+				$dl_main_link = $this->helper->route('dl_ext_controller');
+				if (strpos($dl_main_link, 'app.' . $this->php_ext . '/dl_ext') === false)
+				{
+					$dl_main_link = str_replace('/dl_ext', '/app.' . $this->php_ext . '/dl_ext', $dl_main_link);
+				}
+	
+				$event['location'] = $this->user->lang('DL_PAGE_DOWNLOADS');
+				$event['location_url'] = $dl_main_link;
 			}
 		}
 	}

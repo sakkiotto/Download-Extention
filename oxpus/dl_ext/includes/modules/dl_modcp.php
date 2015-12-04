@@ -1049,7 +1049,7 @@ else
 					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
 					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
 		
-					\oxpus\dl_ext\includes\classes\ dl_topic::delete_topic($dl_topics);
+					$return = \oxpus\dl_ext\includes\classes\ dl_topic::delete_topic($dl_topics);
 				}
 			}
 		
