@@ -853,6 +853,11 @@ else
 				$message		= $this->user->lang['DOWNLOAD_UPDATED'] . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 		
+			if ($cat_auth['auth_up'])
+			{
+				$message .= '<br /><br />' . sprintf($this->user->lang['DL_UPLOAD_ONE_MORE'], '<a href="' . $this->helper->route('dl_ext_controller', array('view' => 'upload', 'cat_id' => $cat_id)) . '">', '</a>');
+			}
+
 			if (!$new_version)
 			{
 				meta_refresh(3, $meta_url);

@@ -459,6 +459,10 @@ if ($submit)
 		$approve_message = ($approve) ? '' : '<br />' . $this->user->lang['DL_MUST_BE_APPROVED'];
 
 		$message = $this->user->lang['DOWNLOAD_ADDED'] . $thumb_message . $approve_message . '<br /><br />' . sprintf($this->user->lang['CLICK_RETURN_DOWNLOADS'], '<a href="' . $this->helper->route('dl_ext_controller', array('cat' => $cat_id)) . '">', '</a>');
+		if ($cat_auth['auth_up'])
+		{
+			$message .= '<br /><br />' . sprintf($this->user->lang['DL_UPLOAD_ONE_MORE'], '<a href="' . $this->helper->route('dl_ext_controller', array('view' => 'upload', 'cat_id' => $cat_id)) . '">', '</a>');
+		}
 
 		// Purge the files cache
 		@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
