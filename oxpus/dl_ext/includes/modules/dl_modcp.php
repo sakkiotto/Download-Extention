@@ -70,6 +70,11 @@ if ($cat_id && $cat_auth['auth_mod'])
 	$deny_modcp = false;
 }
 
+if ($action == 'delete')
+{
+	$deny_modcp = false;
+}
+
 if ($deny_modcp)
 {
 	trigger_error($this->user->lang['DL_NO_PERMISSION']);
@@ -868,7 +873,7 @@ else
 			trigger_error($message);
 		}
 		
-		if ($action == 'delete' && $cat_id)
+		if ($action == 'delete')
 		{
 			$dl_id = $this->request->variable('dlo_id', array(0));
 		
@@ -879,7 +884,7 @@ else
 					if (sizeof($dl_id) == 1)
 					{
 						$dl_file	= array();
-						$dl_file	= \oxpus\dl_ext\includes\classes\ dl_files::all_files($cat_id, '', 'ASC', '', intval($dl_id[0]), true, '*');
+						$dl_file	= \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', '', intval($dl_id[0]), true, '*');
 		
 						$description			= $dl_file['description'];
 						$delete_confirm_text	= $this->user->lang['DL_CONFIRM_DELETE_SINGLE_FILE'];
@@ -903,14 +908,13 @@ else
 		
 					$s_hidden_fields = array(
 						'view'		=> 'modcp',
-						'cat_id'	=> $cat_id,
 						'df_id'		=> $df_id,
 						'action'	=> 'delete',
 						'confirm'	=> 1
 					);
 		
 					$i = 0;
-					foreach($dl_id as $cat_id => $value)
+					foreach($dl_id as $key => $value)
 					{
 						$s_hidden_fields = array_merge($s_hidden_fields, array('dlo_id[' . $i . ']' => $value));
 						$i++;
@@ -954,9 +958,8 @@ else
 						$this->db->sql_freeresult($result);
 					}
 		
-					$sql = 'SELECT c.path, d.real_file, d.thumbnail, d.dl_topic, d.id AS df_id FROM ' . DL_CAT_TABLE . ' c, ' . DOWNLOADS_TABLE . ' d
-						WHERE c.id = ' . (int) $cat_id . '
-							AND c.id = d.cat
+					$sql = 'SELECT c.path, d.cat, d.real_file, d.thumbnail, d.dl_topic, d.id AS df_id FROM ' . DL_CAT_TABLE . ' c, ' . DOWNLOADS_TABLE . ' d
+						WHERE c.id = d.cat
 							AND ' . $this->db->sql_in_set('d.id', $dl_ids);
 					$result = $this->db->sql_query($sql);
 		
@@ -964,6 +967,21 @@ else
 		
 					while ($row = $this->db->sql_fetchrow($result))
 					{
+						$cat_id = $row['cat'];
+
+						if (!$this->auth->acl_get('a_') && isset($index[$cat_id]['auth_mod']) && !$index[$cat_id]['auth_mod'])
+						{
+							trigger_error($user->lang['DL_NO_PERMISSION'] . __LINE__);
+						}
+						
+						$cat_auth = array();
+						$cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
+						
+						if (!$this->auth->acl_get('a_') && !$cat_auth['auth_mod'])
+						{
+							trigger_error($user->lang['DL_NO_PERMISSION'] . __LINE__);
+						}
+						
 						$path		= $row['path'];
 						$real_file	= $row['real_file'];
 						$df_id		= $row['df_id'];
