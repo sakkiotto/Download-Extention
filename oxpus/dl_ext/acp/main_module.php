@@ -18,6 +18,8 @@ class main_module
 	var $u_action;
 	var $edit_lang_id;
 	var $lang_defs;
+	var $user;
+	var $request;
 
 	function main($id, $mode)
 	{
@@ -120,7 +122,7 @@ class main_module
 		* initiate the help system
 		*/
 		$template->assign_vars(array(
-			'U_HELP_POPUP' => str_replace('&amp;', '&', $this->u_action . '&amp;action=help&amp;help_key='),
+			'U_HELP_POPUP' => str_replace('&amp;', '&', $this->u_action . '&amp;action=help'),
 		));
 
 		/*
@@ -128,7 +130,9 @@ class main_module
 		*/		
 		if ($action == 'help')
 		{
-			include_once($ext_path . 'includes/helpers/dl_help_adm.' . $phpEx);
+			$this->user = $user;
+			$this->request = $request;
+			include_once($ext_path . 'includes/helpers/dl_help.' . $phpEx);
 		}
 
 		/*
@@ -308,7 +312,7 @@ class main_module
 		}
 
 		$template->assign_vars(array(
-			'DL_MOD_RELEASE' => sprintf($user->lang['DL_MOD_VERSION'], $config['dl_ext_version']),
+			'DL_MOD_RELEASE'	=> sprintf($user->lang['DL_MOD_VERSION'], $config['dl_ext_version']),
 		));
 	}
 

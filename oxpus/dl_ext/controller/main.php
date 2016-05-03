@@ -385,12 +385,26 @@ class main
 		{
 			$file_id = ($df_id) ? $df_id : $dl_id;
 
-			$sql = 'SELECT cat, description FROM ' . DOWNLOADS_TABLE . '
+			$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags, hack_version FROM ' . DOWNLOADS_TABLE . '
 				WHERE id = ' . (int) $file_id;
 			$result = $this->db->sql_query($sql);
 			$row = $this->db->sql_fetchrow($result);
 			$cat_id = (!$cat_id) ? $row['cat'] : $cat_id;
-			$description = $row['description'];
+			$description		= $row['description'];
+			$desc_uid			= $row['desc_uid'];
+			$desc_bitfield		= $row['desc_bitfield'];
+			$desc_flags			= $row['desc_flags'];
+			$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
+			
+			$mini_icon			= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id, $ext_path_images);
+			
+			$hack_version		= '&nbsp;'.$row['hack_version'];
+			
+			$file_status	= array();
+			$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+			
+			$status			= $file_status['status_detail'];
+
 			$this->db->sql_freeresult($result);
 		}
 		else
@@ -439,6 +453,7 @@ class main
 			break;
 			case 'version':
 			case 'detail':
+			case 'broken':
 				$nav_string['link'][] = array('view' => 'detail', 'df_id' => $df_id);
 				$nav_string['name'][] = $this->user->lang['DL_DETAIL'] . ': ' . $description;
 			break;
@@ -451,8 +466,6 @@ class main
 			case 'comment':
 				$nav_string['link'][] = array('view' => 'detail', 'df_id' => $df_id);
 				$nav_string['name'][] = $this->user->lang['DL_DETAIL'] . ': ' . $description;
-//				$nav_string['link'][] = array('view' => 'comment', 'df_id' => $df_id, 'cat_id' = $cat_id, 'action' => 'view');
-//				$nav_string['name'][] = $this->user->lang['DL_COMMENTS'];
 			break;
 			case 'upload':
 				$nav_string['link'][] = array('view' => 'upload', 'cat_id' => $cat_id);
@@ -532,10 +545,12 @@ class main
 
 					if (sizeof($tmp_nav['link']))
 					{
+
 						for ($i = sizeof($tmp_nav['link']) - 1; $i >= 0; $i--)
 						{
 							$nav_string['link'][] = $tmp_nav['link'][$i];
 							$nav_string['name'][] = $tmp_nav['name'][$i];
+							$index_cat_name = $tmp_nav['name'][$i];
 						}
 					}
 				}
@@ -547,6 +562,11 @@ class main
 				'U_VIEW_FORUM'	=> $this->helper->route('dl_ext_controller', $nav_string['link'][$i]),
 				'FORUM_NAME'	=> $nav_string['name'][$i],
 			));
+		}
+
+		if (isset($index_cat_name))
+		{
+			$this->template->assign_var('INDEX_CAT_TITLE', $index_cat_name);
 		}
 
 		/*
@@ -773,6 +793,10 @@ class main
 					));
 
 					$this->template->assign_vars(array(
+						'DESCRIPTION'		=> $description,
+						'MINI_IMG'			=> $mini_icon,
+						'HACK_VERSION'		=> $hack_version,
+						'STATUS'			=> $status,
 						'MESSAGE_TITLE'		=> $this->user->lang['DL_BROKEN'],
 						'MESSAGE_TEXT'		=> $this->user->lang['DL_REPORT_CONFIRM_CODE'],
 
@@ -801,6 +825,10 @@ class main
 				);
 
 				$this->template->assign_vars(array(
+					'DESCRIPTION'		=> $description,
+					'MINI_IMG'			=> $mini_icon,
+					'HACK_VERSION'		=> $hack_version,
+					'STATUS'			=> $status,
 					'MESSAGE_TITLE'		=> $this->user->lang['DL_BROKEN'],
 					'MESSAGE_TEXT'		=> $this->user->lang['DL_REPORT_CONFIRM_CODE'],
 

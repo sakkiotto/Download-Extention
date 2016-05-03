@@ -1,5 +1,5 @@
 <style>
-#dl_new_bg, #dl_help_bg {
+#dl_help_bg {
     display:none;
     z-index:1;
     position: fixed;
@@ -10,7 +10,7 @@
     background:#000000;
 }
 
-#dl_new_popup, #dl_help_popup {
+#dl_help_popup {
     display: none;
     z-index: 2;
     position: fixed;
@@ -24,22 +24,22 @@
     color: #000;
 }
 
-div.dl_new_close, div.dl_help_close {
+div.dl_help_close {
     position: relative;
     height: 16px;
     width: 16px;
     left: 8px;
     bottom: 8px;
-    background: url("{T_THEME_PATH}/images/alert_close.png") no-repeat scroll 0 0 transparent;
+    background: url("./../adm/images/alert_close.png") no-repeat scroll 0 0 transparent;
     float: right;
     cursor: pointer;
 }
 
-div.dl_new_close:hover, div.dl_help_close:hover {
+div.dl_help_close:hover {
 	background-position: 0 -16px;
 }
 
-#dl_new_content, #dl_help_content {
+#dl_help_content {
     margin: 8px 14px;
 }
 </style>

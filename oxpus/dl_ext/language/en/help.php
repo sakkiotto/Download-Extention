@@ -139,6 +139,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_RSS_DESC_LENGTH_SHORTEN'	=> 'Cut the description from the downloads after the here setted characters, if the description should be shown shorten (previous option).<br />0 will hide the description!',
 
 	'HELP_DL_SHORTEN_EXTERN_LINKS'	=> 'Enter the length of the displayed external download link on the download details.<br />Based on the length of the link it will be cut in the middle or shorten beginning from the right side.<br />Leave this field empty or enter 0 to disable this function.',
+	'HELP_DL_SHOW_FOOTER_EXT_STATS'	=> 'Shows in the download footer additional the overall traffic for registered users and guests and the number of clicks for the current month.',
 	'HELP_DL_SHOW_FILE_HASH'		=> 'Shows the file hash in the download details or hide it.',
 	'HELP_DL_SHOW_FOOTER_LEGEND'	=> 'This option will turn the legend with the download status icons on the download footer on and off.<br />The icons which you can find beside the downloads will not be changed by this option.',
 	'HELP_DL_SHOW_FOOTER_STAT'		=> 'This option will turn the statistic lines on the download footer on and off.<br />The statistic will still earn data, if you switch it off.',

@@ -142,11 +142,19 @@ if (sizeof($dl_files))
 
 			if (isset($ratings[$file_id]) && $this->config['dl_enable_rate'])
 			{
-				$rating_count_text = '&nbsp;[ '.sizeof($ratings[$file_id]).' ]';
+				$total_ratings = sizeof($ratings[$file_id]);
+				if ($total_ratings == 1)
+				{
+					$rating_count_text = $this->user->lang['DL_RATING_ONE'];
+				}
+				else
+				{
+					$rating_count_text = sprintf($this->user->lang['DL_RATING_MORE'], $total_ratings);
+				}
 			}
 			else
 			{
-				$rating_count_text = '';
+				$rating_count_text = $this->user->lang['DL_RATING_NONE'];
 			}
 
 			$this->template->assign_block_vars('downloads', array(

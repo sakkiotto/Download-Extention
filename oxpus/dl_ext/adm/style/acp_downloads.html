@@ -40,22 +40,6 @@
 <br />
 <!-- ENDIF -->
 
-<script type="text/javascript">
-// <![CDATA[
-function help_popup(help_key, value)
-{
-	url = '{U_HELP_POPUP}' + help_key;
-
-	if (value != '')
-	{
-		url = url + '&value=' + value;
-	}
-
-	window.open(url, '_blank', 'height=500,width=600,resizable=yes,toolbar=no,scrollbars=no,status=no,menubar=no');;
-}
-// ]]>
-</script>
-
 <!-- IF U_BACK --><a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a><!-- ENDIF -->
 
 <!-- IF S_DL_CONFIG --><!-- INCLUDE dl_config_body.html --><!-- ENDIF -->

@@ -64,6 +64,21 @@ if ($cancel && $action == 'delete')
 */
 $comment_text = $this->request->variable('message', '', true);
 
+$dl_files = array();
+$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', '', $df_id, $modcp, '*');
+
+if (!$dl_files)
+{
+	redirect($this->helper->route('dl_ext_controller'));
+}
+
+$this->template->assign_vars(array(
+	'DESCRIPTION'			=> $description,
+	'MINI_IMG'				=> $mini_icon,
+	'HACK_VERSION'			=> $hack_version,
+	'STATUS'				=> $status,
+));
+
 /*
 * check permissions to manage comments
 */

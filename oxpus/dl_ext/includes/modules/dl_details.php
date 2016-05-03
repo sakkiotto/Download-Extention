@@ -487,26 +487,12 @@ $username = $this->user->data['username'];
 /*
 * prepare the download for displaying
 */
-$description		= $dl_files['description'];
-$desc_uid			= $dl_files['desc_uid'];
-$desc_bitfield		= $dl_files['desc_bitfield'];
-$desc_flags			= $dl_files['desc_flags'];
-$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-
-$mini_icon			= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id, $ext_path_images);
-
-$hack_version		= '&nbsp;'.$dl_files['hack_version'];
-
 $long_desc			= $dl_files['long_desc'];
 $long_desc_uid		= $dl_files['long_desc_uid'];
 $long_desc_bitfield	= $dl_files['long_desc_bitfield'];
 $long_desc_flags	= $dl_files['long_desc_flags'];
 $long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 
-$file_status	= array();
-$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
-
-$status			= $file_status['status_detail'];
 $file_name		= $file_status['file_detail'];
 $file_load		= $file_status['auth_dl'];
 $real_file		= $dl_files['real_file'];
@@ -1009,11 +995,18 @@ if ($this->config['dl_enable_rate'])
 
 	if ($ratings)
 	{
-		$rating_count_text = '&nbsp;[ '.$ratings.' ]';
+		if ($ratings == 1)
+		{
+			$rating_count_text = $this->user->lang['DL_RATING_ONE'];
+		}
+		else
+		{
+			$rating_count_text = sprintf($this->user->lang['DL_RATING_MORE'], $ratings);
+		}
 	}
 	else
 	{
-		$rating_count_text = '';
+		$rating_count_text = $this->user->lang['DL_RATING_NONE'];
 	}
 
 	$this->template->assign_vars(array(
@@ -1042,6 +1035,7 @@ if ($this->user->data['is_registered'] && !$this->config['dl_disable_email'])
 	{
 		$l_favorite = $this->user->lang['DL_FAVORITE_DROP'];
 		$u_favorite = $this->helper->route('dl_ext_controller', array('view' => 'unfav', 'df_id' => $df_id, 'cat_id' => $cat_id, 'fav_id' => $fav_id));
+		$this->template->assign_var('S_FAV_ACTIVE', true);
 	}
 	else
 	{
@@ -1065,7 +1059,7 @@ if (!$this->user->data['is_bot'] && \oxpus\dl_ext\includes\classes\ dl_auth::use
 {
 	$this->template->assign_var('S_EDIT_BUTTON', true);
 
-	if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'] && $dl_files['thumbnail'])
+	if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 	{
 		$this->template->assign_var('S_EDIT_THUMBS_BUTTON', true);
 	}

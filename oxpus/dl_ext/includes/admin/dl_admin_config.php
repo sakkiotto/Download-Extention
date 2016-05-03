@@ -69,16 +69,17 @@ switch ($view)
 			'vars'	=> array(
 				'legend1'				=> '',
 		
-				'dl_icon_free_for_reg'		=> array('lang' => 'DL_ICON_FREE_FOR_REG',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'),
-				'dl_new_time'				=> array('lang' => 'DL_NEW_TIME',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'),
-				'dl_edit_time'				=> array('lang' => 'DL_EDIT_TIME',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'),
-				'dl_show_footer_legend'		=> array('lang' => 'DL_SHOW_FOOTER_LEGEND',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'),
-				'dl_show_footer_stat'		=> array('lang' => 'DL_SHOW_FOOTER_STAT',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_STAT'),
-				'dl_overview_link_onoff'	=> array('lang' => 'DL_OVERVIEW_LINK',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OVERVIEW_LINK'),
-				'dl_todo_link_onoff'		=> array('lang' => 'DL_TODO_LINK',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'),
-				'dl_uconf_link_onoff'		=> array('lang' => 'DL_UCONF_LINK',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_UCONF_LINK'),
-				'dl_enable_jumpbox'			=> array('lang' => 'DL_ENABLE_JUMPBOX',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'),
-				'dl_cat_edit'				=> array('lang' => 'DL_CAT_EDIT_LINK',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => 'select_dl_cat_edit',	'params' => array('{CONFIG_VALUE}')),
+				'dl_icon_free_for_reg'		=> array('lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'),
+				'dl_new_time'				=> array('lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'),
+				'dl_edit_time'				=> array('lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'),
+				'dl_show_footer_legend'		=> array('lang' => 'DL_SHOW_FOOTER_LEGEND',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'),
+				'dl_show_footer_stat'		=> array('lang' => 'DL_SHOW_FOOTER_STAT',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_STAT'),
+				'dl_mini_stats_ext'			=> array('lang' => 'DL_SHOW_FOOTER_EXT_STATS',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_EXT_STATS',	'function' => 'select_dl_ext_stats',	'params' => array('{CONFIG_VALUE}')),
+				'dl_overview_link_onoff'	=> array('lang' => 'DL_OVERVIEW_LINK',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OVERVIEW_LINK'),
+				'dl_todo_link_onoff'		=> array('lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'),
+				'dl_uconf_link_onoff'		=> array('lang' => 'DL_UCONF_LINK',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_UCONF_LINK'),
+				'dl_enable_jumpbox'			=> array('lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'),
+				'dl_cat_edit'				=> array('lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => 'select_dl_cat_edit',	'params' => array('{CONFIG_VALUE}')),
 
 				'legend2'				=> '',
 		
@@ -926,6 +927,20 @@ function select_filebase($value)
 {
 	$s_select = '<option value="1">/forumroot/ext/oxpus/dl_ext/files/</option>';
 	$s_select .= '<option value="2">/forumroot/store/oxpus/dl_ext/</option>';
+	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+
+	return $s_select;
+}
+
+function select_dl_ext_stats($value)
+{
+	global $user;
+
+	$s_select = '<option value="0">' . $user->lang['DL_EXT_STATS_0'] . '</option>';
+	$s_select .= '<option value="1">' . $user->lang['DL_EXT_STATS_1'] . '</option>';
+	$s_select .= '<option value="2">' . $user->lang['DL_EXT_STATS_2'] . '</option>';
+	$s_select .= '<option value="3">' . $user->lang['DL_EXT_STATS_3'] . '</option>';
+	$s_select .= '<option value="4">' . $user->lang['DL_EXT_STATS_4'] . '</option>';
 	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 	return $s_select;

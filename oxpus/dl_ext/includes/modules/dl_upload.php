@@ -644,8 +644,9 @@ $this->template->assign_vars(array(
 	'S_FILE_EXT_SIZE_RANGE'	=> $s_file_ext_size_range,
 	'S_HACKLIST'			=> $s_hacklist,
 	'S_DOWNLOADS_ACTION'	=> $this->helper->route('dl_ext_controller', array('view' => 'upload')),
-	'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields))
-);
+	'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
+	'S_ADD_DL'				=> true,
+));
 
 // Init and display the custom fields with the existing data
 $cp->get_profile_fields($df_id);

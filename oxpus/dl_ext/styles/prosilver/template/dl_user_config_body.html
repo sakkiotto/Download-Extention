@@ -178,7 +178,12 @@ function select_switch(status)
 <!-- ENDIF -->
 
 <fieldset class="submit-buttons">
+<!-- IF S_DL_UCP -->
 	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp;<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+<!-- ELSE -->
+	<input type="reset" value="{L_RESET}" name="reset" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
+    <input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />
+<!-- ENDIF -->
 	{S_FORM_TOKEN}
 </fieldset>
 
