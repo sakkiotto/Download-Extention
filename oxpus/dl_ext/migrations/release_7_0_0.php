@@ -629,7 +629,7 @@ class release_7_0_0 extends \phpbb\db\migration\migration
 			return;
 		}
 
-		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'dl_banlist ' . $db->sql_build_array('INSERT', array('user_agent' => 'n/a')));
+		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'dl_banlist ' . $this->db->sql_build_array('INSERT', array('user_agent' => 'n/a')));
 	}
 
 	public function add_default_blacklist_extentions()
