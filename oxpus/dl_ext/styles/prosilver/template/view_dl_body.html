@@ -50,7 +50,7 @@ var active_cat = 0;
 <!-- ENDIF -->
 <!-- END category -->
 
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid;" class="panel" id="options0" style="display: ;">
+<div class="panel dlext" id="options0">
 	
 	<div class="tablewrap">
 
@@ -88,7 +88,7 @@ var active_cat = 0;
 	
 </div>
 
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid; display: none;" class="panel" id="options1">
+<div class="panel dlext noshow" id="options1">
 	
 	<div class="tablewrap">
 
@@ -96,14 +96,14 @@ var active_cat = 0;
 		<br />
 
 		<ul class="topiclist">
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_FILE_NAME}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_NAME}</label></dd>
 			</dl>
 		</li>
 		<!-- BEGIN real_filetime -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.real_filetime.REAL_FILETIME}</label></dd>
@@ -112,7 +112,7 @@ var active_cat = 0;
 		<!-- END real_filetime -->
     	<!-- END downloads -->
 		<!-- BEGIN hacklist -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_HACK_AUTOR}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_AUTHOR}{hacklist.HACK_AUTHOR_WEBSITE}</label></dd>
@@ -121,7 +121,7 @@ var active_cat = 0;
 		<!-- END hacklist -->
 		<!-- BEGIN downloads -->
 		<!-- BEGIN bug_tracker -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_BUG_TRACKER}</label></dt>
 				<dd class="lastpost" style="display: block;"><label><a href="{downloads.bug_tracker.U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
@@ -129,20 +129,20 @@ var active_cat = 0;
 		</li>
 		<!-- END bug_tracker -->
 		<!-- IF S_SHOW_TOPIC_LINK -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_TOPIC}</label></dt>
 				<dd class="lastpost" style="display: block;"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
 			</dl>
 		</li>
 		<!-- ENDIF -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_FILE_SIZE}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_SIZE}</label></dd>
 			</dl>
 		</li>
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_KLICKS} / {downloads.FILE_OVERALL_KLICKS}</label></dd>
@@ -150,7 +150,7 @@ var active_cat = 0;
 		</li>
 		<!-- END downloads -->
 		<!-- BEGIN hacklist -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_HACK_DL_URL}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_DL_URL}</label></dd>
@@ -158,7 +158,7 @@ var active_cat = 0;
 		</li>
 		<!-- END hacklist -->
 		<!-- IF S_ENABLE_RATE -->
-		<li style="background-color: #fafafa; border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid;" class="panel">
+		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_RATING}</label></dt>
 				<dd class="lastpost" style="display: block;"><div id="rating_{DF_ID}">{RATING_IMG}</div><div>{RATINGS}</div></dd>
@@ -174,7 +174,7 @@ var active_cat = 0;
 </div>
 
 <!-- IF VER_TAB -->
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid; display: none;" class="panel" id="options2">
+<div class="panel dlext3 noshow" id="options2">
 
 	<div class="tablewrap">
 
@@ -211,9 +211,9 @@ var active_cat = 0;
 <!-- ENDIF -->
 
 <!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS -->
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid; display: none;" class="panel" id="options3">
-	
-	<div style="background-color: #fafafa;" class="panel">
+<div class="panel dlext3 noshow" id="options3">
+
+	<div class="tablewrap">
 
 		<!-- BEGIN modwarning -->
 		<h3>{L_DL_MOD_WARNING}</h3>
@@ -271,7 +271,7 @@ var active_cat = 0;
 <!-- ENDIF -->
 
 <!-- IF HASH_TAB -->
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid; display: none;" class="panel" id="options4">
+<div class="panel dlext3 noshow" id="options4">
 	
 	<div class="tablewrap">
 
@@ -295,7 +295,7 @@ var active_cat = 0;
 <!-- ENDIF -->
 
 <!-- IF S_COMMENTS_TAB -->
-<div style="background-color: #fafafa; border: 1px #aaaaaa solid; display: none;" class="panel" id="options5">
+<div class="panel dlext3 noshow" id="options5">
 	
 	<div class="tablewrap">
 
@@ -352,7 +352,7 @@ var active_cat = 0;
 <div class="clearfix"></div>
 
 <!-- IF S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN_DL or S_DL_BROKEN_MOD -->
-<div style="background-color: #f5f5f5; border: 1px #aaaaaa solid;" class="panel">
+<div class="panel dlext4">
 	<ul class="linklist">
 		<!-- IF S_FAV_BLOCK --><li class="small-icon icon-<!-- IF S_FAV_ACTIVE -->un<!-- ENDIF -->subscribe leftside"><a href="{U_FAVORITE}">{FAVORITE}</a></li><!-- ENDIF -->
 		<!-- BEGIN report_broken_dl --><li class="small-icon icon-notification leftside"><a href="{report_broken_dl.U_BROKEN_DOWNLOAD}">{L_DL_BROKEN}</a></li><!-- END report_broken_dl -->
@@ -366,12 +366,12 @@ var active_cat = 0;
 
 <!-- BEGIN download_button -->
 <br />
-<div style="background-color: none; width: 100%;" id="dl_mod_button">
+<div id="dl_mod_button">
 <form action="{download_button.U_DOWNLOAD}" method="post" id="download" {download_button.S_DL_WINDOW} onsubmit="hide_dl_button();">
 
 <ul class="linklist navlinks">
 <!-- IF S_VC -->
-<li style="background-color: #fafafa; float: left; border: 2px #555555 solid; width: 40%; text-align: center;" class="panel">
+<li class="panel dlbutton1">
 	<span class="crumb">
 		<!-- IF CAPTCHA_TEMPLATE -->
 				<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
@@ -380,7 +380,7 @@ var active_cat = 0;
 	</span>
 </li>
 <!-- ENDIF -->
-<li style="background-color: #fafafa; float: right; border: 2px #555555 solid; width: 40%; text-align: center;" class="panel">
+<li class="panel dlbutton2">
 	<span class="crumb">
 		{download_button.S_DL_VERSION}&nbsp;<input type="image" src="{IMG_DL_BUTTON}" name="submit" id="submit" alt="{L_DL_DOWNLOAD}" title="{L_DL_DOWNLOAD}" value="1" />
 		<input type="hidden" name="hotlink_id" value="{download_button.S_HOTLINK_ID}" />

@@ -6,7 +6,7 @@
 
 <form action="{S_DOWNLOADS_ACTION}" method="post" {ENCTYPE} id="dl_edit">
 
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+<div class="panel dlext">
 	<div class="inner">
 
 	<h3>{DL_FILES_TITLE}</h3>
@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel bg2">
+<div class="panel bg2 dlext">
 	<div class="inner">
 
 	<fieldset>
@@ -110,7 +110,7 @@
 </div>
 
 <!-- IF S_MODCP or S_CHANGE_TIME or S_POPUP_NOTIFY or S_EMAIL_BLOCK -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+<div class="panel dlext">
 	<div class="inner">
 
 	<fieldset>
@@ -132,7 +132,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_MODCP -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dlnav">
 		<dt>
 			<label>{L_DL_APPROVE}</label>
 		</dt>
@@ -143,7 +143,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_CHANGE_TIME -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dlnav">
 		<dt>
 			<label>{L_DL_NO_CHANGE_EDIT_TIME}</label>
 		</dt>
@@ -154,7 +154,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_CLICK_RESET -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dlnav">
 		<dt>
 			<label>{L_DL_KLICKS_RESET}</label>
 		</dt>
@@ -165,7 +165,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_POPUP_NOTIFY -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dlnav">
 		<dt>
 			<label>{L_DL_DISABLE_POPUP}</label>
 		</dt>
@@ -176,7 +176,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_EMAIL_BLOCK -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dlnav">
 		<dt>
 			<label>{L_DL_DISABLE_EMAIL}</label>
 		</dt>
@@ -194,7 +194,7 @@
 <!-- ENDIF -->
 
 <!-- IF S_USE_HACKLIST -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel{HACKLIST_BG}">
+<div class="panel{HACKLIST_BG} dlext">
 	<div class="inner">
 
 	<fieldset>
@@ -242,7 +242,7 @@
 <!-- ENDIF -->
 
 <!-- IF S_ALLOW_EDIT_MOD_DESC or S_TODO_LINK_ONOFF -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel{MOD_BLOCK_BG}">
+<div class="panel{MOD_BLOCK_BG} dlext">
 	<div class="inner">
 
 	<fieldset>
@@ -307,7 +307,7 @@
 
 <!-- BEGIN download_fields -->
 <!-- IF download_fields.S_FIRST_ROW -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel bg2">
+<div class="panel bg2">
 	<div class="inner">
 
 	<fieldset>
