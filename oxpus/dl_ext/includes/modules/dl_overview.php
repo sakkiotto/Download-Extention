@@ -42,7 +42,7 @@ $this->template->assign_vars(array(
 );
 
 $dl_files = array();
-$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', '', 0, 0, 'id, cat');
+$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', '', 0, 0, '*');
 
 $total_files = 0;
 

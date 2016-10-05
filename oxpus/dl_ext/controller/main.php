@@ -354,15 +354,14 @@ class main
 
 		switch ($view)
 		{
-			case 'bug_tracker':
-			case 'comment':
-			case 'detail':
-			case 'latest':
-			case 'load':
-			case 'modcp':
 			case 'overall':
+			case 'load':
+			case 'detail':
 			case 'thumbs':
+			case 'comment':
 			case 'upload':
+			case 'modcp':
+			case 'bug_tracker':
 
 				$index = \oxpus\dl_ext\includes\classes\ dl_main::full_index($this->helper);
 			break;
@@ -451,10 +450,6 @@ class main
 			case 'overall':
 				$nav_string['link'][] = array('view' => 'overall');
 				$nav_string['name'][] = $this->user->lang['DL_OVERVIEW'];
-			break;
-			case 'latest':
-				$nav_string['link'][] = array('view' => 'latest');
-				$nav_string['name'][] = $this->user->lang['DL_LATEST_DOWNLOADS'];
 			break;
 			case 'version':
 			case 'detail':
@@ -1114,11 +1109,6 @@ class main
 			}
 		}
 
-		if ($view == 'latest' && sizeof($index))
-		{
-			include($ext_path . '/includes/modules/dl_latest.' . $this->php_ext);
-		}
-
 		/*
 		* default user entry. redirect to index or category
 		*/
@@ -1127,7 +1117,7 @@ class main
 			include($ext_path . '/includes/modules/dl_cat.' . $this->php_ext);
 		}
 
-		$view_check = array('broken', 'bug_tracker', 'comment', 'detail', 'fav', 'latest', 'load', 'modcp', 'overall', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'view', 'version');
+		$view_check = array('broken', 'bug_tracker', 'comment', 'detail', 'fav', 'load', 'modcp', 'overall', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'view', 'version');
 
 		if (in_array($view, $view_check))
 		{

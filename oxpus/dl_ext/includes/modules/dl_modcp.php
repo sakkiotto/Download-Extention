@@ -783,10 +783,6 @@ else
 								$sql_fav_user
 								AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 						$this->db->sql_query($sql);
-
-						$notification = $this->phpbb_container->get('notification_manager');
-						$notification_data = array('notification_id' => $df_id);
-						$notification->add_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
 					}
 		
 					if ($this->config['dl_upload_traffic_count'] && !$file_extern && !$this->config['dl_traffic_off'])

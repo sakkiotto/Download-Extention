@@ -433,10 +433,6 @@ if ($submit)
 					WHERE user_allow_new_download_popup = 1
 					AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 			$this->db->sql_query($sql);
-
-			$notification = $this->phpbb_container->get('notification_manager');
-			$notification_data = array('notification_id' => $next_id);
-			$notification->add_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
 		}
 
 
