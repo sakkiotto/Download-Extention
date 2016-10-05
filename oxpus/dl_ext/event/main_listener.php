@@ -122,24 +122,23 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		$event['lang_set_ext'] = $lang_set_ext;
-
 	}
 
 	public function add_download_message($event)
 	{
-		if ( isset($this->user->data['user_new_download']) && $this->user->data['user_new_download'])
+		if (isset($this->user->data['user_new_download']) && $this->user->data['user_new_download'] && $this->user->data['user_dl_note_type'] <> 2)
 		{
 			$sql = 'UPDATE ' . USERS_TABLE . '
 				SET user_new_download = 0
 				WHERE user_id = ' . (int)$this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
-			$new_dl_link = $this->helper->route('dl_ext_controller');
+			$new_dl_link = $this->helper->route('dl_ext_controller', array('view' => 'latest'));
 
 			$this->template->assign_vars(array(
 				'NEW_DOWNLOAD_MESSAGE'	=> sprintf($this->user->lang['NEW_DOWNLOAD'], $new_dl_link),
-				'S_NEW_DL_POPUP'		=> ($this->user->data['user_dl_note_type']) ? true : false,
-				'S_NEW_DL_MESSAGE'		=> (!$this->user->data['user_dl_note_type']) ? true : false,
+				'S_NEW_DL_POPUP'		=> ($this->user->data['user_dl_note_type'] == 1) ? true : false,
+				'S_NEW_DL_MESSAGE'		=> ($this->user->data['user_dl_note_type'] == 0) ? true : false,
 			));
 		}
 	}

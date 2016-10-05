@@ -154,6 +154,22 @@ if (sizeof($index) || $cat)
 	}
 
 	/*
+	* Check for latest downloads and prepare link
+	*/
+	$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
+	$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
+	
+	$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
+	
+	$dl_latest_files = array();
+	$dl_latest_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', $sql_latest_where, 0, 0, 'id');
+	
+	if (sizeof($dl_latest_files))
+	{
+		$this->template->assign_var('U_LATEST_DOWNLOADS', $this->helper->route('dl_ext_controller', array('view' => 'latest')));
+	}
+
+	/*
 	* load footer template and send default values
 	*/
 	$this->template->set_filenames(array(

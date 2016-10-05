@@ -1020,6 +1020,10 @@ else if($action == 'save')
 				$db->sql_query($sql);
 			}
 		}
+
+		$notification = $phpbb_container->get('notification_manager');
+		$notification_data = array('notification_id' => $dl_t_id);
+		$notification->add_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
 	}
 
 	if ($df_id)

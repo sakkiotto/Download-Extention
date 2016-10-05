@@ -16,7 +16,11 @@ if ( !defined('IN_PHPBB') )
 	exit;
 }
 
-page_header($this->user->lang['DOWNLOADS'] . ' ' . $this->user->lang['DL_OVERVIEW']);
+$notification = $this->phpbb_container->get('notification_manager');
+$notification_data = array('notification_id' => $next_id);
+$notification->delete_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
+
+page_header($this->user->lang['DL_LATEST_DOWNLOADS']);
 
 $sql = 'SELECT dl_id, user_id FROM ' . DL_RATING_TABLE;
 $result = $this->db->sql_query($sql);
@@ -38,11 +42,16 @@ $this->template->assign_vars(array(
 	'U_DL_INDEX'		=> $this->helper->route('dl_ext_controller'),
 	'U_DL_AJAX'			=> $this->helper->route('dl_ext_controller', array('view' => 'ajax')),
 
-	'PAGE_NAME'			=> $this->user->lang['DOWNLOADS'] . ' ' . $this->user->lang['DL_OVERVIEW'])
+	'PAGE_NAME'			=> $this->user->lang['DL_LATEST_DOWNLOADS'])
 );
 
+$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
+$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
+
+$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
+
 $dl_files = array();
-$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', '', 0, 0, 'id, cat');
+$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', $sql_latest_where, 0, 0, 'id, cat');
 
 $total_files = 0;
 
@@ -63,6 +72,10 @@ if (sizeof($dl_files))
 if ($total_files)
 {
 	$this->template->assign_var('S_OVERALL_VIEW', true);
+}
+else
+{
+	redirect($this->helper->route('dl_ext_controller', array('view' => '')));
 }
 
 if ($total_files > $this->config['dl_links_per_page'])
@@ -86,7 +99,7 @@ if ($total_files > $this->config['dl_links_per_page'])
 $sql_sort_by = ($sql_sort_by == 'sort') ? 'cat, sort' : $sql_sort_by;
 
 $dl_files = array();
-$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', ' ORDER BY ' . $sql_sort_by . ' ' . $sql_order . ' LIMIT ' . $start . ', ' . $this->config['dl_links_per_page'], 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating');
+$dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', $sql_latest_where . ' ORDER BY ' . $sql_sort_by . ' ' . $sql_order . ' LIMIT ' . $start . ', ' . $this->config['dl_links_per_page'], 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating');
 
 if (sizeof($dl_files))
 {
