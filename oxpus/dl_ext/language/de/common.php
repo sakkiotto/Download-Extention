@@ -757,6 +757,7 @@ $lang = array_merge($lang, array(
 	'MUST_SELECT_DOWNLOAD'	=> 'Wähle einen Download aus',
 
 	'NEW_DOWNLOAD'					=> 'Es ist ein Download neu hochgeladen oder aktualisiert worden.<br />Klick <a href="%s">hier</a>, um zu den Downloads zu gehen.',
+	'NEW_DOWNLOAD_NOTIFICATION'		=> 'Es ist ein Download neu hochgeladen oder aktualisiert worden.',
 	'NUMBER_RECENT_DL_ON_PORTAL'	=> 'Anzahl der letzten Downloads auf dem Portal',
 
 	'POST_CONFIRM_EXPLAIN'	=> 'Um unkontrollierte Downloads zu vermeiden musst du den nachfolgenden Bestätigungscode eingeben, damit du die Datei herunterladen kannst.<br />Bitte trage den Code in das nachfolgende Eingabefeld ein und bestätige dann deine Eingabe mit dem Button "Download".',
@@ -780,6 +781,7 @@ $lang = array_merge($lang, array(
 	'USER_DOWNLOAD_NOTIFY_TYPE'			=> 'Art der Board Nachricht',
 	'USER_DOWNLOAD_NOTIFY_TYPE_MESSAGE'	=> 'Nachricht im Board Kopf',
 	'USER_DOWNLOAD_NOTIFY_TYPE_POPUP'	=> 'Popup',
+	'USER_DOWNLOAD_NOTIFY_TYPE_NOTIFY'	=> 'Board-Benachrichtigung',
 	'USER_DOWNLOAD_POPUP'				=> 'Board<br />Nachricht',
 	'USERGROUP_TRAFFIC_TITLE'			=> 'Traffic für Mitglieder einer Benutzergruppe',
 	'USERS_TRAFFIC_TITLE'				=> 'Traffic für alle Benutzer',
